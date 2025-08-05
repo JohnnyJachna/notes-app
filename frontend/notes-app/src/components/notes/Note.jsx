@@ -3,25 +3,50 @@
 // import NoteSources from "./NoteSources";
 // import NoteTags from "./NoteTags";
 // import NoteDate from "./NoteDate";
+import { useState } from "react";
+import { createPortal } from "react-dom";
+
+import Button from "../Button";
+import styles from "../css-modules/Note.module.css";
+import NotePreview from "./NotePreview";
+import NoteEditor from "./NoteEditor";
 
 const Note = ({ id }) => {
   const data = {
     id: id,
-    header: "Header",
-    content: "Content",
-    sources: "Sources",
-    tags: "Tags",
-    date: "Date",
+    header: "Temp Header",
+    content: "Temp Content",
+    sources: "Temp Sources",
+    tags: "Temp Tags",
+    date: "Temp Date",
   };
+
+  const [showEditor, setShowEditor] = useState(false);
+  const [noteData, setNoteData] = useState(data);
+
+  const closeEditor = (editedNote) => {
+    setNoteData(editedNote);
+    setShowEditor(false);
+  };
+
   return (
-    <div>
-      <p>ID: {data.id}</p>
-      <p>Header: {data.header}</p>
-      <p>Content: {data.content}</p>
-      <p>Sources: {data.sources}</p>
-      <p>Tags: {data.tags}</p>
-      <p>Date: {data.date}</p>
-    </div>
+    <>
+      <div className={styles.note}>
+        <NotePreview data={noteData} />
+        <Button
+          type="button"
+          name="Edit Note"
+          onClick={() => setShowEditor(true)}
+        />
+      </div>
+      <div>
+        {showEditor &&
+          createPortal(
+            <NoteEditor note={noteData} closeEditor={closeEditor} />,
+            document.body
+          )}
+      </div>
+    </>
   );
 };
 

@@ -1,15 +1,15 @@
-import NoteHeader from "./NoteHeader";
-import NoteSources from "./NoteSources";
-import NoteTags from "./NoteTags";
-import NoteDate from "./NoteDate";
+// import NoteHeader from "./NoteHeader";
+// import NoteSources from "./NoteSources";
+// import NoteTags from "./NoteTags";
+// import NoteDate from "./NoteDate";
 
-const NotePreview = () => {
+const NotePreview = ({ data }) => {
   return (
     <>
-      <NoteHeader />
-      <NoteSources />
-      <NoteTags />
-      <NoteDate />
+      <p>Header: {data.header}</p>
+      <p>Sources: {data.sources}</p>
+      <p>Tags: {data.tags}</p>
+      <p>Date: {data.date}</p>
     </>
   );
 };
