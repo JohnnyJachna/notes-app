@@ -1,17 +1,19 @@
 import { Routes, Route } from "react-router";
 
 import MainLayout from "./layouts/MainLayout";
-import Home from "./pages/HomePage";
-import Sets from "./pages/SetsPage";
-import About from "./pages/AboutPage";
+import HomePage from "./pages/HomePage";
+import SetsPage from "./pages/SetsPage";
+import EditorPage from "./pages/EditorPage";
+import AboutPage from "./pages/AboutPage";
 
 function App() {
   return (
     <Routes>
       <Route element={<MainLayout />}>
-        <Route path="/" element={<Home />} />
-        <Route path="/sets" element={<Sets />} />
-        <Route path="/about" element={<About />} />
+        <Route path="/" element={<HomePage />} />
+        <Route path="/sets" element={<SetsPage />} />
+        <Route path="/sets/editor" element={<EditorPage />} />
+        <Route path="/about" element={<AboutPage />} />
       </Route>
     </Routes>
   );

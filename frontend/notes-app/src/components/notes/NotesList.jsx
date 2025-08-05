@@ -3,7 +3,7 @@ import Note from "./Note";
 const NotesList = () => {
   return (
     <>
-      <p>Notes List</p>
+      <h4>Notes List</h4>
       <Note />
     </>
   );
