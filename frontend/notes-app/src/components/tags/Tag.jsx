@@ -4,7 +4,7 @@ import Button from "../Button";
 import styles from "../css-modules/Tag.module.css";
 import TagEditor from "./TagEditor";
 
-const Tag = ({ id }) => {
+const Tag = ({ id, handleDeleteTag }) => {
   const data = {
     id: id,
     name: "New Tag",
@@ -29,6 +29,11 @@ const Tag = ({ id }) => {
             type="button"
             name="edit"
             onClick={() => setShowEditor(true)}
+          />
+          <Button
+            type="button"
+            name="delete"
+            onClick={() => handleDeleteTag(id)}
           />
         </>
       )}

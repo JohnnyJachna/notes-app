@@ -1,3 +1,5 @@
+import SourcesList from "../sources/SourcesList";
+
 const NoteSources = () => {
   return (
     <>

@@ -11,7 +11,7 @@ import styles from "../css-modules/Note.module.css";
 import NotePreview from "./NotePreview";
 import NoteEditor from "./NoteEditor";
 
-const Note = ({ id }) => {
+const Note = ({ id, handleDeleteNote }) => {
   const data = {
     id: id,
     header: "Temp Header",
@@ -33,10 +33,11 @@ const Note = ({ id }) => {
     <>
       <div className={styles.note}>
         <NotePreview data={noteData} />
+        <Button type="button" name="edit" onClick={() => setShowEditor(true)} />
         <Button
           type="button"
-          name="Edit Note"
-          onClick={() => setShowEditor(true)}
+          name="delete"
+          onClick={() => handleDeleteNote(id)}
         />
       </div>
       <div>

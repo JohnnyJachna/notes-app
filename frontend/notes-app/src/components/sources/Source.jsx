@@ -4,7 +4,7 @@ import Button from "../Button";
 import styles from "../css-modules/Source.module.css";
 import SourceEditor from "./SourceEditor";
 
-const Source = ({ id }) => {
+const Source = ({ id, handleDeleteSource }) => {
   const data = {
     id: id,
     name: "New Source",
@@ -29,6 +29,11 @@ const Source = ({ id }) => {
             type="button"
             name="edit"
             onClick={() => setShowEditor(true)}
+          />
+          <Button
+            type="button"
+            name="delete"
+            onClick={() => handleDeleteSource(id)}
           />
         </>
       )}

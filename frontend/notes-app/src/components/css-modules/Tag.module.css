@@ -7,6 +7,10 @@
   border-radius: 3px;
 }
 
+.tag p {
+  margin-right: 8px;
+}
+
 .tag button {
-  margin: 10px;
+  margin: 3px;
 }
