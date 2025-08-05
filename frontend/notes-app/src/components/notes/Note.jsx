@@ -12,13 +12,16 @@ import NotePreview from "./NotePreview";
 import NoteEditor from "./NoteEditor";
 
 const Note = ({ id, handleDeleteNote }) => {
+  const currentDate = new Date();
+  const startDate = currentDate.toLocaleTimeString();
+
   const data = {
     id: id,
     header: "Temp Header",
     content: "Temp Content",
     sources: "Temp Sources",
     tags: "Temp Tags",
-    date: "Temp Date",
+    date: startDate,
   };
 
   const [showEditor, setShowEditor] = useState(false);

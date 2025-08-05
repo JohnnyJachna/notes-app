@@ -9,7 +9,7 @@ const NotePreview = ({ data }) => {
       <p>Header: {data.header}</p>
       <p>Sources: {data.sources}</p>
       <p>Tags: {data.tags}</p>
-      <p>Date: {data.date}</p>
+      <p>Last Edit: {data.date}</p>
     </>
   );
 };

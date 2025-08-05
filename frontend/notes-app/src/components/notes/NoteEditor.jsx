@@ -9,14 +9,12 @@ const NoteEditor = ({ note, closeEditor }) => {
   const [content, setContent] = useState();
   const [sources, setSources] = useState();
   const [tags, setTags] = useState();
-  const [date, setDate] = useState();
 
   useEffect(() => {
     setHeader(note.header);
     setContent(note.content);
     setSources(note.sources);
     setTags(note.tags);
-    setDate(note.date);
   }, []);
 
   const updateHeader = (e) => {
@@ -31,8 +29,9 @@ const NoteEditor = ({ note, closeEditor }) => {
   const updateTags = (e) => {
     setTags(e.target.value);
   };
-  const updateDate = (e) => {
-    setDate(e.target.value);
+  const getDate = () => {
+    const currentDate = new Date();
+    return currentDate.toLocaleTimeString();
   };
 
   const handleClick = () => {
@@ -42,7 +41,7 @@ const NoteEditor = ({ note, closeEditor }) => {
       content: content,
       sources: sources,
       tags: tags,
-      date: date,
+      date: getDate(),
     });
   };
 
@@ -72,13 +71,7 @@ const NoteEditor = ({ note, closeEditor }) => {
         value={tags}
         onChange={updateTags}
       ></textarea>
-      <textarea
-        id="Date"
-        placeholder="Date..."
-        value={date}
-        onChange={updateDate}
-      ></textarea>
-      <Button type="button" name="Close" onClick={handleClick} />
+      <Button type="button" name="Done" onClick={handleClick} />
     </div>
   );
 };
