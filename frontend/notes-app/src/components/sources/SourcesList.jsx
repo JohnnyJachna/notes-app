@@ -1,10 +1,12 @@
 import Source from "./Source";
 
-const SourcesList = () => {
+const SourcesList = ({ sourcesList }) => {
   return (
     <>
       <h4>Sources List</h4>
-      <Source />
+      {sourcesList.map((source) => (
+        <Source id={source.id} key={source.id} />
+      ))}
     </>
   );
 };

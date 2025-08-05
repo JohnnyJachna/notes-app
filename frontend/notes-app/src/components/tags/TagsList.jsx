@@ -1,10 +1,12 @@
 import Tag from "./Tag";
 
-const TagsList = () => {
+const TagsList = ({ tagsList }) => {
   return (
     <>
       <h4>Tags List</h4>
-      <Tag />
+      {tagsList.map((tag) => (
+        <Tag id={tag.id} key={tag.id} />
+      ))}
     </>
   );
 };
