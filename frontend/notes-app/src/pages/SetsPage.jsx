@@ -1,13 +1,10 @@
-import { Link } from "react-router";
-
-import SetList from "../components/sets/SetsList";
+import SetsSection from "../components/sets/SetsSection";
 
 const SetsPage = () => {
   return (
     <>
       <h3>Sets Page</h3>
-      <SetList />
-      <Link to="/sets/editor">Editor</Link>
+      <SetsSection />
     </>
   );
 };
