@@ -12,4 +12,4 @@ class Sources(Base, table=True):
   publish_date: str | None
   update_date: str | None
   access_date: str | None
-  set_id: int | None = Field(default=None, foreign_key="set.id")
+  set_id: int | None = Field(default=None, foreign_key="sets.id")

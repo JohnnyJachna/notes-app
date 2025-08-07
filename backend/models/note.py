@@ -9,4 +9,4 @@ class Notes(Base, table=True):
   content: str
   create_date: str
   update_date: str
-  set_id: int | None = Field(default=None, foreign_key="set.id")
+  set_id: int | None = Field(default=None, foreign_key="sets.id")
