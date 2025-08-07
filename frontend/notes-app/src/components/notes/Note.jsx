@@ -12,8 +12,8 @@ import NotePreview from "./NotePreview";
 import NoteEditor from "./NoteEditor";
 
 const Note = ({ id, handleDeleteNote }) => {
-  const currentDate = new Date();
-  const startDate = currentDate.toLocaleTimeString();
+  // const currentDate = new Date();
+  // const startDate = currentDate.toLocaleTimeString();
 
   const data = {
     id: id,
@@ -21,7 +21,8 @@ const Note = ({ id, handleDeleteNote }) => {
     content: "Temp Content",
     sources: "Temp Sources",
     tags: "Temp Tags",
-    date: startDate,
+    create_date: "Temp create date",
+    update_date: "Temp update date",
   };
 
   const [showEditor, setShowEditor] = useState(false);
