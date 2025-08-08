@@ -8,8 +8,8 @@ fastapi = "*"
 uvicorn = "*"
 sqlmodel = "*"
 python-dotenv = "*"
-alembic = "*"
 psycopg2 = "*"
+alembic = "*"
 
 [dev-packages]
 
