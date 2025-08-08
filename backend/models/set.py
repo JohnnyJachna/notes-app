@@ -1,7 +1,7 @@
 from .base import Base
 
-class Sets(Base, table=True):
-  __tablename__: str = "sets"
+class Set(Base, table=True):
+  __tablename__: str = "set"
 
   name: str
   create_date: str

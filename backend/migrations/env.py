@@ -5,16 +5,13 @@ from sqlalchemy import pool
 
 from alembic import context
 
-from sqlmodel import SQLModel, create_engine
+from sqlmodel import SQLModel
 
 from config import DATABASE_URL
 
-from models.tag import Tags
-from models.source import Sources
-from models.note import Notes
-from models.set import Sets
-from models.link_tag_note import LinkTagNote
-from models.link_source_note import LinkSourceNote
+from models.set import Set
+from models.note import Note, Tag, Source
+from models.links import LinkTagNote, LinkSourceNote
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
