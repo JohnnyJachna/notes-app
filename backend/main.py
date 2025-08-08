@@ -21,13 +21,13 @@ async def root():
 
 # ----- SETS ROUTES ------
 
-@app.get("/sets")
+@app.get("/sets", response_model=list[Set])
 async def get_sets(session: Session = Depends(get_session)):
   statement = select(Set)
   result = session.exec(statement).all()
   return result
 
-@app.get("/sets/{set_id}")
+@app.get("/sets/{set_id}", response_model=Set)
 def get_single_set(set_id: int, response: Response, session: Session = Depends(get_session)):
   set = session.get(Set, set_id)
   if set is None:
@@ -36,7 +36,7 @@ def get_single_set(set_id: int, response: Response, session: Session = Depends(g
   
   return set
 
-@app.post("/sets/add")
+@app.post("/sets/add", response_model=Set)
 async def add_set(session: Session = Depends(get_session)):
   new_set = Set(
     name="New Set",
@@ -62,13 +62,13 @@ def delete_set(set_id: int, response: Response, session: Session = Depends(get_s
 
 # ----- NOTES ROUTES -----
 
-@app.get("/sets/{set_id}/notes")
+@app.get("/sets/{set_id}/notes", response_model=list[Note])
 async def get_notes(set_id: int, session: Session = Depends(get_session)):
   statement = select(Note).where(Note.set_id == set_id)
   result = session.exec(statement).all()
   return result
 
-@app.get("/sets/notes/{note_id}")
+@app.get("/sets/notes/{note_id}", response_model=Note)
 def get_single_note(notes_id: int, response: Response, session: Session = Depends(get_session)):
   note = session.get(Note, notes_id)
   if note is None:
@@ -77,7 +77,7 @@ def get_single_note(notes_id: int, response: Response, session: Session = Depend
   
   return note
 
-@app.post("/sets/notes/add")
+@app.post("/sets/notes/add", response_model=Note)
 async def add_note(set_id: int, session: Session = Depends(get_session)):
 
   new_note = Note(
@@ -107,13 +107,13 @@ def delete_note(note_id: int, response: Response, session: Session = Depends(get
 
 # ----- TAGS ROUTES -----
 
-@app.get("/sets/{set_id}/tags")
+@app.get("/sets/{set_id}/tags", response_model=list[Tag])
 async def get_tags(set_id: int, session: Session = Depends(get_session)):
   statement = select(Tag).where(Tag.set_id == set_id)
   result = session.exec(statement).all()
   return result
 
-@app.get("/sets/tags/{tag_id}")
+@app.get("/sets/tags/{tag_id}", response_model=Tag)
 def get_single_tag(tag_id: int, response: Response, session: Session = Depends(get_session)):
   tag = session.get(Tag, tag_id)
   if tag is None:
@@ -122,7 +122,7 @@ def get_single_tag(tag_id: int, response: Response, session: Session = Depends(g
   
   return tag
 
-@app.post("/sets/tags/add")
+@app.post("/sets/tags/add", response_model=Tag)
 async def add_tag(set_id: int, session: Session = Depends(get_session)):
   new_tag = Tag(
     name="New Tag",
@@ -147,13 +147,13 @@ def delete_tag(tag_id: int, response: Response, session: Session = Depends(get_s
 
 # ----- SOURCES ROUTES -----
 
-@app.get("/sets/{set_id}/sources")
+@app.get("/sets/{set_id}/sources", response_model=list[Source])
 async def get_sources(set_id: int, session: Session = Depends(get_session)):
   statement = select(Source).where(Source.set_id == set_id)
   result = session.exec(statement).all()
   return result
 
-@app.get("/sets/sources/{source_id}")
+@app.get("/sets/sources/{source_id}", response_model=Source)
 def get_single_source(source_id: int, response: Response, session: Session = Depends(get_session)):
   source = session.get(Source, source_id)
   if source is None:
@@ -162,7 +162,7 @@ def get_single_source(source_id: int, response: Response, session: Session = Dep
   
   return source
 
-@app.post("/sets/sources/add")
+@app.post("/sets/sources/add", response_model=Source)
 async def add_source(set_id: int, session: Session = Depends(get_session)):
   new_source = Source(
     name="New Source",
@@ -187,13 +187,13 @@ def delete_source(source_id: int, response: Response, session: Session = Depends
 
 # ----- NOTES TAGS ROUTES -----
 
-@app.get("/sets/notes/{note_id}/tags")
+@app.get("/sets/notes/{note_id}/tags", response_model=list[Tag])
 async def get_notes_tags(note_id: int, session: Session = Depends(get_session)):
   note = session.exec(select(Note).where(Note.id == note_id)).one()
   tags = note.tags
   return tags
 
-@app.post("/sets/notes/{note_id}/tags/add")
+@app.post("/sets/notes/{note_id}/tags/add", response_model=Note)
 async def add_tag_to_note(note_id: int, tag_id: int, session: Session = Depends(get_session)):
   note = session.exec(select(Note).where(Note.id == note_id)).one()
   tag = session.exec(select(Tag).where(Tag.id == tag_id)).one()
@@ -201,8 +201,9 @@ async def add_tag_to_note(note_id: int, tag_id: int, session: Session = Depends(
   note.tags.append(tag)
   session.add(note)
   session.commit()
+  session.refresh(note)
 
-  return {"message": f"Source: {tag_id} added to Note: {note_id}"}
+  return note
 
 @app.delete("/sets/notes/{note_id}/tags/{tag_id}")
 def delete_tag_from_note(note_id: int, tag_id: int, session: Session = Depends(get_session)):
@@ -215,13 +216,13 @@ def delete_tag_from_note(note_id: int, tag_id: int, session: Session = Depends(g
 
 # ----- NOTES SOURCES ROUTES -----
 
-@app.get("/sets/notes/{note_id}/sources")
+@app.get("/sets/notes/{note_id}/sources", response_model=list[Source])
 async def get_notes_sources(note_id: int, session: Session = Depends(get_session)):
   note = session.exec(select(Note).where(Note.id == note_id)).one()
   sources = note.sources
   return sources
 
-@app.post("/sets/notes/{note_id}/sources/add")
+@app.post("/sets/notes/{note_id}/sources/add", response_model=Note)
 async def add_source_to_note(note_id: int, source_id: int, session: Session = Depends(get_session)):
   note = session.exec(select(Note).where(Note.id == note_id)).one()
   source = session.exec(select(Source).where(Source.id == source_id)).one()
