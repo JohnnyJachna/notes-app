@@ -1,18 +1,24 @@
 import { useState } from "react";
+import { useParams } from "react-router";
 import { Link } from "react-router";
 
 import SetEditor from "./SetEditor";
 import Button from "../Button";
 import styles from "../css-modules/Set.module.css";
 
-const Set = ({ id, handleDeleteSet }) => {
+const Set = (props) => {
   const data = {
-    id: id,
-    name: "New Set",
+    id: props.id,
+    name: props.name,
+    create_date: props.create_date,
+    update_date: props.update_date,
   };
 
   const [showEditor, setShowEditor] = useState(false);
   const [setData, setSetData] = useState(data);
+
+  let { setID } = useParams();
+  setID = setData.id;
 
   const closeEditor = (value) => {
     setSetData(value);
@@ -25,7 +31,7 @@ const Set = ({ id, handleDeleteSet }) => {
         <SetEditor set={setData} closeEditor={closeEditor} />
       ) : (
         <>
-          <Link to="/sets/editor" className={styles.link}>
+          <Link to={`/sets/${setID}`} className={styles.link}>
             {setData.name}
           </Link>
           <Button
@@ -36,7 +42,7 @@ const Set = ({ id, handleDeleteSet }) => {
           <Button
             type="button"
             name="delete"
-            onClick={() => handleDeleteSet(id)}
+            onClick={() => props.handleDeleteSet(setData.id)}
           />
         </>
       )}

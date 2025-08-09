@@ -1,24 +1,57 @@
 import { useState } from "react";
+import { useEffect } from "react";
+import { useAPI } from "../../utils/api";
 
 import SetsList from "./SetsList";
 import Button from "../Button";
 
-let setID = 0;
-
 const SetsSection = () => {
+  const date = new Date().toLocaleString();
+
   const [setsList, setSetsList] = useState([]);
+  const { makeRequest } = useAPI();
 
-  const addSet = () => {
-    const newSet = { id: setID };
-    const updatedSetsList = [...setsList, newSet];
+  useEffect(() => {
+    fetchSets();
+  }, []);
 
-    setSetsList(updatedSetsList);
-    setID++;
+  const fetchSets = async () => {
+    try {
+      const data = await makeRequest("sets");
+      setSetsList(data);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const deleteSet = (id) => {
-    const newSetsList = setsList.filter((set) => set.id !== id);
-    setSetsList(newSetsList);
+  const addSet = async () => {
+    const body = {
+      name: "New Set",
+      create_date: date,
+      update_date: date,
+    };
+
+    try {
+      const response = await makeRequest("sets/add", {
+        method: "POST",
+        body: JSON.stringify(body),
+      });
+      fetchSets();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const deleteSet = async (id) => {
+    try {
+      const response = await makeRequest(`sets/${id}`, {
+        method: "DELETE",
+        body: id,
+      });
+      fetchSets();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (

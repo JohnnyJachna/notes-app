@@ -16,7 +16,6 @@ const SetEditor = ({ set, closeEditor }) => {
 
   const handleClick = () => {
     closeEditor({
-      id: set.id,
       name: name,
     });
   };
