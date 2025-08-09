@@ -60,6 +60,20 @@ async def add_set(payload: Set, session: Session = Depends(get_session)):
   session.refresh(new_set)
   return {"message": f"New set: {new_set}"}
 
+@app.patch("/sets", response_model = Set)
+async def update_set_name(payload: Set, session: Session = Depends(get_session)):
+  set = session.get(Set, payload.id)
+
+  updated_data = payload.model_dump(exclude_unset=True)
+  for key, value in updated_data.items():
+    setattr(set, key, value)
+
+  session.add(set)
+  session.commit()
+  session.refresh(set)
+  return set
+
+
 @app.delete("/sets/{set_id}")
 def delete_set(set_id: int, response: Response, session: Session = Depends(get_session)):
   set = session.get(Set, set_id)

@@ -1,23 +1,37 @@
 import { useState } from "react";
-import { useEffect } from "react";
+// import { useEffect } from "react";
+import { useAPI } from "../../utils/api";
 
 import Button from "../Button";
 
 const SetEditor = ({ set, closeEditor }) => {
-  const [name, setName] = useState();
+  const [name, setName] = useState(set.name);
+  const { makeRequest } = useAPI();
 
-  useEffect(() => {
-    setName(set.name);
-  }, []);
+  console.log(name);
 
-  const updateName = (e) => {
-    setName(e.target.value);
+  const updateName = async () => {
+    const body = {
+      id: set.id,
+      name: name,
+    };
+    console.log(body);
+    try {
+      const response = await makeRequest("sets", {
+        method: "PATCH",
+        body: JSON.stringify(body),
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleClick = () => {
-    closeEditor({
-      name: name,
-    });
+    if (name !== set.name) {
+      console.log("true");
+      updateName();
+    }
+    closeEditor(name);
   };
 
   return (
@@ -26,7 +40,7 @@ const SetEditor = ({ set, closeEditor }) => {
         id="Name"
         placeholder="Name..."
         value={name}
-        onChange={updateName}
+        onChange={(e) => setName(e.target.value)}
       ></textarea>
       <Button type="button" name="Done" onClick={handleClick} />
     </>

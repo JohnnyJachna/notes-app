@@ -20,8 +20,11 @@ const Set = (props) => {
   let { setID } = useParams();
   setID = setData.id;
 
-  const closeEditor = (value) => {
-    setSetData(value);
+  const closeEditor = (updatedName) => {
+    setSetData({
+      ...setData,
+      name: updatedName,
+    });
     setShowEditor(false);
   };
 
