@@ -5,6 +5,7 @@ import { useAPI } from "../../utils/api";
 
 import TagsList from "./TagsList";
 import Button from "../Button";
+import styles from "../css-modules/Section.module.css";
 
 const TagsSection = () => {
   const [tagsList, setTagsList] = useState([]);
@@ -56,10 +57,10 @@ const TagsSection = () => {
   };
 
   return (
-    <>
+    <div className={styles.section}>
       <TagsList tagsList={tagsList} handleDeleteTag={deleteTag} />
       <Button type="button" name="Add Tag" onClick={addTag} />
-    </>
+    </div>
   );
 };
 

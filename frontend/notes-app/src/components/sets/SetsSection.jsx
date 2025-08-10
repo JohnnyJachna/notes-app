@@ -4,6 +4,7 @@ import { useAPI } from "../../utils/api";
 
 import SetsList from "./SetsList";
 import Button from "../Button";
+import styles from "../css-modules/Section.module.css";
 
 const SetsSection = () => {
   const date = new Date().toLocaleString();
@@ -55,10 +56,10 @@ const SetsSection = () => {
   };
 
   return (
-    <>
+    <div className={styles.section}>
       <SetsList setsList={setsList} handleDeleteSet={deleteSet} />
       <Button type="button" name="Add Set" onClick={addSet} />
-    </>
+    </div>
   );
 };
 

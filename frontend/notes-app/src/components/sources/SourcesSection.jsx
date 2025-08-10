@@ -5,6 +5,7 @@ import { useAPI } from "../../utils/api";
 
 import SourcesList from "./SourcesList";
 import Button from "../Button";
+import styles from "../css-modules/Section.module.css";
 
 const SourcesSection = () => {
   const [sourcesList, setSourcesList] = useState([]);
@@ -56,13 +57,13 @@ const SourcesSection = () => {
   };
 
   return (
-    <>
+    <div className={styles.section}>
       <SourcesList
         sourcesList={sourcesList}
         handleDeleteSource={deleteSource}
       />
       <Button type="button" name="Add Source" onClick={addSource} />
-    </>
+    </div>
   );
 };
 

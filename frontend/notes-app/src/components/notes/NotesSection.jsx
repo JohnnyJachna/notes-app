@@ -5,6 +5,7 @@ import { useAPI } from "../../utils/api";
 
 import NotesList from "./NotesList";
 import Button from "../Button";
+import styles from "../css-modules/Section.module.css";
 
 const NotesSection = () => {
   const [notesList, setNotesList] = useState([]);
@@ -61,10 +62,10 @@ const NotesSection = () => {
   };
 
   return (
-    <>
+    <div className={styles.section}>
       <NotesList notesList={notesList} handleDeleteNote={deleteNote} />
       <Button type="button" name="Add Note" onClick={addNote} />
-    </>
+    </div>
   );
 };
 
