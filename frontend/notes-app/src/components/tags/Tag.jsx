@@ -4,17 +4,21 @@ import Button from "../Button";
 import styles from "../css-modules/Tag.module.css";
 import TagEditor from "./TagEditor";
 
-const Tag = ({ id, handleDeleteTag }) => {
+const Tag = (props) => {
   const data = {
-    id: id,
-    name: "New Tag",
+    id: props.id,
+    name: props.name,
+    set_id: props.set_id,
   };
 
   const [showEditor, setShowEditor] = useState(false);
   const [tagData, setTagData] = useState(data);
 
-  const closeEditor = (value) => {
-    setTagData(value);
+  const closeEditor = (updatedName) => {
+    setTagData({
+      ...tagData,
+      name: updatedName,
+    });
     setShowEditor(false);
   };
 
@@ -33,7 +37,7 @@ const Tag = ({ id, handleDeleteTag }) => {
           <Button
             type="button"
             name="delete"
-            onClick={() => handleDeleteTag(id)}
+            onClick={() => props.handleDeleteTag(tagData.id)}
           />
         </>
       )}

@@ -1,5 +1,4 @@
 import { useState } from "react";
-// import { useEffect } from "react";
 import { useAPI } from "../../utils/api";
 
 import Button from "../Button";
@@ -8,16 +7,13 @@ const SetEditor = ({ set, closeEditor }) => {
   const [name, setName] = useState(set.name);
   const { makeRequest } = useAPI();
 
-  console.log(name);
-
   const updateName = async () => {
     const body = {
       id: set.id,
       name: name,
     };
-    console.log(body);
     try {
-      const response = await makeRequest("sets", {
+      await makeRequest("sets", {
         method: "PATCH",
         body: JSON.stringify(body),
       });
@@ -28,7 +24,6 @@ const SetEditor = ({ set, closeEditor }) => {
 
   const handleClick = () => {
     if (name !== set.name) {
-      console.log("true");
       updateName();
     }
     closeEditor(name);

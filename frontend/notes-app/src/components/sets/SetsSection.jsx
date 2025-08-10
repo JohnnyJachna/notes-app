@@ -32,7 +32,7 @@ const SetsSection = () => {
     };
 
     try {
-      const response = await makeRequest("sets/add", {
+      await makeRequest("sets/add", {
         method: "POST",
         body: JSON.stringify(body),
       });
@@ -44,7 +44,7 @@ const SetsSection = () => {
 
   const deleteSet = async (id) => {
     try {
-      const response = await makeRequest(`sets/${id}`, {
+      await makeRequest(`sets/${id}`, {
         method: "DELETE",
         body: id,
       });

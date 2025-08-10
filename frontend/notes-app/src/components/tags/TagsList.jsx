@@ -5,7 +5,13 @@ const TagsList = ({ tagsList, handleDeleteTag }) => {
     <>
       <h4>Tags List</h4>
       {tagsList.map((tag) => (
-        <Tag id={tag.id} key={tag.id} handleDeleteTag={handleDeleteTag} />
+        <Tag
+          id={tag.id}
+          key={tag.id}
+          name={tag.name}
+          set_id={tag.set_id}
+          handleDeleteTag={handleDeleteTag}
+        />
       ))}
     </>
   );

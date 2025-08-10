@@ -4,24 +4,28 @@ import Button from "../Button";
 import styles from "../css-modules/Source.module.css";
 import SourceEditor from "./SourceEditor";
 
-const Source = ({ id, handleDeleteSource }) => {
+const Source = (props) => {
   const data = {
-    id: id,
-    name: "New Source",
+    id: props.id,
+    name: props.name,
+    set_id: props.set_id,
   };
 
   const [showEditor, setShowEditor] = useState(false);
   const [sourceData, setSourceData] = useState(data);
 
-  const closeEditor = (value) => {
-    setSourceData(value);
+  const closeEditor = (updatedName) => {
+    setSourceData({
+      ...sourceData,
+      name: updatedName,
+    });
     setShowEditor(false);
   };
 
   return (
     <div className={styles.source}>
       {showEditor ? (
-        <SourceEditor tag={sourceData} closeEditor={closeEditor} />
+        <SourceEditor source={sourceData} closeEditor={closeEditor} />
       ) : (
         <>
           <p>{sourceData.name}</p>
@@ -33,7 +37,7 @@ const Source = ({ id, handleDeleteSource }) => {
           <Button
             type="button"
             name="delete"
-            onClick={() => handleDeleteSource(id)}
+            onClick={() => props.handleDeleteSource(sourceData.id)}
           />
         </>
       )}

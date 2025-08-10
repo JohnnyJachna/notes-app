@@ -8,6 +8,8 @@ const SourcesList = ({ sourcesList, handleDeleteSource }) => {
         <Source
           id={source.id}
           key={source.id}
+          name={source.name}
+          set_id={source.set_id}
           handleDeleteSource={handleDeleteSource}
         />
       ))}

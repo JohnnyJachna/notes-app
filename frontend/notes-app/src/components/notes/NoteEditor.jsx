@@ -1,48 +1,51 @@
 import { useState } from "react";
-import { useEffect } from "react";
+import { useAPI } from "../../utils/api";
 
 import styles from "../css-modules/NoteEditor.module.css";
 import Button from "../Button";
 
 const NoteEditor = ({ note, closeEditor }) => {
-  const [header, setHeader] = useState();
-  const [content, setContent] = useState();
-  const [sources, setSources] = useState();
-  const [tags, setTags] = useState();
+  const [header, setHeader] = useState(note.header);
+  const [content, setContent] = useState(note.content);
 
-  useEffect(() => {
-    setHeader(note.header);
-    setContent(note.content);
-    setSources(note.sources);
-    setTags(note.tags);
-  }, []);
+  const { makeRequest } = useAPI();
 
-  const updateHeader = (e) => {
-    setHeader(e.target.value);
-  };
-  const updateContent = (e) => {
-    setContent(e.target.value);
-  };
-  const updateSources = (e) => {
-    setSources(e.target.value);
-  };
-  const updateTags = (e) => {
-    setTags(e.target.value);
-  };
-  const getDate = () => {
-    const currentDate = new Date();
-    return currentDate.toLocaleTimeString();
+  const updateData = async (date) => {
+    const body = {
+      id: note.id,
+      update_date: date,
+    };
+
+    if (header !== note.header) {
+      body.header = header;
+    }
+    if (content !== note.content) {
+      body.content = content;
+    }
+
+    try {
+      await makeRequest(`sets/${note.set_id}/notes`, {
+        method: "PATCH",
+        body: JSON.stringify(body),
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleClick = () => {
-    closeEditor({
-      id: note.id,
+    const updatedNote = {
       header: header,
       content: content,
-      sources: sources,
-      tags: tags,
-      date: getDate(),
-    });
+      update_date: note.update_date,
+    };
+
+    if (header !== note.header || content !== note.content) {
+      updatedNote.update_date = new Date().toLocaleString();
+      updateData(updatedNote.update_date);
+    }
+
+    closeEditor(updatedNote);
   };
 
   return (
@@ -51,25 +54,13 @@ const NoteEditor = ({ note, closeEditor }) => {
         id="Header"
         placeholder="Header..."
         value={header}
-        onChange={updateHeader}
+        onChange={(e) => setHeader(e.target.value)}
       ></textarea>
       <textarea
         id="Content"
         placeholder="Content..."
         value={content}
-        onChange={updateContent}
-      ></textarea>
-      <textarea
-        id="Sources"
-        placeholder="Sources..."
-        value={sources}
-        onChange={updateSources}
-      ></textarea>
-      <textarea
-        id="Tags"
-        placeholder="Tags..."
-        value={tags}
-        onChange={updateTags}
+        onChange={(e) => setContent(e.target.value)}
       ></textarea>
       <Button type="button" name="Done" onClick={handleClick} />
     </div>

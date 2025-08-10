@@ -115,21 +115,33 @@ def get_single_note(set_id: int, note_id: int, response: Response, session: Sess
   return note
 
 @app.post("/sets/{set_id}/notes/add", response_model=Note)
-async def add_note(set_id: int, session: Session = Depends(get_session)):
+async def add_note(set_id: int, payload: Note,session: Session = Depends(get_session)):
 
   new_note = Note(
-    name="New Note",
-    header="Header",
-    content="Content",
-    create_date= f"{get_datetime()}",
-    update_date= f"{get_datetime()}",
-    set_id= set_id
+    header=payload.header,
+    content=payload.content,
+    create_date=payload.create_date,
+    update_date=payload.update_date,
+    set_id=payload.set_id
   )
   
   session.add(new_note)
   session.commit()
   session.refresh(new_note)
   return {"message": f"New note: {new_note}"}
+
+@app.patch("/sets/{set_id}/notes", response_model = Note)
+async def update_note_data(set_id: int, payload: Note, session: Session = Depends(get_session)):
+  note = session.get(Note, payload.id)
+
+  updated_data = payload.model_dump(exclude_unset=True)
+  for key, value in updated_data.items():
+    setattr(note, key, value)
+
+  session.add(note)
+  session.commit()
+  session.refresh(note)
+  return note
 
 @app.delete("/sets/{set_id}/notes/{note_id}")
 def delete_note(set_id: int, note_id: int, response: Response, session: Session = Depends(get_session)):
@@ -160,16 +172,29 @@ def get_single_tag(set_id: int, tag_id: int, response: Response, session: Sessio
   return tag
 
 @app.post("/sets/{set_id}/tags/add", response_model=Tag)
-async def add_tag(set_id: int, session: Session = Depends(get_session)):
+async def add_tag(set_id: int, payload: Tag, session: Session = Depends(get_session)):
   new_tag = Tag(
-    name="New Tag",
-    set_id= set_id
+    name=payload.name,
+    set_id=payload.set_id
   )
   
   session.add(new_tag)
   session.commit()
   session.refresh(new_tag)
   return {"message": f"New tag: {new_tag}"}
+
+@app.patch("/sets/{set_id}/tags", response_model = Tag)
+async def update_tag_name(set_id: int, payload: Tag, session: Session = Depends(get_session)):
+  tag = session.get(Tag, payload.id)
+
+  updated_data = payload.model_dump(exclude_unset=True)
+  for key, value in updated_data.items():
+    setattr(tag, key, value)
+
+  session.add(tag)
+  session.commit()
+  session.refresh(tag)
+  return tag
 
 @app.delete("/sets/{set_id}/tags/{tag_id}")
 def delete_tag(set_id: int, tag_id: int, response: Response, session: Session = Depends(get_session)):
@@ -210,6 +235,19 @@ async def add_source(set_id: int, session: Session = Depends(get_session)):
   session.commit()
   session.refresh(new_source)
   return {"message": f"New source: {new_source}"}
+
+@app.patch("/sets/{set_id}/sources", response_model = Source)
+async def update_source_name(set_id: int, payload: Source, session: Session = Depends(get_session)):
+  source = session.get(Source, payload.id)
+
+  updated_data = payload.model_dump(exclude_unset=True)
+  for key, value in updated_data.items():
+    setattr(source, key, value)
+
+  session.add(source)
+  session.commit()
+  session.refresh(source)
+  return source
 
 @app.delete("/sets/{set_id}/sources/{source_id}")
 def delete_source(set_id: int, source_id: int, response: Response, session: Session = Depends(get_session)):

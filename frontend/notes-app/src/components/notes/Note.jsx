@@ -11,25 +11,27 @@ import styles from "../css-modules/Note.module.css";
 import NotePreview from "./NotePreview";
 import NoteEditor from "./NoteEditor";
 
-const Note = ({ id, handleDeleteNote }) => {
-  // const currentDate = new Date();
-  // const startDate = currentDate.toLocaleTimeString();
-
+const Note = (props) => {
   const data = {
-    id: id,
-    header: "Temp Header",
-    content: "Temp Content",
-    sources: "Temp Sources",
-    tags: "Temp Tags",
-    create_date: "Temp create date",
-    update_date: "Temp update date",
+    id: props.id,
+    header: props.header,
+    content: props.content,
+    create_date: props.create_date,
+    update_date: props.update_date,
+    set_id: props.set_id,
   };
 
   const [showEditor, setShowEditor] = useState(false);
   const [noteData, setNoteData] = useState(data);
 
-  const closeEditor = (editedNote) => {
-    setNoteData(editedNote);
+  const closeEditor = (updatedNote) => {
+    setNoteData({
+      ...noteData,
+      header: updatedNote.header,
+      content: updatedNote.content,
+      update_date: updatedNote.update_date,
+    });
+    // setNoteData([...noteData, updatedNote]);
     setShowEditor(false);
   };
 
@@ -41,7 +43,7 @@ const Note = ({ id, handleDeleteNote }) => {
         <Button
           type="button"
           name="delete"
-          onClick={() => handleDeleteNote(id)}
+          onClick={() => props.handleDeleteNote(noteData.id)}
         />
       </div>
       <div>
