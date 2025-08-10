@@ -5,7 +5,6 @@ from .links import LinkTagNote, LinkSourceNote
 class Note(Base, table=True):
   __tablename__: str = "note"
 
-  name: str
   header: str
   content: str
   create_date: str
