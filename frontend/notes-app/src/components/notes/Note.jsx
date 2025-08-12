@@ -3,7 +3,8 @@
 // import NoteSources from "./NoteSources";
 // import NoteTags from "./NoteTags";
 // import NoteDate from "./NoteDate";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useAPI } from "../../utils/api";
 import { createPortal } from "react-dom";
 
 import Button from "../Button";
@@ -19,10 +20,39 @@ const Note = (props) => {
     create_date: props.create_date,
     update_date: props.update_date,
     set_id: props.set_id,
+    tags: props.tags,
+    sources: props.sources,
   };
 
   const [showEditor, setShowEditor] = useState(false);
   const [noteData, setNoteData] = useState(data);
+  const [tags, setTags] = useState();
+  const [sources, setSources] = useState();
+
+  const { makeRequest } = useAPI();
+
+  useEffect(() => {
+    fetchTags();
+    fetchSources();
+  }, []);
+
+  const fetchTags = async () => {
+    try {
+      const response = await makeRequest(`sets/${data.set_id}/tags`);
+      setTags(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fetchSources = async () => {
+    try {
+      const response = await makeRequest(`sets/${data.set_id}/sources`);
+      setSources(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const closeEditor = (updatedNote) => {
     setNoteData({
@@ -30,15 +60,16 @@ const Note = (props) => {
       header: updatedNote.header,
       content: updatedNote.content,
       update_date: updatedNote.update_date,
+      tags: updatedNote.tags,
+      sources: updatedNote.sources,
     });
-    // setNoteData([...noteData, updatedNote]);
     setShowEditor(false);
   };
 
   return (
     <>
       <div className={styles.note}>
-        <NotePreview data={noteData} />
+        <NotePreview note={noteData} />
         <Button type="button" name="edit" onClick={() => setShowEditor(true)} />
         <Button
           type="button"
@@ -49,7 +80,11 @@ const Note = (props) => {
       <div>
         {showEditor &&
           createPortal(
-            <NoteEditor note={noteData} closeEditor={closeEditor} />,
+            <NoteEditor
+              note={noteData}
+              tagList={tags}
+              closeEditor={closeEditor}
+            />,
             document.body
           )}
       </div>

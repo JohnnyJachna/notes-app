@@ -61,5 +61,6 @@ class NoteRead(SQLModel):
     create_date: str
     update_date: str
     set_id: int
-    tags: List[TagRead] = []
-    sources: List[SourceRead] = []
+    tags: List[TagRead] | None= []
+    sources: List[SourceRead] | None = []
+    

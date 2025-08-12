@@ -116,7 +116,7 @@ def get_single_note(set_id: int, note_id: int, response: Response, session: Sess
   
   return note
 
-@app.post("/sets/{set_id}/notes/add", response_model=NoteRead)
+@app.post("/sets/{set_id}/notes/add", response_model=Note)
 async def add_note(set_id: int, payload: Note,session: Session = Depends(get_session)):
 
   new_note = Note(
@@ -173,7 +173,7 @@ def get_single_tag(set_id: int, tag_id: int, response: Response, session: Sessio
   
   return tag
 
-@app.post("/sets/{set_id}/tags/add", response_model=TagRead)
+@app.post("/sets/{set_id}/tags/add", response_model=Tag)
 async def add_tag(set_id: int, payload: Tag, session: Session = Depends(get_session)):
   new_tag = Tag(
     name=payload.name,
@@ -226,7 +226,7 @@ def get_single_source(set_id: int, source_id: int, response: Response, session: 
   
   return source
 
-@app.post("/sets/{set_id}/sources/add", response_model=SourceRead)
+@app.post("/sets/{set_id}/sources/add", response_model=Source)
 async def add_source(set_id: int, session: Session = Depends(get_session)):
   new_source = Source(
     name="New Source",
@@ -270,7 +270,7 @@ async def get_notes_tags(set_id: int, note_id: int, session: Session = Depends(g
   tags = note.tags
   return tags
 
-@app.post("/sets/{set_id}/notes/{note_id}/tags/add", response_model=NoteRead)
+@app.post("/sets/{set_id}/notes/{note_id}/tags/{tag_id}", response_model=NoteRead)
 async def add_tag_to_note(set_id: int, note_id: int, tag_id: int, session: Session = Depends(get_session)):
   note = session.exec(select(Note).where(Note.id == note_id)).one()
   tag = session.exec(select(Tag).where(Tag.id == tag_id)).one()
@@ -299,7 +299,7 @@ async def get_notes_sources(set_id: int, note_id: int, session: Session = Depend
   sources = note.sources
   return sources
 
-@app.post("/sets/{set_id}/notes/{note_id}/sources/add", response_model=NoteRead)
+@app.post("/sets/{set_id}/notes/{note_id}/sources/{source_id}", response_model=NoteRead)
 async def add_source_to_note(set_id: int, note_id: int, source_id: int, session: Session = Depends(get_session)):
   note = session.exec(select(Note).where(Note.id == note_id)).one()
   source = session.exec(select(Source).where(Source.id == source_id)).one()

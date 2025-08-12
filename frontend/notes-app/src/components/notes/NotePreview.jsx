@@ -1,16 +1,17 @@
 // import NoteHeader from "./NoteHeader";
 // import NoteSources from "./NoteSources";
-// import NoteTags from "./NoteTags";
+import NoteTags from "./NoteTags";
 // import NoteDate from "./NoteDate";
+import styles from "../css-modules/NotePreview.module.css";
 
-const NotePreview = ({ data }) => {
+const NotePreview = ({ note }) => {
   return (
-    <>
-      <p>Header: {data.header}</p>
-      <p>Sources: {data.sources}</p>
-      <p>Tags: {data.tags}</p>
-      <p>Last Edit: {data.update_date}</p>
-    </>
+    <div className={styles.note_preview}>
+      <p>Header: {note.header}</p>
+      <p>Sources: </p>
+      <NoteTags tags={note.tags} />
+      <p>Last Edit: {note.update_date}</p>
+    </div>
   );
 };
 

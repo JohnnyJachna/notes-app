@@ -12,6 +12,8 @@ const NotesList = ({ notesList, handleDeleteNote }) => {
           create_date={note.create_date}
           update_date={note.update_date}
           set_id={note.set_id}
+          tags={note.tags}
+          sources={note.sources}
           key={note.id}
           handleDeleteNote={handleDeleteNote}
         />
