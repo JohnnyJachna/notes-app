@@ -9,20 +9,15 @@ const NoteEditor = ({ note, tagList, closeEditor }) => {
   const [header, setHeader] = useState(note.header);
   const [content, setContent] = useState(note.content);
   const [noteTags, setNoteTags] = useState(note.tags);
-  const [noteSources, setNoteSources] = useState(note.sources);
-  const [tags, setTags] = useState(tagList);
-  const [addableTags, setAddableTags] = useState();
+  // const [noteSources, setNoteSources] = useState(note.sources);
+  const [addableTags, setAddableTags] = useState([]);
   const [tagSelection, setTagSelection] = useState();
   const [tagsAvailable, setTagsAvailable] = useState(false);
 
   const { makeRequest } = useAPI();
 
   useEffect(() => {
-    getAddableTags();
-  }, []);
-
-  const getAddableTags = () => {
-    const addable = tags.filter(
+    const addable = tagList.filter(
       (option) => !noteTags.some((noteTag) => noteTag.id === option.id)
     );
 
@@ -30,12 +25,14 @@ const NoteEditor = ({ note, tagList, closeEditor }) => {
       setTagsAvailable(true);
       setAddableTags(addable);
       setTagSelection(addable[0].id);
+    } else {
+      setAddableTags([]);
+      setTagsAvailable(false);
     }
-  };
+  }, [noteTags]);
 
   const addTag = async () => {
     try {
-      console.log(tagSelection);
       await makeRequest(
         `sets/${note.set_id}/notes/${note.id}/tags/${tagSelection}`,
         {
@@ -43,6 +40,8 @@ const NoteEditor = ({ note, tagList, closeEditor }) => {
           body: tagSelection,
         }
       );
+      const addedTag = tagList.find((tag) => tag.id == tagSelection);
+      setNoteTags([...noteTags, addedTag]);
     } catch (error) {
       console.log(error);
     }
@@ -54,6 +53,7 @@ const NoteEditor = ({ note, tagList, closeEditor }) => {
         method: "DELETE",
         body: tagSelection,
       });
+      setNoteTags(noteTags.filter((tag) => tag.id !== id));
     } catch (error) {
       console.log(error);
     }
@@ -88,7 +88,7 @@ const NoteEditor = ({ note, tagList, closeEditor }) => {
       content: content,
       update_date: note.update_date,
       tags: noteTags,
-      sources: noteSources,
+      // sources: noteSources,
     };
 
     if (header !== note.header || content !== note.content) {

@@ -26,33 +26,32 @@ const Note = (props) => {
 
   const [showEditor, setShowEditor] = useState(false);
   const [noteData, setNoteData] = useState(data);
-  const [tags, setTags] = useState();
-  const [sources, setSources] = useState();
+  const [setTags, setSetTags] = useState();
+  // const [sources, setSources] = useState();
 
   const { makeRequest } = useAPI();
 
   useEffect(() => {
     fetchTags();
-    fetchSources();
   }, []);
 
   const fetchTags = async () => {
     try {
       const response = await makeRequest(`sets/${data.set_id}/tags`);
-      setTags(response);
+      setSetTags(response);
     } catch (error) {
       console.log(error);
     }
   };
 
-  const fetchSources = async () => {
-    try {
-      const response = await makeRequest(`sets/${data.set_id}/sources`);
-      setSources(response);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const fetchSources = async () => {
+  //   try {
+  //     const response = await makeRequest(`sets/${data.set_id}/sources`);
+  //     setSources(response);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   const closeEditor = (updatedNote) => {
     setNoteData({
@@ -61,7 +60,7 @@ const Note = (props) => {
       content: updatedNote.content,
       update_date: updatedNote.update_date,
       tags: updatedNote.tags,
-      sources: updatedNote.sources,
+      // sources: updatedNote.sources,
     });
     setShowEditor(false);
   };
@@ -82,7 +81,7 @@ const Note = (props) => {
           createPortal(
             <NoteEditor
               note={noteData}
-              tagList={tags}
+              tagList={setTags}
               closeEditor={closeEditor}
             />,
             document.body
