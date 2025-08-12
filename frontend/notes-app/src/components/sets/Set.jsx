@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { useParams } from "react-router";
-import { Link } from "react-router";
+import { useParams, Link } from "react-router";
 
 import SetEditor from "./SetEditor";
 import Button from "../Button";
