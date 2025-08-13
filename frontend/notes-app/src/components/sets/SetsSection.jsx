@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+// import { useEffect } from "react";
+import { useSets, useSetsDispatch } from "../../context/SetsContext";
 import { useAPI } from "../../utils/api";
 
 import SetsList from "./SetsList";
@@ -6,25 +7,13 @@ import Button from "../Button";
 import styles from "../css-modules/Section.module.css";
 
 const SetsSection = () => {
-  const date = new Date().toLocaleString();
+  const sets = useSets();
+  const dispatch = useSetsDispatch();
 
-  const [setsList, setSetsList] = useState([]);
   const { makeRequest } = useAPI();
 
-  useEffect(() => {
-    fetchSets();
-  }, []);
-
-  const fetchSets = async () => {
-    try {
-      const data = await makeRequest("sets");
-      setSetsList(data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const addSet = async () => {
+  const handleAddSet = async () => {
+    const date = new Date().toLocaleString();
     const body = {
       name: "New Set",
       create_date: date,
@@ -32,33 +21,37 @@ const SetsSection = () => {
     };
 
     try {
-      await makeRequest("sets/add", {
+      const addedSet = await makeRequest("sets/add", {
         method: "POST",
         body: JSON.stringify(body),
       });
-      fetchSets();
+      dispatch({ type: "set_added", addedSet });
     } catch (error) {
       console.log(error);
     }
   };
 
-  const deleteSet = async (id) => {
+  const handleDeleteSet = async (id) => {
     try {
       await makeRequest(`sets/${id}`, {
         method: "DELETE",
         body: id,
       });
-      fetchSets();
+      dispatch({ type: "set_deleted", id });
     } catch (error) {
       console.log(error);
     }
   };
 
   return (
-    <div className={styles.section}>
-      <SetsList setsList={setsList} handleDeleteSet={deleteSet} />
-      <Button type="button" name="Add Set" onClick={addSet} />
-    </div>
+    <>
+      {sets.length > 0 && (
+        <div className={styles.section}>
+          <SetsList handleDeleteSet={handleDeleteSet} />
+          <Button type="button" name="Add Set" onClick={handleAddSet} />
+        </div>
+      )}
+    </>
   );
 };
 

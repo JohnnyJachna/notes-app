@@ -1,10 +1,13 @@
+import { useSets } from "../../context/SetsContext";
 import Set from "./Set";
 
-const SetsList = ({ setsList, handleDeleteSet }) => {
+const SetsList = ({ handleDeleteSet }) => {
+  const sets = useSets();
+
   return (
     <>
       <h4>Sets List</h4>
-      {setsList.map((set) => (
+      {sets.map((set) => (
         <Set
           id={set.id}
           key={set.id}

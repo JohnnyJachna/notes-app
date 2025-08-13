@@ -1,4 +1,5 @@
 import { Routes, Route } from "react-router";
+import SetContextLayout from "./layouts/SetContextLayout";
 
 import MainLayout from "./layouts/MainLayout";
 import HomePage from "./pages/HomePage";
@@ -11,8 +12,10 @@ function App() {
     <Routes>
       <Route element={<MainLayout />}>
         <Route path="/" element={<HomePage />} />
-        <Route path="/sets" element={<SetsPage />} />
-        <Route path="/sets/:setID" element={<EditorPage />} />
+        <Route element={<SetContextLayout />}>
+          <Route path="/sets" element={<SetsPage />} />
+          <Route path="/sets/:setID" element={<EditorPage />} />
+        </Route>
         <Route path="/about" element={<AboutPage />} />
       </Route>
     </Routes>
