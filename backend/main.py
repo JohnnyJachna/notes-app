@@ -183,7 +183,7 @@ async def add_tag(set_id: int, payload: Tag, session: Session = Depends(get_sess
   session.add(new_tag)
   session.commit()
   session.refresh(new_tag)
-  return {"message": f"New tag: {new_tag}"}
+  return new_tag
 
 @app.patch("/sets/{set_id}/tags", response_model=TagRead)
 async def update_tag_name(set_id: int, payload: Tag, session: Session = Depends(get_session)):
@@ -236,7 +236,7 @@ async def add_source(set_id: int, session: Session = Depends(get_session)):
   session.add(new_source)
   session.commit()
   session.refresh(new_source)
-  return {"message": f"New source: {new_source}"}
+  return new_source
 
 @app.patch("/sets/{set_id}/sources", response_model = SourceRead)
 async def update_source_name(set_id: int, payload: Source, session: Session = Depends(get_session)):

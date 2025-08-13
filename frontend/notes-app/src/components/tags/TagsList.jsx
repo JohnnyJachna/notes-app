@@ -1,20 +1,19 @@
+import React from "react";
 import Tag from "./Tag";
+import { splitTagsAtom } from "./TagsAtoms";
+import { useAtom } from "jotai/react";
 
-const TagsList = ({ tagsList, handleDeleteTag }) => {
+const TagsList = () => {
+  const [tagsList] = useAtom(splitTagsAtom);
+
   return (
     <>
       <h4>Tags List</h4>
-      {tagsList.map((tag) => (
-        <Tag
-          id={tag.id}
-          key={tag.id}
-          name={tag.name}
-          set_id={tag.set_id}
-          handleDeleteTag={handleDeleteTag}
-        />
+      {tagsList.map((singleTag) => (
+        <Tag key={singleTag.toString()} tagAtom={singleTag} />
       ))}
     </>
   );
 };
 
-export default TagsList;
+export default React.memo(TagsList);

@@ -1,20 +1,19 @@
+import React from "react";
 import Source from "./Source";
+import { splitSourcesAtom } from "./SourcesAtoms";
+import { useAtom } from "jotai/react";
 
-const SourcesList = ({ sourcesList, handleDeleteSource }) => {
+const SourcesList = () => {
+  const [sourcesList] = useAtom(splitSourcesAtom);
+
   return (
     <>
       <h4>Sources List</h4>
-      {sourcesList.map((source) => (
-        <Source
-          id={source.id}
-          key={source.id}
-          name={source.name}
-          set_id={source.set_id}
-          handleDeleteSource={handleDeleteSource}
-        />
+      {sourcesList.map((singleSource) => (
+        <Source key={singleSource.toString()} sourceAtom={singleSource} />
       ))}
     </>
   );
 };
 
-export default SourcesList;
+export default React.memo(SourcesList);

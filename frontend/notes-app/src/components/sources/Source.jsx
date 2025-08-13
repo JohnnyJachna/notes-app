@@ -1,48 +1,47 @@
-import { useState } from "react";
+import React, { useState } from "react";
+
+import { deleteSourceAtom } from "./SourcesAtoms";
+import { useAtom, useSetAtom } from "jotai/react";
 
 import Button from "../Button";
 import styles from "../css-modules/Source.module.css";
 import SourceEditor from "./SourceEditor";
 
 const Source = (props) => {
-  const data = {
-    id: props.id,
-    name: props.name,
-    set_id: props.set_id,
-  };
+  const [source, setSources] = useAtom(props.sourceAtom);
+  const deleteSource = useSetAtom(deleteSourceAtom);
 
   const [showEditor, setShowEditor] = useState(false);
-  const [sourceData, setSourceData] = useState(data);
 
-  const closeEditor = (updatedName) => {
-    setSourceData({
-      ...sourceData,
-      name: updatedName,
-    });
+  const handleCloseEditor = () => {
     setShowEditor(false);
+  };
+
+  const handleDeleteNote = async () => {
+    await deleteSource(source);
   };
 
   return (
     <div className={styles.source}>
       {showEditor ? (
-        <SourceEditor source={sourceData} closeEditor={closeEditor} />
+        <SourceEditor
+          sourceAtom={props.sourceAtom}
+          setSources={setSources}
+          handleCloseEditor={handleCloseEditor}
+        />
       ) : (
         <>
-          <p>{sourceData.name}</p>
+          <p>{source.name}</p>
           <Button
             type="button"
             name="edit"
             onClick={() => setShowEditor(true)}
           />
-          <Button
-            type="button"
-            name="delete"
-            onClick={() => props.handleDeleteSource(sourceData.id)}
-          />
+          <Button type="button" name="delete" onClick={handleDeleteNote} />
         </>
       )}
     </div>
   );
 };
 
-export default Source;
+export default React.memo(Source);

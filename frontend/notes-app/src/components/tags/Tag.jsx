@@ -1,48 +1,47 @@
-import { useState } from "react";
+import React, { useState } from "react";
+
+import { deleteTagAtom } from "./TagsAtoms";
+import { useAtom, useSetAtom } from "jotai/react";
 
 import Button from "../Button";
 import styles from "../css-modules/Tag.module.css";
 import TagEditor from "./TagEditor";
 
 const Tag = (props) => {
-  const data = {
-    id: props.id,
-    name: props.name,
-    set_id: props.set_id,
-  };
+  const [tag, setTags] = useAtom(props.tagAtom);
+  const deleteTag = useSetAtom(deleteTagAtom);
 
   const [showEditor, setShowEditor] = useState(false);
-  const [tagData, setTagData] = useState(data);
 
-  const closeEditor = (updatedName) => {
-    setTagData({
-      ...tagData,
-      name: updatedName,
-    });
+  const handleCloseEditor = () => {
     setShowEditor(false);
+  };
+
+  const handleDeleteNote = async () => {
+    await deleteTag(tag);
   };
 
   return (
     <div className={styles.tag}>
       {showEditor ? (
-        <TagEditor tag={tagData} closeEditor={closeEditor} />
+        <TagEditor
+          tagAtom={props.tagAtom}
+          setTags={setTags}
+          handleCloseEditor={handleCloseEditor}
+        />
       ) : (
         <>
-          <p>{tagData.name}</p>
+          <p>{tag.name}</p>
           <Button
             type="button"
             name="edit"
             onClick={() => setShowEditor(true)}
           />
-          <Button
-            type="button"
-            name="delete"
-            onClick={() => props.handleDeleteTag(tagData.id)}
-          />
+          <Button type="button" name="delete" onClick={handleDeleteNote} />
         </>
       )}
     </div>
   );
 };
 
-export default Tag;
+export default React.memo(Tag);

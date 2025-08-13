@@ -9,7 +9,7 @@ import Button from "../Button";
 const NoteEditor = ({ noteAtom, handleCloseEditor }) => {
   const note = useAtomValue(noteAtom);
   const updateNote = useSetAtom(updateNoteAtom);
-  console.log("render note editor");
+
   const [header, setHeader] = useState(note.header);
   const [content, setContent] = useState(note.content);
 
@@ -36,8 +36,8 @@ const NoteEditor = ({ noteAtom, handleCloseEditor }) => {
         };
       }
       console.log("updated note: " + updatedNote);
+      await updateNote(updatedNote);
     }
-    await updateNote(updatedNote);
     handleCloseEditor();
   };
 

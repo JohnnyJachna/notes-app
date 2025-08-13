@@ -1,64 +1,48 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useParams } from "react-router";
-import { useAPI } from "../../utils/api";
+
+import {
+  loadableTagsAtom,
+  addTagAtom,
+  tagsAtom,
+  tagsSetIDAtom,
+} from "./TagsAtoms";
+import { useAtomValue, useSetAtom } from "jotai/react";
 
 import TagsList from "./TagsList";
 import Button from "../Button";
 import styles from "../css-modules/Section.module.css";
 
 const TagsSection = () => {
-  const [tagsList, setTagsList] = useState([]);
-  const { makeRequest } = useAPI();
+  const { setID } = useParams();
 
-  let params = useParams();
-  const setID = params.setID;
+  const loadableTags = useAtomValue(loadableTagsAtom);
+  const setTags = useSetAtom(tagsAtom);
+  const addTag = useSetAtom(addTagAtom);
+  const setTagsSetID = useSetAtom(tagsSetIDAtom);
 
   useEffect(() => {
-    fetchTags();
-  }, []);
+    setTagsSetID(setID);
+  }, [setID, setTagsSetID]);
 
-  const fetchTags = async () => {
-    try {
-      const data = await makeRequest(`sets/${setID}/tags`);
-      setTagsList(data);
-    } catch (error) {
-      console.log(error);
+  useEffect(() => {
+    if (loadableTags.state === "hasData") {
+      setTags(loadableTags.data);
     }
-  };
+  }, [loadableTags, setTags]);
 
-  const addTag = async () => {
+  const handleAddTag = async () => {
     const body = {
       name: "New Tag",
       set_id: setID,
     };
-
-    try {
-      await makeRequest(`sets/${setID}/tags/add`, {
-        method: "POST",
-        body: JSON.stringify(body),
-      });
-      fetchTags();
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const deleteTag = async (id) => {
-    try {
-      await makeRequest(`sets/${setID}/tags/${id}`, {
-        method: "DELETE",
-        body: id,
-      });
-      fetchTags();
-    } catch (error) {
-      console.log(error);
-    }
+    await addTag(body);
   };
 
   return (
     <div className={styles.section}>
-      <TagsList tagsList={tagsList} handleDeleteTag={deleteTag} />
-      <Button type="button" name="Add Tag" onClick={addTag} />
+      <TagsList />
+      <Button type="button" name="Add Tag" onClick={handleAddTag} />
     </div>
   );
 };

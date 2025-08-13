@@ -1,67 +1,48 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useParams } from "react-router";
-import { useAPI } from "../../utils/api";
+
+import {
+  loadableSourcesAtom,
+  addSourceAtom,
+  sourcesAtom,
+  sourcesSetIDAtom,
+} from "./SourcesAtoms";
+import { useAtomValue, useSetAtom } from "jotai/react";
 
 import SourcesList from "./SourcesList";
 import Button from "../Button";
 import styles from "../css-modules/Section.module.css";
 
 const SourcesSection = () => {
-  const [sourcesList, setSourcesList] = useState([]);
-  const { makeRequest } = useAPI();
+  const { setID } = useParams();
 
-  let params = useParams();
-  const setID = params.setID;
+  const loadableSources = useAtomValue(loadableSourcesAtom);
+  const setSources = useSetAtom(sourcesAtom);
+  const addSource = useSetAtom(addSourceAtom);
+  const setSourcesSetID = useSetAtom(sourcesSetIDAtom);
 
   useEffect(() => {
-    fetchSources();
-  }, []);
+    setSourcesSetID(setID);
+  }, [setID, setSourcesSetID]);
 
-  const fetchSources = async () => {
-    try {
-      const data = await makeRequest(`sets/${setID}/sources`);
-      setSourcesList(data);
-    } catch (error) {
-      console.log(error);
+  useEffect(() => {
+    if (loadableSources.state === "hasData") {
+      setSources(loadableSources.data);
     }
-  };
+  }, [loadableSources, setSources]);
 
-  const addSource = async () => {
+  const handleAddSource = async () => {
     const body = {
-      title: "New Source",
+      name: "New Source",
       set_id: setID,
     };
-
-    try {
-      await makeRequest(`sets/${setID}/sources/add`, {
-        method: "POST",
-        body: JSON.stringify(body),
-      });
-      fetchSources();
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const deleteSource = async (id) => {
-    try {
-      await makeRequest(`sets/${setID}/sources/${id}`, {
-        method: "DELETE",
-        body: id,
-      });
-      fetchSources();
-    } catch (error) {
-      console.log(error);
-    }
+    await addSource(body);
   };
 
   return (
     <div className={styles.section}>
-      <SourcesList
-        sourcesList={sourcesList}
-        handleDeleteSource={deleteSource}
-      />
-      <Button type="button" name="Add Source" onClick={addSource} />
+      <SourcesList />
+      <Button type="button" name="Add Source" onClick={handleAddSource} />
     </div>
   );
 };
