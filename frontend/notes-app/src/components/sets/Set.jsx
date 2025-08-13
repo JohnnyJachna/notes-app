@@ -1,48 +1,38 @@
-import { useState } from "react";
-import { useParams, Link } from "react-router";
+import React, { useState } from "react";
+import { Link } from "react-router";
 import { deleteSetAtom } from "./SetsAtoms";
-import { useAtom } from "jotai/react";
+import { useAtom, useSetAtom } from "jotai/react";
 
 import SetEditor from "./SetEditor";
 import Button from "../Button";
 import styles from "../css-modules/Set.module.css";
 
 const Set = (props) => {
-  const data = {
-    id: props.id,
-    name: props.name,
-    create_date: props.create_date,
-    update_date: props.update_date,
-  };
+  const [set, setSet] = useAtom(props.setAtom);
+  const deleteSet = useSetAtom(deleteSetAtom);
 
   const [showEditor, setShowEditor] = useState(false);
-  const [setData, setSetData] = useState(data);
 
-  let { setID } = useParams();
-  setID = setData.id;
-
-  const [, deleteSet] = useAtom(deleteSetAtom);
-
-  const closeEditor = (updatedName) => {
-    setSetData({
-      ...setData,
-      name: updatedName,
-    });
+  const handleCloseEditor = () => {
     setShowEditor(false);
   };
 
   const handleDeleteSet = async () => {
-    await deleteSet(setData.id);
+    await deleteSet(set.id);
   };
 
   return (
     <div className={styles.set}>
       {showEditor ? (
-        <SetEditor set={setData} closeEditor={closeEditor} />
+        <SetEditor
+          setAtom={props.setAtom}
+          setSet={setSet}
+          handleCloseEditor={handleCloseEditor}
+        />
       ) : (
         <>
-          <Link to={`/sets/${setID}`} className={styles.link}>
-            {setData.name}
+          <Link to={`/sets/${set.id}`} className={styles.link}>
+            {set.name}
           </Link>
           <Button
             type="button"
@@ -56,4 +46,4 @@ const Set = (props) => {
   );
 };
 
-export default Set;
+export default React.memo(Set);

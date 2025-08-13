@@ -1,32 +1,23 @@
 import { useState } from "react";
-import { useAPI } from "../../utils/api";
-
+import { useAtomValue, useSetAtom } from "jotai/react";
+import { updateSetAtom } from "./SetsAtoms";
 import Button from "../Button";
 
-const SetEditor = ({ set, closeEditor }) => {
+const SetEditor = ({ setAtom, handleCloseEditor }) => {
+  const set = useAtomValue(setAtom);
+  const updateSet = useSetAtom(updateSetAtom);
+
   const [name, setName] = useState(set.name);
-  const { makeRequest } = useAPI();
 
-  const updateName = async () => {
-    const body = {
-      id: set.id,
-      name: name,
-    };
-    try {
-      await makeRequest("sets", {
-        method: "PATCH",
-        body: JSON.stringify(body),
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const handleClick = () => {
+  const handleClick = async () => {
     if (name !== set.name) {
-      updateName();
+      const updatedSet = {
+        ...set,
+        name: name,
+      };
+      await updateSet(updatedSet);
     }
-    closeEditor(name);
+    handleCloseEditor(name);
   };
 
   return (

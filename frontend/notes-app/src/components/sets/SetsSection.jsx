@@ -1,22 +1,21 @@
 import { useEffect } from "react";
-// import { useAPI } from "../../utils/api";
-import { loadableSetsAtom, fetchSetsAtom, addSetAtom } from "./SetsAtoms";
-import { useAtom } from "jotai/react";
+import { loadableSetsAtom, addSetAtom, setsAtom } from "./SetsAtoms";
+import { useAtomValue, useSetAtom } from "jotai/react";
 
 import SetsList from "./SetsList";
 import Button from "../Button";
 import styles from "../css-modules/Section.module.css";
 
 const SetsSection = () => {
-  // const { makeRequest } = useAPI();
-
-  const [, fetchList] = useAtom(fetchSetsAtom);
-  const [, addSet] = useAtom(addSetAtom);
-  const [loadableSets] = useAtom(loadableSetsAtom);
+  const loadableSets = useAtomValue(loadableSetsAtom);
+  const setSets = useSetAtom(setsAtom);
+  const addSet = useSetAtom(addSetAtom);
 
   useEffect(() => {
-    fetchList();
-  }, [fetchList]);
+    if (loadableSets.state === "hasData") {
+      setSets(loadableSets.data);
+    }
+  }, [loadableSets, setSets]);
 
   const handleAddSet = async () => {
     const date = new Date().toLocaleString();
@@ -27,17 +26,6 @@ const SetsSection = () => {
     };
     await addSet(body);
   };
-
-  // const deleteSet = async (id) => {
-  //   // try {
-  //   //   await makeRequest(`sets/${id}`, {
-  //   //     method: "DELETE",
-  //   //     body: id,
-  //   //   });
-  //   // } catch (error) {
-  //   //   console.log(error);
-  //   // }
-  // };
 
   return (
     <>
