@@ -1,64 +1,53 @@
-import { useState, useEffect } from "react";
-import { useAPI } from "../../utils/api";
+import { useEffect } from "react";
+// import { useAPI } from "../../utils/api";
+import { loadableSetsAtom, fetchSetsAtom, addSetAtom } from "./SetsAtoms";
+import { useAtom } from "jotai/react";
 
 import SetsList from "./SetsList";
 import Button from "../Button";
 import styles from "../css-modules/Section.module.css";
 
 const SetsSection = () => {
-  const date = new Date().toLocaleString();
+  // const { makeRequest } = useAPI();
 
-  const [setsList, setSetsList] = useState([]);
-  const { makeRequest } = useAPI();
+  const [, fetchList] = useAtom(fetchSetsAtom);
+  const [, addSet] = useAtom(addSetAtom);
+  const [loadableSets] = useAtom(loadableSetsAtom);
 
   useEffect(() => {
-    fetchSets();
-  }, []);
+    fetchList();
+  }, [fetchList]);
 
-  const fetchSets = async () => {
-    try {
-      const data = await makeRequest("sets");
-      setSetsList(data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const addSet = async () => {
+  const handleAddSet = async () => {
+    const date = new Date().toLocaleString();
     const body = {
       name: "New Set",
       create_date: date,
       update_date: date,
     };
-
-    try {
-      await makeRequest("sets/add", {
-        method: "POST",
-        body: JSON.stringify(body),
-      });
-      fetchSets();
-    } catch (error) {
-      console.log(error);
-    }
+    await addSet(body);
   };
 
-  const deleteSet = async (id) => {
-    try {
-      await makeRequest(`sets/${id}`, {
-        method: "DELETE",
-        body: id,
-      });
-      fetchSets();
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const deleteSet = async (id) => {
+  //   // try {
+  //   //   await makeRequest(`sets/${id}`, {
+  //   //     method: "DELETE",
+  //   //     body: id,
+  //   //   });
+  //   // } catch (error) {
+  //   //   console.log(error);
+  //   // }
+  // };
 
   return (
-    <div className={styles.section}>
-      <SetsList setsList={setsList} handleDeleteSet={deleteSet} />
-      <Button type="button" name="Add Set" onClick={addSet} />
-    </div>
+    <>
+      {loadableSets.state === "hasData" && (
+        <div className={styles.section}>
+          <SetsList />
+          <Button type="button" name="Add Set" onClick={handleAddSet} />
+        </div>
+      )}
+    </>
   );
 };
 

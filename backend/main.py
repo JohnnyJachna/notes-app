@@ -58,7 +58,7 @@ async def add_set(payload: Set, session: Session = Depends(get_session)):
   session.add(new_set)
   session.commit()
   session.refresh(new_set)
-  return {"message": f"New set: {new_set}"}
+  return new_set
 
 @app.patch("/sets", response_model = Set)
 async def update_set_name(payload: Set, session: Session = Depends(get_session)):

@@ -1,17 +1,19 @@
 import Set from "./Set";
+import { setsAtom } from "./SetsAtoms";
+import { useAtom } from "jotai/react";
 
-const SetsList = ({ setsList, handleDeleteSet }) => {
+const SetsList = () => {
+  const [list] = useAtom(setsAtom);
   return (
     <>
       <h4>Sets List</h4>
-      {setsList.map((set) => (
+      {list.map((set) => (
         <Set
           id={set.id}
           key={set.id}
           name={set.name}
           create_date={set.create_date}
           update_date={set.update_date}
-          handleDeleteSet={handleDeleteSet}
         />
       ))}
     </>
