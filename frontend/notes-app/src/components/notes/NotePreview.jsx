@@ -1,10 +1,13 @@
 // import NoteHeader from "./NoteHeader";
 // import NoteSources from "./NoteSources";
+import { useAtomValue } from "jotai/react";
 import NoteTags from "./NoteTags";
 // import NoteDate from "./NoteDate";
 import styles from "../css-modules/NotePreview.module.css";
 
-const NotePreview = ({ note }) => {
+const NotePreview = ({ noteAtom }) => {
+  const note = useAtomValue(noteAtom);
+
   return (
     <div className={styles.note_preview}>
       <p>Header: {note.header}</p>

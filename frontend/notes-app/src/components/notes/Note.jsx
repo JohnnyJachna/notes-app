@@ -1,10 +1,6 @@
-// import NoteHeader from "./NoteHeader";
-// import NoteContent from "./NoteContent";
-// import NoteSources from "./NoteSources";
-// import NoteTags from "./NoteTags";
-// import NoteDate from "./NoteDate";
-import { useState, useEffect } from "react";
-import { useAPI } from "../../utils/api";
+import React, { useState } from "react";
+import { deleteNoteAtom } from "./NotesAtoms";
+import { useAtom, useSetAtom } from "jotai/react";
 import { createPortal } from "react-dom";
 
 import Button from "../Button";
@@ -13,76 +9,48 @@ import NotePreview from "./NotePreview";
 import NoteEditor from "./NoteEditor";
 
 const Note = (props) => {
-  const data = {
-    id: props.id,
-    header: props.header,
-    content: props.content,
-    create_date: props.create_date,
-    update_date: props.update_date,
-    set_id: props.set_id,
-    tags: props.tags,
-    sources: props.sources,
-  };
+  const [note, setNote] = useAtom(props.noteAtom);
+  const deleteNote = useSetAtom(deleteNoteAtom);
 
   const [showEditor, setShowEditor] = useState(false);
-  const [noteData, setNoteData] = useState(data);
-  const [setTags, setSetTags] = useState();
+  // const [setTags, setSetTags] = useState();
   // const [sources, setSources] = useState();
 
-  const { makeRequest } = useAPI();
+  // useEffect(() => {
+  //   fetchTags();
+  // }, []);
 
-  useEffect(() => {
-    fetchTags();
-  }, []);
-
-  const fetchTags = async () => {
-    try {
-      const response = await makeRequest(`sets/${data.set_id}/tags`);
-      setSetTags(response);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  // const fetchSources = async () => {
+  // const fetchTags = async () => {
   //   try {
-  //     const response = await makeRequest(`sets/${data.set_id}/sources`);
-  //     setSources(response);
+  //     const response = await makeRequest(`sets/${data.set_id}/tags`);
+  //     setSetTags(response);
   //   } catch (error) {
   //     console.log(error);
   //   }
   // };
 
-  const closeEditor = (updatedNote) => {
-    setNoteData({
-      ...noteData,
-      header: updatedNote.header,
-      content: updatedNote.content,
-      update_date: updatedNote.update_date,
-      tags: updatedNote.tags,
-      // sources: updatedNote.sources,
-    });
+  const handleCloseEditor = () => {
     setShowEditor(false);
+  };
+
+  const handleDeleteNote = async () => {
+    await deleteNote(note);
   };
 
   return (
     <>
       <div className={styles.note}>
-        <NotePreview note={noteData} />
+        <NotePreview noteAtom={props.noteAtom} />
         <Button type="button" name="edit" onClick={() => setShowEditor(true)} />
-        <Button
-          type="button"
-          name="delete"
-          onClick={() => props.handleDeleteNote(noteData.id)}
-        />
+        <Button type="button" name="delete" onClick={handleDeleteNote} />
       </div>
       <div>
         {showEditor &&
           createPortal(
             <NoteEditor
-              note={noteData}
-              tagList={setTags}
-              closeEditor={closeEditor}
+              noteAtom={props.noteAtom}
+              setNote={setNote}
+              handleCloseEditor={handleCloseEditor}
             />,
             document.body
           )}
@@ -91,4 +59,4 @@ const Note = (props) => {
   );
 };
 
-export default Note;
+export default React.memo(Note);

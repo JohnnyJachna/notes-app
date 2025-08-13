@@ -130,7 +130,7 @@ async def add_note(set_id: int, payload: Note,session: Session = Depends(get_ses
   session.add(new_note)
   session.commit()
   session.refresh(new_note)
-  return {"message": f"New note: {new_note}"}
+  return new_note
 
 @app.patch("/sets/{set_id}/notes", response_model = NoteRead)
 async def update_note_data(set_id: int, payload: Note, session: Session = Depends(get_session)):
