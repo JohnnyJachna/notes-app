@@ -29,7 +29,7 @@ export const addSetAtom = atom(null, async (get, set, newSet) => {
 
 export const deleteSetAtom = atom(null, async (get, set, setID) => {
   try {
-    await fetch(`${import.meta.env.VITE_API_URL}/sets`, {
+    await fetch(`${import.meta.env.VITE_API_URL}/sets/${setID}`, {
       method: "DELETE",
       body: setID,
     });
