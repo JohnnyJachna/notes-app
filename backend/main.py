@@ -116,7 +116,7 @@ def get_single_note(set_id: int, note_id: int, response: Response, session: Sess
   
   return note
 
-@app.post("/sets/{set_id}/notes/add", response_model=Note)
+@app.post("/sets/{set_id}/notes/add", response_model=NoteRead)
 async def add_note(set_id: int, payload: Note,session: Session = Depends(get_session)):
 
   new_note = Note(
