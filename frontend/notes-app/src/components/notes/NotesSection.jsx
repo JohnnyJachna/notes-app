@@ -9,7 +9,7 @@ import {
 } from "./NotesAtoms";
 import { useAtomValue, useSetAtom } from "jotai/react";
 
-import NotesList from "./NotesList";
+import NotesList from "./list/NotesList";
 import Button from "../Button";
 import styles from "../css-modules/Section.module.css";
 
