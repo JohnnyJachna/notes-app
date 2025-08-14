@@ -32,8 +32,8 @@ const NoteEditor = ({ noteAtom, handleCloseEditor }) => {
       note,
       header,
       content,
-      tags: noteTags,
-      sources: noteSources,
+      noteTags,
+      noteSources,
     });
     handleCloseEditor();
   };

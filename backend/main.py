@@ -132,18 +132,29 @@ async def add_note(set_id: int, payload: Note,session: Session = Depends(get_ses
   session.refresh(new_note)
   return new_note
 
-@app.patch("/sets/{set_id}/notes", response_model = Note)
+@app.patch("/sets/{set_id}/notes", response_model=NoteRead)
 async def update_note_data(set_id: int, payload: NoteRead, session: Session = Depends(get_session)):
-  note = session.get(Note, payload.id)
+    note = session.get(Note, payload.id)
 
-  updated_data = payload.model_dump(exclude_unset=True)
-  for key, value in updated_data.items():
-    setattr(note, key, value)
+    note.header = payload.header
+    note.content = payload.content
+    note.update_date = payload.update_date
 
-  session.add(note)
-  session.commit()
-  session.refresh(note)
-  return note
+    # https://docs.sqlalchemy.org/en/20/core/operators.html#in-comparisons
+    # Create a new list of tag ids from the payload, then select all Tags with that id
+    
+    if payload.tags is not None:
+        tags = session.exec(select(Tag).where(Tag.id.in_([t.id for t in payload.tags]))).all()
+        note.tags = tags
+        
+    if payload.sources is not None:
+        sources = session.exec(select(Source).where(Source.id.in_([s.id for s in payload.sources]))).all()
+        note.sources = sources
+
+    session.add(note)
+    session.commit()
+    session.refresh(note)
+    return note
 
 @app.delete("/sets/{set_id}/notes/{note_id}")
 def delete_note(set_id: int, note_id: int, response: Response, session: Session = Depends(get_session)):
