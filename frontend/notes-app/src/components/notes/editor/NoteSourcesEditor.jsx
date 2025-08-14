@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { sourcesAtom } from "../../sources/SourcesAtoms";
 import { useAtomValue } from "jotai/react";
 
@@ -7,8 +7,12 @@ import Button from "../../Button";
 const NoteSourcesEditor = ({ sources, setSources }) => {
   const allSources = useAtomValue(sourcesAtom);
 
-  const addableSources = allSources.filter(
-    (src) => !sources.some((noteSrc) => noteSrc.id === src.id)
+  const addableSources = useMemo(
+    () =>
+      allSources.filter(
+        (src) => !sources.some((noteSrc) => noteSrc.id === src.id)
+      ),
+    [allSources, sources]
   );
   const [sourceSelection, setSourceSelection] = useState(
     addableSources.length > 0 ? addableSources[0].id : ""

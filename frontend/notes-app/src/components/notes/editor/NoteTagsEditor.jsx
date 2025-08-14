@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { tagsAtom } from "../../tags/TagsAtoms";
 import { useAtomValue } from "jotai/react";
 
@@ -7,8 +7,10 @@ import Button from "../../Button";
 const NoteTagsEditor = ({ tags, setTags }) => {
   const allTags = useAtomValue(tagsAtom);
 
-  const addableTags = allTags.filter(
-    (tag) => !tags.some((noteTag) => noteTag.id === tag.id)
+  const addableTags = useMemo(
+    () =>
+      allTags.filter((tag) => !tags.some((noteTag) => noteTag.id === tag.id)),
+    [allTags, tags]
   );
   const [tagSelection, setTagSelection] = useState(
     addableTags.length > 0 ? addableTags[0].id : ""
