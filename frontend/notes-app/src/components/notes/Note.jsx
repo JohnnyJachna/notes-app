@@ -13,21 +13,6 @@ const Note = (props) => {
   const deleteNote = useSetAtom(deleteNoteAtom);
 
   const [showEditor, setShowEditor] = useState(false);
-  // const [setTags, setSetTags] = useState();
-  // const [sources, setSources] = useState();
-
-  // useEffect(() => {
-  //   fetchTags();
-  // }, []);
-
-  // const fetchTags = async () => {
-  //   try {
-  //     const response = await makeRequest(`sets/${data.set_id}/tags`);
-  //     setSetTags(response);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
 
   const handleCloseEditor = () => {
     setShowEditor(false);

@@ -3,7 +3,7 @@ import { loadable, splitAtom } from "jotai/utils";
 import { useAPI } from "../../utils/api";
 
 export const fetchSourcesAtom = atom(async (get) => {
-  console.log("fetch sources");
+  // console.log("fetch sources");
   const setID = get(sourcesSetIDAtom);
 
   if (!setID) {
@@ -20,7 +20,7 @@ export const fetchSourcesAtom = atom(async (get) => {
 });
 
 export const addSourceAtom = atom(null, async (get, set, newSource) => {
-  console.log("add source");
+  // console.log("add source");
 
   const { makeRequest } = useAPI();
   try {
@@ -38,7 +38,7 @@ export const addSourceAtom = atom(null, async (get, set, newSource) => {
 });
 
 export const updateSourceAtom = atom(null, async (get, set, updatedSource) => {
-  console.log("update source");
+  // console.log("update source");
 
   const { makeRequest } = useAPI();
   const body = {
@@ -61,7 +61,7 @@ export const updateSourceAtom = atom(null, async (get, set, updatedSource) => {
 });
 
 export const deleteSourceAtom = atom(null, async (get, set, source) => {
-  console.log("delete source");
+  // console.log("delete source");
 
   const { makeRequest } = useAPI();
   try {

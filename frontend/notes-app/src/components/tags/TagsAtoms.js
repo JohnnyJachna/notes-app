@@ -3,7 +3,7 @@ import { loadable, splitAtom } from "jotai/utils";
 import { useAPI } from "../../utils/api";
 
 export const fetchTagsAtom = atom(async (get) => {
-  console.log("fetch tags");
+  // console.log("fetch tags");
   const setID = get(tagsSetIDAtom);
 
   if (!setID) {
@@ -20,7 +20,7 @@ export const fetchTagsAtom = atom(async (get) => {
 });
 
 export const addTagAtom = atom(null, async (get, set, newTag) => {
-  console.log("add tag");
+  // console.log("add tag");
 
   const { makeRequest } = useAPI();
   try {
@@ -35,7 +35,7 @@ export const addTagAtom = atom(null, async (get, set, newTag) => {
 });
 
 export const updateTagAtom = atom(null, async (get, set, updatedTag) => {
-  console.log("update tag");
+  // console.log("update tag");
 
   const { makeRequest } = useAPI();
   const body = {
@@ -56,7 +56,7 @@ export const updateTagAtom = atom(null, async (get, set, updatedTag) => {
 });
 
 export const deleteTagAtom = atom(null, async (get, set, tag) => {
-  console.log("delete tag");
+  // console.log("delete tag");
 
   const { makeRequest } = useAPI();
   try {

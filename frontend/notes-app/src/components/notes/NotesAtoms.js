@@ -3,7 +3,7 @@ import { loadable, splitAtom } from "jotai/utils";
 import { useAPI } from "../../utils/api";
 
 export const fetchNotesAtom = atom(async (get) => {
-  console.log("fetch notes");
+  // console.log("fetch notes");
   const setID = get(notesSetIDAtom);
 
   if (!setID) {
@@ -20,7 +20,7 @@ export const fetchNotesAtom = atom(async (get) => {
 });
 
 export const addNoteAtom = atom(null, async (get, set, newNote) => {
-  console.log("add note");
+  // console.log("add note");
 
   const { makeRequest } = useAPI();
   try {
@@ -35,7 +35,7 @@ export const addNoteAtom = atom(null, async (get, set, newNote) => {
 });
 
 export const updateNoteAtom = atom(null, async (get, set, updatedNote) => {
-  console.log("update note");
+  // console.log("update note");
 
   const { makeRequest } = useAPI();
   const body = {
@@ -58,7 +58,7 @@ export const updateNoteAtom = atom(null, async (get, set, updatedNote) => {
 });
 
 export const deleteNoteAtom = atom(null, async (get, set, note) => {
-  console.log("delete note");
+  // console.log("delete note");
 
   const { makeRequest } = useAPI();
   try {
