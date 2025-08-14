@@ -1,8 +1,9 @@
 import Button from "../../Button";
+import styles from "../../css-modules/NoteList.module.css";
 
 const NotesSortControls = (props) => {
   return (
-    <div>
+    <div className={styles.note_list}>
       <Button
         type="button"
         name={props.isSorted ? "Unsort" : "Sort"}

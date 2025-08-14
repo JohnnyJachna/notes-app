@@ -6,6 +6,7 @@ import { useAtomValue } from "jotai/react";
 import NotesSortControls from "./NotesSortControls";
 import NotesSortDropdown from "./NotesSortDropdown";
 import NotesListItems from "./NotesListItems";
+import styles from "../../css-modules/NoteList.module.css";
 
 const NotesList = () => {
   const types = ["Header", "Tags", "Sources", "Edited", "Created"];
@@ -88,19 +89,22 @@ const NotesList = () => {
     <>
       <h4>Notes List</h4>
       {notesList.length > 0 && (
-        <NotesSortControls
-          isSorted={isSorted}
-          ascending={ascending}
-          onSortToggle={handleSortToggle}
-          onOrderToggle={handleOrderToggle}
-          disabled={!isSorted}
-        />
+        <div className={styles.note_list}>
+          <NotesSortControls
+            isSorted={isSorted}
+            ascending={ascending}
+            onSortToggle={handleSortToggle}
+            onOrderToggle={handleOrderToggle}
+            disabled={!isSorted}
+          />
+          <NotesSortDropdown
+            types={types}
+            sortType={sortType}
+            setSortType={setSortType}
+          />
+        </div>
       )}
-      <NotesSortDropdown
-        types={types}
-        sortType={sortType}
-        setSortType={setSortType}
-      />
+
       <NotesListItems
         sortedNoteAtoms={sortedNoteAtoms}
         sortedNotes={sortedNotes}
