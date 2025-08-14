@@ -1,16 +1,68 @@
-import React from "react";
+import React, { useState } from "react";
 import Tag from "./Tag";
-import { splitTagsAtom } from "./TagsAtoms";
-import { useAtom } from "jotai/react";
+import { tagsAtom, splitTagsAtom } from "./TagsAtoms";
+import { useAtomValue } from "jotai/react";
+import Button from "../Button";
 
 const TagsList = () => {
-  const [tagsList] = useAtom(splitTagsAtom);
+  const tagsList = useAtomValue(tagsAtom);
+  const tagAtoms = useAtomValue(splitTagsAtom);
+  const [isSorted, setIsSorted] = useState(false);
+  const [ascending, setAscending] = useState(true);
+
+  const sortedTags = isSorted
+    ? [...tagsList].sort((a, b) => {
+        const nameA = a.name?.toLowerCase() ?? ""; // if it has a name, lowercase it, else empty string
+        const nameB = b.name?.toLowerCase() ?? "";
+        if (nameA < nameB) return ascending ? -1 : 1; // if sort by ascending, -1 else 1
+        if (nameA > nameB) return ascending ? 1 : -1;
+        return 0; // if names equal, keep positions
+      })
+    : tagsList;
+
+  const sortedTagAtoms = sortedTags.map((tag) =>
+    tagAtoms.find((_, index) => tagsList[index].id === tag.id)
+  );
+
+  // go through the tagAtom's indexes
+  // is the id at this index equal to the current sorted id
+  // if so, return that atom into sortedTagAtoms
+  // works because
+  // Ex:
+  // tagsList = [{id: 1}, {id: 2}, {id: 3}]
+  // tagAtoms = [atom1, atom2, atom3]
+  // sortedTags = [{id: 2}, {id: 1}, {id: 3}]
+  // sortedTagAtoms = [atom2, atom1, atom3]
+
+  const handleSortToggle = () => {
+    setIsSorted((prev) => !prev);
+  };
+
+  const handleOrderToggle = () => {
+    setAscending((prev) => !prev);
+  };
 
   return (
     <>
       <h4>Tags List</h4>
-      {tagsList.map((singleTag) => (
-        <Tag key={singleTag.toString()} tagAtom={singleTag} />
+      {tagsList.length > 0 && (
+        <div>
+          <Button
+            type="button"
+            name={isSorted ? "Unsort" : "Sort"}
+            onClick={handleSortToggle}
+          />
+          <Button
+            type="button"
+            name={ascending ? "Asc" : "Desc"}
+            onClick={handleOrderToggle}
+            disabled={!isSorted}
+          />
+        </div>
+      )}
+
+      {sortedTagAtoms.map((tagAtom, idx) => (
+        <Tag key={sortedTags[idx].id} tagAtom={tagAtom} />
       ))}
     </>
   );
