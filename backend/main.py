@@ -124,7 +124,7 @@ async def add_note(set_id: int, payload: Note,session: Session = Depends(get_ses
     content=payload.content,
     create_date=payload.create_date,
     update_date=payload.update_date,
-    set_id=payload.set_id
+    set_id=payload.set_id,
   )
   
   session.add(new_note)
@@ -132,8 +132,8 @@ async def add_note(set_id: int, payload: Note,session: Session = Depends(get_ses
   session.refresh(new_note)
   return new_note
 
-@app.patch("/sets/{set_id}/notes", response_model = NoteRead)
-async def update_note_data(set_id: int, payload: Note, session: Session = Depends(get_session)):
+@app.patch("/sets/{set_id}/notes", response_model = Note)
+async def update_note_data(set_id: int, payload: NoteRead, session: Session = Depends(get_session)):
   note = session.get(Note, payload.id)
 
   updated_data = payload.model_dump(exclude_unset=True)
@@ -307,8 +307,9 @@ async def add_source_to_note(set_id: int, note_id: int, source_id: int, session:
   note.sources.append(source)
   session.add(note)
   session.commit()
+  session.refresh(note)
 
-  return {"message": f"Source: {source_id} added to Note: {note_id}"}
+  return note
 
 @app.delete("/sets/{set_id}/notes/{note_id}/sources/{source_id}")
 def delete_source_from_note(set_id: int, note_id: int, source_id: int, session: Session = Depends(get_session)):

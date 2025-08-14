@@ -1,5 +1,6 @@
 import { atom } from "jotai/vanilla";
 import { loadable, splitAtom } from "jotai/utils";
+import { notesAtom } from "../notes/NotesAtoms";
 import { useAPI } from "../../utils/api";
 
 export const fetchSourcesAtom = atom(async (get) => {
@@ -55,6 +56,23 @@ export const updateSourceAtom = atom(null, async (get, set, updatedSource) => {
         source.id === updatedSource.id ? updatedSource : source
       )
     );
+
+    // Update source name in all notes containing this source
+    set(notesAtom, (prevNotes) =>
+      prevNotes.map((note) => {
+        if (note.sources.some((source) => source.id === updatedSource.id)) {
+          return {
+            ...note,
+            sources: note.sources.map((source) =>
+              source.id === updatedSource.id
+                ? { ...source, name: updatedSource.name }
+                : source
+            ),
+          };
+        }
+        return note;
+      })
+    );
   } catch (error) {
     console.log(error);
   }
@@ -71,6 +89,19 @@ export const deleteSourceAtom = atom(null, async (get, set, source) => {
     });
     set(sourcesAtom, (prevSource) =>
       prevSource.filter((item) => item.id !== source.id)
+    );
+
+    // Remove source from all notes containing this source
+    set(notesAtom, (prevNotes) =>
+      prevNotes.map((note) => {
+        if (note.sources.some((t) => t.id === source.id)) {
+          return {
+            ...note,
+            sources: note.sources.filter((t) => t.id !== source.id),
+          };
+        }
+        return note;
+      })
     );
   } catch (error) {
     console.log(error);

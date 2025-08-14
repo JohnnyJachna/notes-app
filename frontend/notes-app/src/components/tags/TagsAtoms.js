@@ -1,5 +1,6 @@
 import { atom } from "jotai/vanilla";
 import { loadable, splitAtom } from "jotai/utils";
+import { notesAtom } from "../notes/NotesAtoms";
 import { useAPI } from "../../utils/api";
 
 export const fetchTagsAtom = atom(async (get) => {
@@ -36,7 +37,6 @@ export const addTagAtom = atom(null, async (get, set, newTag) => {
 
 export const updateTagAtom = atom(null, async (get, set, updatedTag) => {
   // console.log("update tag");
-
   const { makeRequest } = useAPI();
   const body = {
     id: updatedTag.id,
@@ -50,14 +50,27 @@ export const updateTagAtom = atom(null, async (get, set, updatedTag) => {
     set(tagsAtom, (prevTags) =>
       prevTags.map((tag) => (tag.id === updatedTag.id ? updatedTag : tag))
     );
+
+    // Update tag name in all notes containing this tag
+    set(notesAtom, (prevNotes) =>
+      prevNotes.map((note) => {
+        if (note.tags.some((tag) => tag.id === updatedTag.id)) {
+          return {
+            ...note,
+            tags: note.tags.map((tag) =>
+              tag.id === updatedTag.id ? { ...tag, name: updatedTag.name } : tag
+            ),
+          };
+        }
+        return note;
+      })
+    );
   } catch (error) {
     console.log(error);
   }
 });
 
 export const deleteTagAtom = atom(null, async (get, set, tag) => {
-  // console.log("delete tag");
-
   const { makeRequest } = useAPI();
   try {
     await makeRequest(`sets/${tag.set_id}/tags/${tag.id}`, {
@@ -65,6 +78,19 @@ export const deleteTagAtom = atom(null, async (get, set, tag) => {
       body: tag.set_id,
     });
     set(tagsAtom, (prevTag) => prevTag.filter((item) => item.id !== tag.id));
+
+    // Remove tag from all notes containing this tag
+    set(notesAtom, (prevNotes) =>
+      prevNotes.map((note) => {
+        if (note.tags.some((t) => t.id === tag.id)) {
+          return {
+            ...note,
+            tags: note.tags.filter((t) => t.id !== tag.id),
+          };
+        }
+        return note;
+      })
+    );
   } catch (error) {
     console.log(error);
   }

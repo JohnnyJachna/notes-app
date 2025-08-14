@@ -5,8 +5,8 @@ import { createPortal } from "react-dom";
 
 import Button from "../Button";
 import styles from "../css-modules/Note.module.css";
-import NotePreview from "./NotePreview";
-import NoteEditor from "./NoteEditor";
+import NotePreview from "./preview/NotePreview";
+import NoteEditor from "./editor/NoteEditor";
 
 const Note = (props) => {
   const [note, setNote] = useAtom(props.noteAtom);

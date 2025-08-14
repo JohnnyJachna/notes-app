@@ -1,6 +1,4 @@
-import Button from "../Button";
-
-const NoteTags = ({ tags, editable, removeTag }) => {
+const NoteTagsPreview = ({ tags }) => {
   return (
     <>
       <p>Tags:</p>
@@ -10,13 +8,6 @@ const NoteTags = ({ tags, editable, removeTag }) => {
             return (
               <li key={tag.id}>
                 <p>{tag.name}</p>
-                {editable && (
-                  <Button
-                    type="button"
-                    name="Remove"
-                    onClick={() => removeTag(tag.id)}
-                  />
-                )}
               </li>
             );
           })}
@@ -28,4 +19,4 @@ const NoteTags = ({ tags, editable, removeTag }) => {
   );
 };
 
-export default NoteTags;
+export default NoteTagsPreview;
