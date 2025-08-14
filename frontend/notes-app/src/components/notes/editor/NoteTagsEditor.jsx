@@ -1,7 +1,12 @@
-import Button from "../../Button";
 import { useState, useEffect } from "react";
+import { tagsAtom } from "../../tags/TagsAtoms";
+import { useAtomValue } from "jotai/react";
 
-const NoteTagsEditor = ({ tags, setTags, allTags }) => {
+import Button from "../../Button";
+
+const NoteTagsEditor = ({ tags, setTags }) => {
+  const allTags = useAtomValue(tagsAtom);
+
   const addableTags = allTags.filter(
     (tag) => !tags.some((noteTag) => noteTag.id === tag.id)
   );

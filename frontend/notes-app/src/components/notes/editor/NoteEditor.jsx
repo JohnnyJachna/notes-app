@@ -1,7 +1,5 @@
 import { useState } from "react";
 import { useAtomValue, useSetAtom } from "jotai/react";
-import { tagsAtom } from "../../tags/TagsAtoms";
-import { sourcesAtom } from "../../sources/SourcesAtoms";
 import { updateNoteAtom } from "../NotesAtoms";
 import NoteHeaderEditor from "./NoteHeaderEditor";
 import NoteContentEditor from "./NoteContentEditor";
@@ -43,16 +41,8 @@ const NoteEditor = ({ noteAtom, handleCloseEditor }) => {
       <h3>Edit Note</h3>
       <NoteHeaderEditor header={header} setHeader={setHeader} />
       <NoteContentEditor content={content} setContent={setContent} />
-      <NoteTagsEditor
-        tags={noteTags}
-        setTags={setNoteTags}
-        allTags={useAtomValue(tagsAtom)}
-      />
-      <NoteSourcesEditor
-        sources={noteSources}
-        setSources={setNoteSources}
-        allSources={useAtomValue(sourcesAtom)}
-      />
+      <NoteTagsEditor tags={noteTags} setTags={setNoteTags} />
+      <NoteSourcesEditor sources={noteSources} setSources={setNoteSources} />
       <Button type="button" name="Save" onClick={handleSave} />
       <Button type="button" name="Cancel" onClick={handleCancel} />
     </div>
