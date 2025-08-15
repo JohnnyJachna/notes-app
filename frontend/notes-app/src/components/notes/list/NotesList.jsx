@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 
 import { notesAtom, splitNotesAtom } from "../NotesAtoms";
 import { useAtomValue } from "jotai/react";
@@ -7,14 +7,59 @@ import NotesSortControls from "./NotesSortControls";
 import NotesSortDropdown from "./NotesSortDropdown";
 import NotesListItems from "./NotesListItems";
 import styles from "../../css-modules/NoteList.module.css";
+import Button from "../../Button";
 
 const NotesList = () => {
-  const types = ["Header", "Tags", "Sources", "Edited", "Created"];
+  const sortTypes = ["Header", "Tags", "Sources", "Edited", "Created"];
   const notesList = useAtomValue(notesAtom);
   const noteAtoms = useAtomValue(splitNotesAtom);
+
+  const [sortType, setSortType] = useState("Header");
   const [isSorted, setIsSorted] = useState(false);
   const [ascending, setAscending] = useState(true);
-  const [sortType, setSortType] = useState("Header");
+
+  const [filterType, setFilterType] = useState("Tag");
+  const [isFiltered, setIsFiltered] = useState(false);
+
+  const [tagSelection, setTagSelection] = useState();
+  const tagsList = notesList.flatMap((note) => note.tags);
+  const tagsNames = useMemo(
+    () => [...new Set(tagsList.map((tag) => tag.name))],
+    [tagsList]
+  );
+
+  const [sourceSelection, setSourceSelection] = useState();
+  const sourcesList = notesList.flatMap((note) => note.sources);
+  const sourcesNames = useMemo(
+    () => [...new Set(sourcesList.map((source) => source.name))],
+    [sourcesList]
+  );
+
+  const tagsAvailable = tagsList.length > 0 ? true : false;
+  const sourcesAvailable = sourcesList.length > 0 ? true : false;
+
+  useEffect(() => {
+    if (!tagSelection && tagsNames.length > 0) {
+      setTagSelection(tagsNames[0]);
+    }
+    if (!sourceSelection && sourcesNames.length > 0) {
+      setSourceSelection(sourcesNames[0]);
+    }
+  }, [notesList]);
+
+  const filteredNotes = useMemo(() => {
+    if (!isFiltered) return notesList;
+
+    if (filterType === "Tag") {
+      return notesList.filter((note) =>
+        note.tags.some((noteTag) => noteTag.name === tagSelection)
+      );
+    } else {
+      return notesList.filter((note) =>
+        note.sources.some((noteSource) => noteSource.name === sourceSelection)
+      );
+    }
+  }, [notesList, isFiltered, filterType, tagSelection, sourceSelection]);
 
   const sortedNotes = useMemo(() => {
     if (!isSorted) return notesList;
@@ -71,11 +116,21 @@ const NotesList = () => {
     return sortedArray;
   }, [notesList, isSorted, ascending, sortType]);
 
-  const sortedNoteAtoms = useMemo(() => {
-    return sortedNotes.map((note) =>
+  const refinedNotes = useMemo(() => {
+    if (!isSorted && !isFiltered) return notesList;
+    if (!isSorted) return filteredNotes;
+    if (!isFiltered) return sortedNotes;
+
+    return sortedNotes.filter((sNote) =>
+      filteredNotes.some((fNote) => fNote.id === sNote.id)
+    );
+  }, [sortedNotes, filteredNotes]);
+
+  const refinedNoteAtoms = useMemo(() => {
+    return refinedNotes.map((note) =>
       noteAtoms.find((_, index) => notesList[index].id === note.id)
     );
-  }, [sortedNotes, notesList, noteAtoms]);
+  }, [refinedNotes, notesList, noteAtoms]);
 
   const handleSortToggle = () => {
     setIsSorted((prev) => !prev);
@@ -83,6 +138,10 @@ const NotesList = () => {
 
   const handleOrderToggle = () => {
     setAscending((prev) => !prev);
+  };
+
+  const handleFilterToggle = () => {
+    setIsFiltered((prev) => !prev);
   };
 
   return (
@@ -98,16 +157,64 @@ const NotesList = () => {
             disabled={!isSorted}
           />
           <NotesSortDropdown
-            types={types}
+            types={sortTypes}
             sortType={sortType}
             setSortType={setSortType}
           />
+          {/* Filtering */}
+          {(tagsAvailable || sourcesAvailable) && (
+            <>
+              <Button
+                type="button"
+                name={isFiltered ? "Unfilter" : "Filter"}
+                onClick={handleFilterToggle}
+              />
+              <select
+                value={filterType}
+                onChange={(e) => setFilterType(e.target.value)}
+              >
+                {tagsAvailable && (
+                  <option key={"Tag"} value="Tag">
+                    Tag
+                  </option>
+                )}
+                {sourcesAvailable && (
+                  <option key={"Soruce"} value="Source">
+                    Source
+                  </option>
+                )}
+              </select>
+              {filterType === "Tag" ? (
+                <select
+                  value={tagSelection}
+                  onChange={(e) => setTagSelection(e.target.value)}
+                >
+                  {tagsNames.map((tag, index) => (
+                    <option key={index} value={tag}>
+                      {tag}
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <select
+                  value={sourceSelection}
+                  onChange={(e) => setSourceSelection(e.target.value)}
+                >
+                  {sourcesNames.map((source, index) => (
+                    <option key={index} value={source}>
+                      {source}
+                    </option>
+                  ))}
+                </select>
+              )}
+            </>
+          )}
         </div>
       )}
 
       <NotesListItems
-        sortedNoteAtoms={sortedNoteAtoms}
-        sortedNotes={sortedNotes}
+        sortedNoteAtoms={refinedNoteAtoms}
+        sortedNotes={refinedNotes}
       />
     </>
   );
