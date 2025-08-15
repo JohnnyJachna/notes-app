@@ -5,6 +5,7 @@ import { useAtom, useSetAtom } from "jotai/react";
 
 import Button from "../Button";
 import styles from "../css-modules/Source.module.css";
+import { createPortal } from "react-dom";
 import SourceEditor from "./SourceEditor";
 
 const Source = (props) => {
@@ -23,23 +24,20 @@ const Source = (props) => {
 
   return (
     <div className={styles.source}>
-      {showEditor ? (
-        <SourceEditor
-          sourceAtom={props.sourceAtom}
-          setSources={setSources}
-          handleCloseEditor={handleCloseEditor}
-        />
-      ) : (
-        <>
-          <p>{source.name}</p>
-          <Button
-            type="button"
-            name="edit"
-            onClick={() => setShowEditor(true)}
-          />
-          <Button type="button" name="delete" onClick={handleDeleteNote} />
-        </>
-      )}
+      {showEditor &&
+        createPortal(
+          <SourceEditor
+            sourceAtom={props.sourceAtom}
+            setSources={setSources}
+            handleCloseEditor={handleCloseEditor}
+          />,
+          document.body
+        )}
+      <>
+        <p>{source.name}</p>
+        <Button type="button" name="edit" onClick={() => setShowEditor(true)} />
+        <Button type="button" name="delete" onClick={handleDeleteNote} />
+      </>
     </div>
   );
 };

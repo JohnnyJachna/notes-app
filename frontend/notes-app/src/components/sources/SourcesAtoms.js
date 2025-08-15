@@ -38,45 +38,75 @@ export const addSourceAtom = atom(null, async (get, set, newSource) => {
   }
 });
 
-export const updateSourceAtom = atom(null, async (get, set, updatedSource) => {
-  // console.log("update source");
+export const updateSourceAtom = atom(
+  null,
+  async (
+    get,
+    set,
+    {
+      originalSource,
+      name,
+      title,
+      authors,
+      publishers,
+      pages,
+      publishDate,
+      updateDate,
+      accessDate,
+    }
+  ) => {
+    console.log("update source " + originalSource);
 
-  const { makeRequest } = useAPI();
-  const body = {
-    id: updatedSource.id,
-    name: updatedSource.name,
-  };
-  try {
-    await makeRequest(`sets/${updatedSource.set_id}/sources`, {
-      method: "PATCH",
-      body: JSON.stringify(body),
-    });
-    set(sourcesAtom, (prevSources) =>
-      prevSources.map((source) =>
-        source.id === updatedSource.id ? updatedSource : source
-      )
-    );
+    const { makeRequest } = useAPI();
+    const body = {
+      id: originalSource.id,
+      name: name,
+      title: title,
+      authors: authors,
+      publishers: publishers,
+      pages: pages,
+      publish_date: publishDate,
+      update_date: updateDate,
+      access_date: accessDate,
+      set_id: originalSource.set_id,
+    };
+    console.log("body: " + JSON.stringify(body));
+    try {
+      await makeRequest(`sets/${originalSource.set_id}/sources`, {
+        method: "PATCH",
+        body: JSON.stringify(body),
+      });
+      set(sourcesAtom, (prevSources) =>
+        prevSources.map((prevSource) =>
+          prevSource.id === originalSource.id ? body : prevSource
+        )
+      );
 
-    // Update source name in all notes containing this source
-    set(notesAtom, (prevNotes) =>
-      prevNotes.map((note) => {
-        if (note.sources.some((source) => source.id === updatedSource.id)) {
-          return {
-            ...note,
-            sources: note.sources.map((source) =>
-              source.id === updatedSource.id
-                ? { ...source, name: updatedSource.name }
-                : source
-            ),
-          };
-        }
-        return note;
-      })
-    );
-  } catch (error) {
-    console.log(error);
+      // Update source name in all notes containing this source
+      set(notesAtom, (prevNotes) =>
+        prevNotes.map((note) => {
+          if (
+            note.sources.some(
+              (noteSource) => noteSource.id === originalSource.id
+            )
+          ) {
+            return {
+              ...note,
+              sources: note.sources.map((noteSource) =>
+                noteSource.id === originalSource.id
+                  ? (noteSource = body)
+                  : noteSource
+              ),
+            };
+          }
+          return note;
+        })
+      );
+    } catch (error) {
+      console.log(error);
+    }
   }
-});
+);
 
 export const deleteSourceAtom = atom(null, async (get, set, source) => {
   // console.log("delete source");

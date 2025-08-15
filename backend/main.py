@@ -187,8 +187,8 @@ def get_single_tag(set_id: int, tag_id: int, response: Response, session: Sessio
 @app.post("/sets/{set_id}/tags/add", response_model=Tag)
 async def add_tag(set_id: int, payload: Tag, session: Session = Depends(get_session)):
   new_tag = Tag(
-    name=payload.name,
-    set_id=payload.set_id
+    name = payload.name,
+    set_id = payload.set_id
   )
   
   session.add(new_tag)
@@ -240,8 +240,15 @@ def get_single_source(set_id: int, source_id: int, response: Response, session: 
 @app.post("/sets/{set_id}/sources/add", response_model=Source)
 async def add_source(set_id: int, session: Session = Depends(get_session)):
   new_source = Source(
-    name="New Source",
-    set_id= set_id
+    name = "New Source",
+    set_id = set_id,
+    title = "",
+    authors = "",
+    publishers = "",
+    pages = "",
+    publish_date = "",
+    update_date = "",
+    access_date = ""
   )
   
   session.add(new_source)
@@ -250,7 +257,7 @@ async def add_source(set_id: int, session: Session = Depends(get_session)):
   return new_source
 
 @app.patch("/sets/{set_id}/sources", response_model = SourceRead)
-async def update_source_name(set_id: int, payload: Source, session: Session = Depends(get_session)):
+async def update_source_name(set_id: int, payload: SourceRead, session: Session = Depends(get_session)):
   source = session.get(Source, payload.id)
 
   updated_data = payload.model_dump(exclude_unset=True)
