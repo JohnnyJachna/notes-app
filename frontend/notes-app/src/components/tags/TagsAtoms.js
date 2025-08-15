@@ -1,7 +1,7 @@
 import { atom } from "jotai/vanilla";
 import { loadable, splitAtom } from "jotai/utils";
 import { notesAtom } from "../notes/NotesAtoms";
-import { useAPI } from "../../utils/api";
+import { makeRequest } from "../../utils/api";
 
 export const fetchTagsAtom = atom(async (get) => {
   // console.log("fetch tags");
@@ -11,7 +11,6 @@ export const fetchTagsAtom = atom(async (get) => {
     return [];
   }
 
-  const { makeRequest } = useAPI();
   try {
     const response = await makeRequest(`sets/${setID}/tags`);
     return response;
@@ -23,7 +22,6 @@ export const fetchTagsAtom = atom(async (get) => {
 export const addTagAtom = atom(null, async (get, set, newTag) => {
   // console.log("add tag");
 
-  const { makeRequest } = useAPI();
   try {
     const addedTag = await makeRequest(`sets/${newTag.set_id}/tags/add`, {
       method: "POST",
@@ -37,7 +35,7 @@ export const addTagAtom = atom(null, async (get, set, newTag) => {
 
 export const updateTagAtom = atom(null, async (get, set, updatedTag) => {
   // console.log("update tag");
-  const { makeRequest } = useAPI();
+
   const body = {
     id: updatedTag.id,
     name: updatedTag.name,
@@ -71,7 +69,6 @@ export const updateTagAtom = atom(null, async (get, set, updatedTag) => {
 });
 
 export const deleteTagAtom = atom(null, async (get, set, tag) => {
-  const { makeRequest } = useAPI();
   try {
     await makeRequest(`sets/${tag.set_id}/tags/${tag.id}`, {
       method: "DELETE",

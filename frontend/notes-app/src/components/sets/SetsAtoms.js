@@ -1,11 +1,10 @@
 import { atom } from "jotai/vanilla";
 import { loadable, splitAtom } from "jotai/utils";
-import { useAPI } from "../../utils/api";
+import { makeRequest } from "../../utils/api";
 
 export const fetchSetsAtom = atom(async () => {
   console.log("fetch sets");
 
-  const { makeRequest } = useAPI();
   try {
     const response = await makeRequest(`sets`);
     return response;
@@ -17,7 +16,6 @@ export const fetchSetsAtom = atom(async () => {
 export const addSetAtom = atom(null, async (get, set, newSet) => {
   console.log("add set");
 
-  const { makeRequest } = useAPI();
   try {
     const addedSet = await makeRequest(`sets/add`, {
       method: "POST",
@@ -32,7 +30,6 @@ export const addSetAtom = atom(null, async (get, set, newSet) => {
 export const updateSetAtom = atom(null, async (get, set, updatedSet) => {
   console.log("update set");
 
-  const { makeRequest } = useAPI();
   const body = {
     id: updatedSet.id,
     name: updatedSet.name,
@@ -53,7 +50,6 @@ export const updateSetAtom = atom(null, async (get, set, updatedSet) => {
 export const deleteSetAtom = atom(null, async (get, set, setID) => {
   console.log("delete set");
 
-  const { makeRequest } = useAPI();
   try {
     await makeRequest(`sets/${setID}`, {
       method: "DELETE",

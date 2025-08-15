@@ -1,7 +1,7 @@
 import { atom } from "jotai/vanilla";
 import { loadable, splitAtom } from "jotai/utils";
 import { notesAtom } from "../notes/NotesAtoms";
-import { useAPI } from "../../utils/api";
+import { makeRequest } from "../../utils/api";
 
 export const fetchSourcesAtom = atom(async (get) => {
   // console.log("fetch sources");
@@ -11,7 +11,6 @@ export const fetchSourcesAtom = atom(async (get) => {
     return [];
   }
 
-  const { makeRequest } = useAPI();
   try {
     const response = await makeRequest(`sets/${setID}/sources`);
     return response;
@@ -23,7 +22,6 @@ export const fetchSourcesAtom = atom(async (get) => {
 export const addSourceAtom = atom(null, async (get, set, newSource) => {
   // console.log("add source");
 
-  const { makeRequest } = useAPI();
   try {
     const addedSource = await makeRequest(
       `sets/${newSource.set_id}/sources/add`,
@@ -57,7 +55,6 @@ export const updateSourceAtom = atom(
   ) => {
     console.log("update source " + originalSource);
 
-    const { makeRequest } = useAPI();
     const body = {
       id: originalSource.id,
       name: name,
@@ -111,7 +108,6 @@ export const updateSourceAtom = atom(
 export const deleteSourceAtom = atom(null, async (get, set, source) => {
   // console.log("delete source");
 
-  const { makeRequest } = useAPI();
   try {
     await makeRequest(`sets/${source.set_id}/sources/${source.id}`, {
       method: "DELETE",
