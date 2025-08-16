@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { deleteNoteAtom } from "./NotesAtoms";
-import { useAtom, useSetAtom } from "jotai/react";
+import { useAtomValue, useSetAtom } from "jotai/react";
 import { createPortal } from "react-dom";
 
 import Button from "../Button";
@@ -9,7 +9,7 @@ import NotePreview from "./preview/NotePreview";
 import NoteEditor from "./editor/NoteEditor";
 
 const Note = (props) => {
-  const [note, setNote] = useAtom(props.noteAtom);
+  const note = useAtomValue(props.noteAtom);
   const deleteNote = useSetAtom(deleteNoteAtom);
 
   const [showEditor, setShowEditor] = useState(false);
@@ -19,7 +19,7 @@ const Note = (props) => {
   };
 
   const handleDeleteNote = async () => {
-    await deleteNote(note);
+    await deleteNote({ setID: note.set_id, noteID: note.id });
   };
 
   return (
@@ -34,7 +34,6 @@ const Note = (props) => {
           createPortal(
             <NoteEditor
               noteAtom={props.noteAtom}
-              setNote={setNote}
               handleCloseEditor={handleCloseEditor}
             />,
             document.body

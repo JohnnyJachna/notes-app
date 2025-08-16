@@ -43,7 +43,6 @@ const NoteEditor = ({ noteAtom, handleCloseEditor }) => {
       <NoteContentEditor content={content} setContent={setContent} />
       <NoteTagsEditor tags={noteTags} setTags={setNoteTags} />
       <NoteSourcesEditor sources={noteSources} setSources={setNoteSources} />
-
       <Button type="button" name="Save" onClick={handleSave} />
       <Button type="button" name="Cancel" onClick={handleCancel} />
       <p>Last Edit : {note.update_date}</p>

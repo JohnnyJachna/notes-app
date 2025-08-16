@@ -1,30 +1,42 @@
 import { atom } from "jotai/vanilla";
-import { loadable, splitAtom } from "jotai/utils";
+import { splitAtom } from "jotai/utils";
 import { makeRequest } from "../../utils/api";
 
-export const fetchNotesAtom = atom(async (get) => {
+export const notesAtom = atom([]);
+export const splitNotesAtom = splitAtom(notesAtom);
+
+export const fetchNotesAtom = atom(null, async (get, set, setID) => {
   // console.log("fetch notes");
-  const setID = get(notesSetIDAtom);
 
   if (!setID) {
-    return [];
+    set(notesAtom, []);
+    return;
   }
 
   try {
     const response = await makeRequest(`sets/${setID}/notes`);
-    return response;
+    set(notesAtom, response);
   } catch (error) {
     console.log(error);
+    set(notesAtom, []);
   }
 });
 
-export const addNoteAtom = atom(null, async (get, set, newNote) => {
+export const addNoteAtom = atom(null, async (get, set, setID) => {
   // console.log("add note");
+  const date = new Date().toLocaleString();
 
   try {
-    const addedNote = await makeRequest(`sets/${newNote.set_id}/notes/add`, {
+    const addedNote = await makeRequest(`sets/${setID}/notes/add`, {
       method: "POST",
-      body: JSON.stringify(newNote),
+      body: JSON.stringify({
+        name: "New Tag",
+        header: "",
+        content: "",
+        create_date: date,
+        update_date: date,
+        set_id: setID,
+      }),
     });
     set(notesAtom, (prevNote) => [...prevNote, addedNote]);
   } catch (error) {
@@ -61,7 +73,7 @@ export const updateNoteAtom = atom(
       })),
     };
 
-    const refreshed = await makeRequest(`sets/${note.set_id}/notes`, {
+    const newNote = await makeRequest(`sets/${note.set_id}/notes`, {
       method: "PATCH",
       body: JSON.stringify(updatedNote),
       headers: { "Content-Type": "application/json" },
@@ -69,28 +81,25 @@ export const updateNoteAtom = atom(
 
     // Update only the edited note in the atom
     set(notesAtom, (prevNotes) =>
-      prevNotes.map((n) => (n.id === refreshed.id ? refreshed : n))
+      prevNotes.map((prev) => (prev.id === newNote.id ? newNote : prev))
     );
   }
 );
 
-export const deleteNoteAtom = atom(null, async (get, set, note) => {
-  // console.log("delete note");
+export const deleteNoteAtom = atom(
+  null,
+  async (get, set, { setID, noteID }) => {
+    // console.log("delete note");
 
-  try {
-    await makeRequest(`sets/${note.set_id}/notes/${note.id}`, {
-      method: "DELETE",
-      body: note.set_id,
-    });
-    set(notesAtom, (prevNote) =>
-      prevNote.filter((item) => item.id !== note.id)
-    );
-  } catch (error) {
-    console.log(error);
+    try {
+      await makeRequest(`sets/${setID}/notes/${noteID}`, {
+        method: "DELETE",
+      });
+      set(notesAtom, (prevNote) =>
+        prevNote.filter((item) => item.id !== noteID)
+      );
+    } catch (error) {
+      console.log(error);
+    }
   }
-});
-
-export const loadableNotesAtom = loadable(fetchNotesAtom);
-export const notesAtom = atom([]);
-export const splitNotesAtom = splitAtom(notesAtom);
-export const notesSetIDAtom = atom(null);
+);

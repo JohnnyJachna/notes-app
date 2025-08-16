@@ -1,14 +1,13 @@
 import { useAtomValue } from "jotai";
-import { refinedNotesAtom, refinedNotesSplitAtom } from "./NotesListAtoms";
+import { refinedNotesSplitAtom } from "./NotesListAtoms";
 import Note from "../Note";
 
 const NotesListItems = () => {
-  const refinedNotes = useAtomValue(refinedNotesAtom);
-  const refinedNotesSplit = useAtomValue(refinedNotesSplitAtom);
+  const noteAtoms = useAtomValue(refinedNotesSplitAtom);
   return (
     <>
-      {refinedNotesSplit.map((noteAtom, idx) => (
-        <Note key={refinedNotes[idx].id} noteAtom={noteAtom} />
+      {noteAtoms.map((noteAtom) => (
+        <Note key={noteAtom.toString()} noteAtom={noteAtom} />
       ))}
     </>
   );

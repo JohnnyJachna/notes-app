@@ -1,35 +1,35 @@
 import { atom } from "jotai/vanilla";
-import { loadable, splitAtom } from "jotai/utils";
+import { splitAtom } from "jotai/utils";
 import { notesAtom } from "../notes/NotesAtoms";
 import { makeRequest } from "../../utils/api";
 
-export const fetchSourcesAtom = atom(async (get) => {
+export const sourcesAtom = atom([]);
+export const splitSourcesAtom = splitAtom(sourcesAtom);
+
+export const fetchSourcesAtom = atom(null, async (get, set, setID) => {
   // console.log("fetch sources");
-  const setID = get(sourcesSetIDAtom);
 
   if (!setID) {
-    return [];
+    set(sourcesAtom, []);
+    return;
   }
-
   try {
     const response = await makeRequest(`sets/${setID}/sources`);
-    return response;
+    set(sourcesAtom, response);
   } catch (error) {
     console.log(error);
+    set(sourcesAtom, []);
   }
 });
 
-export const addSourceAtom = atom(null, async (get, set, newSource) => {
+export const addSourceAtom = atom(null, async (get, set, setID) => {
   // console.log("add source");
 
   try {
-    const addedSource = await makeRequest(
-      `sets/${newSource.set_id}/sources/add`,
-      {
-        method: "POST",
-        body: JSON.stringify(newSource),
-      }
-    );
+    const addedSource = await makeRequest(`sets/${setID}/sources/add`, {
+      method: "POST",
+      body: JSON.stringify({ name: "New Source", set_id: setID }),
+    });
     set(sourcesAtom, (prevSource) => [...prevSource, addedSource]);
   } catch (error) {
     console.log(error);
@@ -105,36 +105,33 @@ export const updateSourceAtom = atom(
   }
 );
 
-export const deleteSourceAtom = atom(null, async (get, set, source) => {
-  // console.log("delete source");
+export const deleteSourceAtom = atom(
+  null,
+  async (get, set, { setID, sourceID }) => {
+    // console.log("delete source");
 
-  try {
-    await makeRequest(`sets/${source.set_id}/sources/${source.id}`, {
-      method: "DELETE",
-      body: source.set_id,
-    });
-    set(sourcesAtom, (prevSource) =>
-      prevSource.filter((item) => item.id !== source.id)
-    );
+    try {
+      await makeRequest(`sets/${setID}/sources/${sourceID}`, {
+        method: "DELETE",
+      });
+      set(sourcesAtom, (prev) =>
+        prev.filter((source) => source.id !== sourceID)
+      );
 
-    // Remove source from all notes containing this source
-    set(notesAtom, (prevNotes) =>
-      prevNotes.map((note) => {
-        if (note.sources.some((t) => t.id === source.id)) {
-          return {
-            ...note,
-            sources: note.sources.filter((t) => t.id !== source.id),
-          };
-        }
-        return note;
-      })
-    );
-  } catch (error) {
-    console.log(error);
+      // Remove source from all notes containing this source
+      set(notesAtom, (prev) =>
+        prev.map((note) => {
+          if (note.sources.some((t) => t.id === sourceID)) {
+            return {
+              ...note,
+              sources: note.sources.filter((t) => t.id !== sourceID),
+            };
+          }
+          return note;
+        })
+      );
+    } catch (error) {
+      console.log(error);
+    }
   }
-});
-
-export const loadableSourcesAtom = loadable(fetchSourcesAtom);
-export const sourcesAtom = atom([]);
-export const splitSourcesAtom = splitAtom(sourcesAtom);
-export const sourcesSetIDAtom = atom(null);
+);

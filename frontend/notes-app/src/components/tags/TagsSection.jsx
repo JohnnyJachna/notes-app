@@ -1,13 +1,8 @@
 import { useEffect } from "react";
 import { useParams } from "react-router";
 
-import {
-  loadableTagsAtom,
-  addTagAtom,
-  tagsAtom,
-  tagsSetIDAtom,
-} from "./TagsAtoms";
-import { useAtomValue, useSetAtom } from "jotai/react";
+import { addTagAtom, fetchTagsAtom } from "./TagsAtoms";
+import { useSetAtom } from "jotai/react";
 
 import TagsList from "./TagsList";
 import Button from "../Button";
@@ -16,27 +11,15 @@ import styles from "../css-modules/Section.module.css";
 const TagsSection = () => {
   const { setID } = useParams();
 
-  const loadableTags = useAtomValue(loadableTagsAtom);
-  const setTags = useSetAtom(tagsAtom);
   const addTag = useSetAtom(addTagAtom);
-  const setTagsSetID = useSetAtom(tagsSetIDAtom);
+  const fetchTags = useSetAtom(fetchTagsAtom);
 
   useEffect(() => {
-    setTagsSetID(setID);
-  }, [setID, setTagsSetID]);
-
-  useEffect(() => {
-    if (loadableTags.state === "hasData") {
-      setTags(loadableTags.data);
-    }
-  }, [loadableTags, setTags]);
+    fetchTags(setID);
+  }, [setID, fetchTags]);
 
   const handleAddTag = async () => {
-    const body = {
-      name: "New Tag",
-      set_id: setID,
-    };
-    await addTag(body);
+    await addTag(setID);
   };
 
   return (

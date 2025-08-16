@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import { deleteSourceAtom } from "./SourcesAtoms";
-import { useAtom, useSetAtom } from "jotai/react";
+import { useAtomValue, useSetAtom } from "jotai/react";
 
 import Button from "../Button";
 import styles from "../css-modules/Source.module.css";
@@ -9,7 +9,7 @@ import { createPortal } from "react-dom";
 import SourceEditor from "./SourceEditor";
 
 const Source = (props) => {
-  const [source, setSources] = useAtom(props.sourceAtom);
+  const source = useAtomValue(props.sourceAtom);
   const deleteSource = useSetAtom(deleteSourceAtom);
 
   const [showEditor, setShowEditor] = useState(false);
@@ -19,7 +19,7 @@ const Source = (props) => {
   };
 
   const handleDeleteNote = async () => {
-    await deleteSource(source);
+    await deleteSource({ setID: source.set_id, tagID: source.id });
   };
 
   return (
@@ -28,7 +28,6 @@ const Source = (props) => {
         createPortal(
           <SourceEditor
             sourceAtom={props.sourceAtom}
-            setSources={setSources}
             handleCloseEditor={handleCloseEditor}
           />,
           document.body

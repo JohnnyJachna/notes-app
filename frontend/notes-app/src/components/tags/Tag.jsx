@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 
 import { deleteTagAtom } from "./TagsAtoms";
-import { useAtom, useSetAtom } from "jotai/react";
+import { useAtomValue, useSetAtom } from "jotai/react";
 
 import Button from "../Button";
 import styles from "../css-modules/Tag.module.css";
 import TagEditor from "./TagEditor";
 
 const Tag = (props) => {
-  const [tag, setTags] = useAtom(props.tagAtom);
+  const tag = useAtomValue(props.tagAtom);
   const deleteTag = useSetAtom(deleteTagAtom);
 
   const [showEditor, setShowEditor] = useState(false);
@@ -18,7 +18,7 @@ const Tag = (props) => {
   };
 
   const handleDeleteNote = async () => {
-    await deleteTag(tag);
+    await deleteTag({ setID: tag.set_id, tagID: tag.id });
   };
 
   return (
@@ -26,7 +26,6 @@ const Tag = (props) => {
       {showEditor ? (
         <TagEditor
           tagAtom={props.tagAtom}
-          setTags={setTags}
           handleCloseEditor={handleCloseEditor}
         />
       ) : (
