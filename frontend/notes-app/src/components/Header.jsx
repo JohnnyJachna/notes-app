@@ -1,5 +1,4 @@
 import { Link } from "react-router";
-import DarkThemeToggle from "../../flowbite-react";
 import styles from "./css-modules/Header.module.css";
 
 const Header = () => {
