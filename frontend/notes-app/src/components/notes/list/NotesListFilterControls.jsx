@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useAtom, useAtomValue } from "jotai";
 import Button from "../../Button";
 import {
@@ -23,6 +24,16 @@ const NotesListFilterControls = ({ handleFilterToggle }) => {
   const sourcesAvailable = useAtomValue(sourcesAvailableAtom);
   const [sourceSelection, setSourceSelection] = useAtom(sourceSelectionAtom);
 
+  useEffect(() => {
+    if (tagsAvailable && !sourcesAvailable) {
+      setFilterType("Tag");
+      setTagSelection(tagsNames[0]);
+    } else if (sourcesAvailable && !tagsAvailable) {
+      setFilterType("Source");
+      setSourceSelection(sourcesNames[0]);
+    }
+  }, [tagsNames, tagsAvailable, sourcesNames, sourcesAvailable]);
+
   return (
     <>
       <Button
@@ -45,7 +56,7 @@ const NotesListFilterControls = ({ handleFilterToggle }) => {
           </option>
         )}
       </select>
-      {filterType === "Tag" ? (
+      {filterType === "Tag" && (
         <select
           value={tagSelection}
           onChange={(e) => setTagSelection(e.target.value)}
@@ -56,7 +67,8 @@ const NotesListFilterControls = ({ handleFilterToggle }) => {
             </option>
           ))}
         </select>
-      ) : (
+      )}
+      {filterType === "Source" && (
         <select
           value={sourceSelection}
           onChange={(e) => setSourceSelection(e.target.value)}

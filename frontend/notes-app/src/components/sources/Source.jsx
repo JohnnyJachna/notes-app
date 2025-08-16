@@ -19,7 +19,7 @@ const Source = (props) => {
   };
 
   const handleDeleteNote = async () => {
-    await deleteSource({ setID: source.set_id, tagID: source.id });
+    await deleteSource({ setID: source.set_id, sourceID: source.id });
   };
 
   return (
