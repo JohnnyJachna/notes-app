@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { useAtom, useAtomValue } from "jotai";
-import Button from "../../Button";
 import {
   isFilteredAtom,
   filterTypeAtom,
@@ -11,6 +10,8 @@ import {
   sourcesAvailableAtom,
   sourceSelectionAtom,
 } from "./NotesListAtoms";
+
+import { Button, Dropdown, DropdownItem } from "flowbite-react";
 
 const NotesListFilterControls = ({ handleFilterToggle }) => {
   const isFiltered = useAtomValue(isFilteredAtom);
@@ -36,49 +37,41 @@ const NotesListFilterControls = ({ handleFilterToggle }) => {
 
   return (
     <>
-      <Button
-        type="button"
-        name={isFiltered ? "Unfilter" : "Filter"}
-        onClick={handleFilterToggle}
-      />
-      <select
-        value={filterType}
-        onChange={(e) => setFilterType(e.target.value)}
-      >
+      <Button color="alternative" onClick={handleFilterToggle}>
+        {isFiltered ? "Unfilter" : "Filter"}
+      </Button>
+      <Dropdown label={filterType} color="alternative">
         {tagsAvailable && (
-          <option key="Tag" value="Tag">
+          <DropdownItem key="Tag" onClick={() => setFilterType("Tag")}>
             Tag
-          </option>
+          </DropdownItem>
         )}
         {sourcesAvailable && (
-          <option key="Source" value="Source">
+          <DropdownItem key="Source" onClick={() => setFilterType("Source")}>
             Source
-          </option>
+          </DropdownItem>
         )}
-      </select>
+      </Dropdown>
       {filterType === "Tag" && (
-        <select
-          value={tagSelection}
-          onChange={(e) => setTagSelection(e.target.value)}
-        >
+        <Dropdown label={tagSelection} color="alternative">
           {tagsNames.map((tag, index) => (
-            <option key={index} value={tag}>
+            <DropdownItem key={index} onClick={() => setTagSelection(tag)}>
               {tag}
-            </option>
+            </DropdownItem>
           ))}
-        </select>
+        </Dropdown>
       )}
       {filterType === "Source" && (
-        <select
-          value={sourceSelection}
-          onChange={(e) => setSourceSelection(e.target.value)}
-        >
+        <Dropdown label={sourceSelection} color="alternative">
           {sourcesNames.map((source, index) => (
-            <option key={index} value={source}>
+            <DropdownItem
+              key={index}
+              onClick={() => setSourceSelection(source)}
+            >
               {source}
-            </option>
+            </DropdownItem>
           ))}
-        </select>
+        </Dropdown>
       )}
     </>
   );

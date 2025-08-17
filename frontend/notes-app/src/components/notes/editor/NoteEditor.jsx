@@ -5,10 +5,16 @@ import NoteHeaderEditor from "./NoteHeaderEditor";
 import NoteContentEditor from "./NoteContentEditor";
 import NoteTagsEditor from "./NoteTagsEditor";
 import NoteSourcesEditor from "./NoteSourcesEditor";
-import Button from "../../Button";
-import styles from "../../css-modules/NoteEditor.module.css";
 
-const NoteEditor = ({ noteAtom, handleCloseEditor }) => {
+import {
+  Button,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
+} from "flowbite-react";
+
+const NoteEditor = ({ noteAtom, open, handleCloseEditor }) => {
   const note = useAtomValue(noteAtom);
   const updateNote = useSetAtom(updateNoteAtom);
 
@@ -22,6 +28,7 @@ const NoteEditor = ({ noteAtom, handleCloseEditor }) => {
     setContent(note.content);
     setNoteTags(note.tags);
     setNoteSources(note.sources);
+    console.log("cancel");
     handleCloseEditor();
   };
 
@@ -37,17 +44,29 @@ const NoteEditor = ({ noteAtom, handleCloseEditor }) => {
   };
 
   return (
-    <div className={styles.editor}>
-      <h3>Edit Note</h3>
-      <NoteHeaderEditor header={header} setHeader={setHeader} />
-      <NoteContentEditor content={content} setContent={setContent} />
-      <NoteTagsEditor tags={noteTags} setTags={setNoteTags} />
-      <NoteSourcesEditor sources={noteSources} setSources={setNoteSources} />
-      <Button type="button" name="Save" onClick={handleSave} />
-      <Button type="button" name="Cancel" onClick={handleCancel} />
-      <p>Last Edit : {note.update_date}</p>
-      <p>Created on : {note.create_date}</p>
-    </div>
+    <Modal
+      dismissible
+      show={open}
+      onClose={handleCancel}
+      size="lg"
+      className="text-gray-100"
+    >
+      <ModalHeader>
+        <NoteHeaderEditor header={header} setHeader={setHeader} />
+      </ModalHeader>
+      <ModalBody className="flex flex-col ">
+        <NoteContentEditor content={content} setContent={setContent} />
+        <NoteTagsEditor tags={noteTags} setTags={setNoteTags} />
+        <NoteSourcesEditor sources={noteSources} setSources={setNoteSources} />
+        <Button onClick={handleSave} color="green">
+          Save
+        </Button>
+      </ModalBody>
+      <ModalFooter>
+        <p>Last Edit : {note.update_date}</p>
+        <p>Created on : {note.create_date}</p>
+      </ModalFooter>
+    </Modal>
   );
 };
 

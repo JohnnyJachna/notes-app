@@ -1,26 +1,26 @@
 import { useAtomValue } from "jotai";
 import { isSortedAtom, ascendingAtom } from "./NotesListAtoms";
 
-import Button from "../../Button";
-import styles from "../../css-modules/NoteList.module.css";
+import { Button, ButtonGroup } from "flowbite-react";
 
 const NotesSortControls = (props) => {
   const isSorted = useAtomValue(isSortedAtom);
   const ascending = useAtomValue(ascendingAtom);
 
   return (
-    <div className={styles.note_list}>
-      <Button
-        type="button"
-        name={isSorted ? "Unsort" : "Sort"}
-        onClick={props.onSortToggle}
-      />
-      <Button
-        type="button"
-        name={ascending ? "Asc" : "Desc"}
-        onClick={props.onOrderToggle}
-        disabled={!isSorted}
-      />
+    <div>
+      <ButtonGroup>
+        <Button onClick={props.onSortToggle} color="alternative">
+          {isSorted ? "Unsort" : "Sort"}
+        </Button>
+        <Button
+          onClick={props.onOrderToggle}
+          disabled={!isSorted}
+          color="alternative"
+        >
+          {ascending ? "Asc" : "Desc"}
+        </Button>
+      </ButtonGroup>
     </div>
   );
 };

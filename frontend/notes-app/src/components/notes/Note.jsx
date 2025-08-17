@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import { deleteNoteAtom } from "./NotesAtoms";
 import { useAtomValue, useSetAtom } from "jotai/react";
-import { createPortal } from "react-dom";
 
-import Button from "../Button";
-import styles from "../css-modules/Note.module.css";
 import NotePreview from "./preview/NotePreview";
 import NoteEditor from "./editor/NoteEditor";
+
+import { Button, Card } from "flowbite-react";
 
 const Note = (props) => {
   const note = useAtomValue(props.noteAtom);
@@ -24,21 +23,18 @@ const Note = (props) => {
 
   return (
     <>
-      <div className={styles.note}>
+      <Card>
         <NotePreview noteAtom={props.noteAtom} />
-        <Button type="button" name="edit" onClick={() => setShowEditor(true)} />
-        <Button type="button" name="delete" onClick={handleDeleteNote} />
-      </div>
-      <div>
-        {showEditor &&
-          createPortal(
-            <NoteEditor
-              noteAtom={props.noteAtom}
-              handleCloseEditor={handleCloseEditor}
-            />,
-            document.body
-          )}
-      </div>
+        <Button onClick={() => setShowEditor(true)}>edit</Button>
+        <Button color="red" onClick={handleDeleteNote}>
+          delete
+        </Button>
+      </Card>
+      <NoteEditor
+        noteAtom={props.noteAtom}
+        open={showEditor}
+        handleCloseEditor={handleCloseEditor}
+      />
     </>
   );
 };

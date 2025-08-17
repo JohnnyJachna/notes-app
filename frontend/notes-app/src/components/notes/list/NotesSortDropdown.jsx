@@ -1,18 +1,20 @@
 import { useAtom } from "jotai/react";
 import { sortTypesAtom, sortTypeAtom } from "./NotesListAtoms";
 
+import { Dropdown, DropdownItem } from "flowbite-react";
+
 const NotesSortDropdown = () => {
   const sortTypes = useAtom(sortTypesAtom)[0];
   const [sortType, setSortType] = useAtom(sortTypeAtom);
 
   return (
-    <select value={sortType} onChange={(e) => setSortType(e.target.value)}>
-      {sortTypes.map((str, index) => (
-        <option key={index} value={str}>
+    <Dropdown label={sortType} color="alternative">
+      {sortTypes.map((str) => (
+        <DropdownItem key={str} onClick={() => setSortType(str)}>
           {str}
-        </option>
+        </DropdownItem>
       ))}
-    </select>
+    </Dropdown>
   );
 };
 

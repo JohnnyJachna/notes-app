@@ -1,25 +1,34 @@
 import { Link } from "react-router";
-import styles from "./css-modules/Header.module.css";
+import {
+  Navbar,
+  NavbarBrand,
+  NavbarLink,
+  DarkThemeToggle,
+} from "flowbite-react";
 
 const Header = () => {
   return (
-    <header className={styles.header}>
-      <h2>Notes App</h2>
-      <nav>
-        <ul>
-          <li>
-            <Link to="/">Home</Link>
-          </li>
-          <li>
-            <Link to="/sets">Sets</Link>
-          </li>
-          <li>
-            <Link to="/about">About</Link>
-          </li>
-          <DarkThemeToggle />
-        </ul>
-      </nav>
-    </header>
+    <Navbar fluid rounded>
+      <NavbarBrand as={Link} to="/">
+        <span>Notes App</span>
+      </NavbarBrand>
+      <Link to="/">
+        <NavbarLink active={location.pathname === "/"} as="div">
+          Home
+        </NavbarLink>
+      </Link>
+      <Link to="/sets">
+        <NavbarLink active={location.pathname === "/sets"} as="div">
+          Sets
+        </NavbarLink>
+      </Link>
+      <Link to="/about">
+        <NavbarLink active={location.pathname === "/about"} as="div">
+          About
+        </NavbarLink>
+      </Link>
+      <DarkThemeToggle />
+    </Navbar>
   );
 };
 

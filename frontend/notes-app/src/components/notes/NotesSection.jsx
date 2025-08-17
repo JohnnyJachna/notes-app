@@ -5,8 +5,7 @@ import { addNoteAtom, fetchNotesAtom } from "./NotesAtoms";
 import { useSetAtom } from "jotai/react";
 
 import NotesList from "./list/NotesList";
-import Button from "../Button";
-import styles from "../css-modules/Section.module.css";
+import { Button } from "flowbite-react";
 
 const NotesSection = () => {
   const { setID } = useParams();
@@ -23,9 +22,11 @@ const NotesSection = () => {
   };
 
   return (
-    <div className={styles.section}>
+    <div className="m-3 p-5 border-1 border-solid border-b-gray-400 rounded-lg">
       <NotesList />
-      <Button type="button" name="Add Note" onClick={handleAddNote} />
+      <Button color="green" onClick={handleAddNote}>
+        Add Note
+      </Button>
     </div>
   );
 };

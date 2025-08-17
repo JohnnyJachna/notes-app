@@ -4,8 +4,7 @@ import { deleteSetAtom } from "./SetsAtoms";
 import { useAtom, useSetAtom } from "jotai/react";
 
 import SetEditor from "./SetEditor";
-import Button from "../Button";
-import styles from "../css-modules/Set.module.css";
+import { Button, ButtonGroup } from "flowbite-react";
 
 const Set = (props) => {
   const [set, setSet] = useAtom(props.setAtom);
@@ -22,7 +21,7 @@ const Set = (props) => {
   };
 
   return (
-    <div className={styles.set}>
+    <>
       {showEditor ? (
         <SetEditor
           setAtom={props.setAtom}
@@ -30,19 +29,19 @@ const Set = (props) => {
           handleCloseEditor={handleCloseEditor}
         />
       ) : (
-        <>
-          <Link to={`/sets/${set.id}`} className={styles.link}>
+        <div>
+          <Link className="mx-1 px-4" to={`/sets/${set.id}`}>
             {set.name}
           </Link>
-          <Button
-            type="button"
-            name="edit"
-            onClick={() => setShowEditor(true)}
-          />
-          <Button type="button" name="delete" onClick={handleDeleteSet} />
-        </>
+          <ButtonGroup>
+            <Button onClick={() => setShowEditor(true)}>Edit</Button>
+            <Button color="red" onClick={handleDeleteSet}>
+              Delete
+            </Button>
+          </ButtonGroup>
+        </div>
       )}
-    </div>
+    </>
   );
 };
 

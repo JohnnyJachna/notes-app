@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 import { tagsAtom } from "../../tags/TagsAtoms";
 import { useAtomValue } from "jotai/react";
 
-import Button from "../../Button";
+import { Badge, Button, Dropdown, DropdownItem } from "flowbite-react";
 
 const NoteTagsEditor = ({ tags, setTags }) => {
   const allTags = useAtomValue(tagsAtom);
@@ -10,18 +10,18 @@ const NoteTagsEditor = ({ tags, setTags }) => {
   const addableTags = useMemo(
     () =>
       allTags.filter((tag) => !tags.some((noteTag) => noteTag.id === tag.id)),
-    [allTags, tags]
+    [allTags, tags],
   );
   const [tagSelection, setTagSelection] = useState(
-    addableTags.length > 0 ? addableTags[0].id : ""
+    addableTags.length > 0 ? addableTags[0].id : "",
   );
   useEffect(() => {
-    if (addableTags.length > 0) setTagSelection(addableTags[0].id);
+    if (addableTags.length > 0) setTagSelection(addableTags[0]);
     else setTagSelection("");
   }, [addableTags]);
 
   const handleAddTag = () => {
-    const tagToAdd = allTags.find((tag) => tag.id === Number(tagSelection));
+    const tagToAdd = allTags.find((tag) => tag.id === Number(tagSelection.id));
     if (tagToAdd) setTags([...tags, tagToAdd]);
   };
   const handleRemoveTag = (id) => {
@@ -31,32 +31,33 @@ const NoteTagsEditor = ({ tags, setTags }) => {
   return (
     <div>
       <h4>Tags</h4>
-      <ul>
+      <ul className="flex flex-row flex-wrap gap-2">
         {tags.map((tag) => (
-          <li key={tag.id}>
-            {tag.name}
+          <>
+            <Badge key={tag.id + tag.name} size="sm" color="yellow">
+              {tag.name}
+            </Badge>
             <Button
-              type="button"
-              name="Delete"
               onClick={() => handleRemoveTag(tag.id)}
-            />
-          </li>
+              size="xs"
+              color="alternative"
+            >
+              x
+            </Button>
+          </>
         ))}
       </ul>
       {addableTags.length > 0 && (
-        <>
-          <select
-            value={tagSelection}
-            onChange={(e) => setTagSelection(e.target.value)}
-          >
+        <div className="flex flex-row flex-wrap gap-2">
+          <Button onClick={handleAddTag}>Add Tag</Button>
+          <Dropdown label={tagSelection.name}>
             {addableTags.map((tag) => (
-              <option key={tag.id} value={tag.id}>
+              <DropdownItem key={tag.id} onClick={() => setTagSelection(tag)}>
                 {tag.name}
-              </option>
+              </DropdownItem>
             ))}
-          </select>
-          <Button type="button" name="Add Tag" onClick={handleAddTag} />
-        </>
+          </Dropdown>
+        </div>
       )}
     </div>
   );

@@ -5,8 +5,7 @@ import { addSetAtom, fetchSetsAtom } from "./SetsAtoms";
 import { useSetAtom } from "jotai/react";
 
 import SetsList from "./SetsList";
-import Button from "../Button";
-import styles from "../css-modules/Section.module.css";
+import { Button } from "flowbite-react";
 
 const SetsSection = () => {
   const { setID } = useParams();
@@ -23,9 +22,11 @@ const SetsSection = () => {
   };
 
   return (
-    <div className={styles.section}>
+    <div>
       <SetsList />
-      <Button type="button" name="Add Set" onClick={handleAddSet} />
+      <Button color="green" onClick={handleAddSet}>
+        Add Set
+      </Button>
     </div>
   );
 };
