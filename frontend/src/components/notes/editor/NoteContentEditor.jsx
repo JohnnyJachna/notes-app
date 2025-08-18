@@ -1,21 +1,178 @@
-import { useEffect } from "react";
-import { useEditor, EditorContent } from "@tiptap/react";
-import { StarterKit } from "@tiptap/starter-kit";
-import { Button } from "flowbite-react";
-import { MarkButton } from "@/components/tiptap-ui/mark-button";
+import * as React from "react";
+import { EditorContent, EditorContext, useEditor } from "@tiptap/react";
 
-const NoteContentEditor = ({ content, setContent }) => {
+// --- Tiptap Core Extensions ---
+import { StarterKit } from "@tiptap/starter-kit";
+import { Image } from "@tiptap/extension-image";
+import { TaskItem, TaskList } from "@tiptap/extension-list";
+import { TextAlign } from "@tiptap/extension-text-align";
+import { Typography } from "@tiptap/extension-typography";
+import { Highlight } from "@tiptap/extension-highlight";
+import { Subscript } from "@tiptap/extension-subscript";
+import { Superscript } from "@tiptap/extension-superscript";
+import { Selection } from "@tiptap/extensions";
+import FileHandler from "@tiptap/extension-file-handler";
+
+// --- UI Primitives ---
+import { Button } from "@/components/tiptap-ui-primitive/button";
+import { Spacer } from "@/components/tiptap-ui-primitive/spacer";
+import {
+  Toolbar,
+  ToolbarGroup,
+  ToolbarSeparator,
+} from "@/components/tiptap-ui-primitive/toolbar";
+
+// --- Tiptap Node ---
+import { ImageUploadNode } from "@/components/tiptap-node/image-upload-node/image-upload-node-extension";
+import { HorizontalRule } from "@/components/tiptap-node/horizontal-rule-node/horizontal-rule-node-extension";
+import "@/components/tiptap-node/blockquote-node/blockquote-node.scss";
+import "@/components/tiptap-node/code-block-node/code-block-node.scss";
+import "@/components/tiptap-node/horizontal-rule-node/horizontal-rule-node.scss";
+import "@/components/tiptap-node/list-node/list-node.scss";
+import "@/components/tiptap-node/image-node/image-node.scss";
+import "@/components/tiptap-node/heading-node/heading-node.scss";
+import "@/components/tiptap-node/paragraph-node/paragraph-node.scss";
+
+// --- Tiptap UI ---
+import { HeadingDropdownMenu } from "@/components/tiptap-ui/heading-dropdown-menu";
+import { ImageUploadButton } from "@/components/tiptap-ui/image-upload-button";
+import { ListDropdownMenu } from "@/components/tiptap-ui/list-dropdown-menu";
+import { BlockquoteButton } from "@/components/tiptap-ui/blockquote-button";
+import { CodeBlockButton } from "@/components/tiptap-ui/code-block-button";
+import {
+  ColorHighlightPopover,
+  ColorHighlightPopoverContent,
+  ColorHighlightPopoverButton,
+} from "@/components/tiptap-ui/color-highlight-popover";
+import {
+  LinkPopover,
+  LinkContent,
+  LinkButton,
+} from "@/components/tiptap-ui/link-popover";
+import { MarkButton } from "@/components/tiptap-ui/mark-button";
+import { TextAlignButton } from "@/components/tiptap-ui/text-align-button";
+import { UndoRedoButton } from "@/components/tiptap-ui/undo-redo-button";
+
+// --- Icons ---
+import { ArrowLeftIcon } from "@/components/tiptap-icons/arrow-left-icon";
+import { HighlighterIcon } from "@/components/tiptap-icons/highlighter-icon";
+import { LinkIcon } from "@/components/tiptap-icons/link-icon";
+
+// --- Hooks ---
+import { useIsMobile } from "@/hooks/use-mobile";
+import { useWindowSize } from "@/hooks/use-window-size";
+import { useCursorVisibility } from "@/hooks/use-cursor-visibility";
+
+// --- Components ---
+import { ThemeToggle } from "@/components/tiptap-templates/simple/theme-toggle";
+
+// --- Lib ---
+import { handleImageUpload, MAX_FILE_SIZE } from "@/lib/tiptap-utils";
+
+// // --- Styles ---
+import "./simple-editor.scss";
+
+const MainToolbarContent = ({ onHighlighterClick, onLinkClick, isMobile }) => {
+  return (
+    <>
+      <Spacer />
+      <ToolbarGroup>
+        <UndoRedoButton action="undo" />
+        <UndoRedoButton action="redo" />
+      </ToolbarGroup>
+      <ToolbarSeparator />
+      <ToolbarGroup>
+        <HeadingDropdownMenu levels={[1, 2, 3, 4]} portal={isMobile} />
+        <ListDropdownMenu
+          types={["bulletList", "orderedList", "taskList"]}
+          portal={isMobile}
+        />
+        <BlockquoteButton />
+        <CodeBlockButton />
+      </ToolbarGroup>
+      <ToolbarSeparator />
+      <ToolbarGroup>
+        <MarkButton type="bold" />
+        <MarkButton type="italic" />
+        <MarkButton type="strike" />
+        <MarkButton type="code" />
+        <MarkButton type="underline" />
+        {!isMobile ? (
+          <ColorHighlightPopover />
+        ) : (
+          <ColorHighlightPopoverButton onClick={onHighlighterClick} />
+        )}
+        {!isMobile ? <LinkPopover /> : <LinkButton onClick={onLinkClick} />}
+      </ToolbarGroup>
+      <ToolbarSeparator />
+      <ToolbarGroup>
+        <MarkButton type="superscript" />
+        <MarkButton type="subscript" />
+      </ToolbarGroup>
+      <ToolbarSeparator />
+      <ToolbarGroup>
+        <TextAlignButton align="left" />
+        <TextAlignButton align="center" />
+        <TextAlignButton align="right" />
+        <TextAlignButton align="justify" />
+      </ToolbarGroup>
+      <ToolbarSeparator />
+      {/* <ToolbarGroup>
+        <ImageUploadButton text="Add" />
+      </ToolbarGroup> */}
+      <Spacer />
+      {isMobile && <ToolbarSeparator />}
+      <ToolbarGroup>
+        <ThemeToggle />
+      </ToolbarGroup>
+    </>
+  );
+};
+
+const MobileToolbarContent = ({ type, onBack }) => (
+  <>
+    <ToolbarGroup>
+      <Button data-style="ghost" onClick={onBack}>
+        <ArrowLeftIcon className="tiptap-button-icon" />
+        {type === "highlighter" ? (
+          <HighlighterIcon className="tiptap-button-icon" />
+        ) : (
+          <LinkIcon className="tiptap-button-icon" />
+        )}
+      </Button>
+    </ToolbarGroup>
+
+    <ToolbarSeparator />
+
+    {type === "highlighter" ? (
+      <ColorHighlightPopoverContent />
+    ) : (
+      <LinkContent />
+    )}
+  </>
+);
+
+const NoteContentEditor = ({
+  content,
+  setContent,
+  focusRef,
+  autoFocus = true,
+}) => {
+  const isMobile = useIsMobile();
+  const { height } = useWindowSize();
+  const [mobileView, setMobileView] = React.useState("main");
+  const toolbarRef = React.useRef(null);
+
   const editor = useEditor({
-    // immediatelyRender: false,
-    // shouldRerenderOnTransaction: false,
+    immediatelyRender: false,
+    shouldRerenderOnTransaction: false,
     editorProps: {
       attributes: {
         autocomplete: "off",
         autocorrect: "off",
         autocapitalize: "off",
         "aria-label": "Main content area, start typing to enter text.",
-        class:
-          "prose prose-sm dark:prose-invert max-w-none min-h-[160px] focus:outline-none",
+        class: "simple-editor",
       },
     },
     extensions: [
@@ -26,111 +183,97 @@ const NoteContentEditor = ({ content, setContent }) => {
           enableClickSelection: true,
         },
       }),
+      HorizontalRule,
+      TextAlign.configure({ types: ["heading", "paragraph"] }),
+      TaskList,
+      TaskItem.configure({ nested: true }),
+      Highlight.configure({ multicolor: true }),
+      Image,
+      Typography,
+      Superscript,
+      Subscript,
+      Selection,
+      ImageUploadNode.configure({
+        accept: "image/*",
+        maxSize: MAX_FILE_SIZE,
+        limit: 3,
+        upload: handleImageUpload,
+        onError: (error) => console.error("Upload failed:", error),
+      }),
     ],
     content: content || "<p></p>",
     onUpdate: ({ editor }) => setContent(editor.getHTML()),
   });
 
-  // Sync when switching notes (avoid clobbering while typing)
-  useEffect(() => {
+  const rect = useCursorVisibility({
+    editor,
+    overlayHeight: toolbarRef.current?.getBoundingClientRect().height ?? 0,
+  });
+
+  // Set initial focus of note editor to text editor
+  React.useEffect(() => {
+    if (!editor || !autoFocus) return;
+
+    if (focusRef?.current) {
+      focusRef.current.focus();
+      requestAnimationFrame(() => {
+        editor.commands.focus("end");
+      });
+    }
+  }, [editor, autoFocus, focusRef]);
+
+  React.useEffect(() => {
+    if (!isMobile && mobileView !== "main") {
+      setMobileView("main");
+    }
     if (!editor) return;
     if (content && content !== editor.getHTML()) {
       editor.commands.setContent(content, false);
     }
-  }, [content, editor]);
+  }, [isMobile, mobileView, content, editor]);
 
   if (!editor)
     return <div className="text-sm text-gray-500">Loading editor…</div>;
 
-  const cmd = () => editor.chain().focus();
-
   return (
-    <div className="space-y-2">
-      <div className="flex flex-wrap gap-1">
-        <MarkButton type="bold" />
-        <Button
-          size="xs"
-          color={editor.isActive("bold") ? "editorActive" : "editor"}
-          onClick={() => cmd().toggleBold().run()}
-        >
-          B
-        </Button>
-        <Button
-          size="xs"
-          color={editor.isActive("italic") ? "editorActive" : "editor"}
-          onClick={() => cmd().toggleItalic().run()}
-        >
-          I
-        </Button>
-        <Button
-          size="xs"
-          color={editor.isActive("underline") ? "editorActive" : "editor"}
-          onClick={() => cmd().toggleUnderline().run()}
-        >
-          U
-        </Button>
-        <Button
-          size="xs"
-          color={editor.isActive("strike") ? "editorActive" : "editor"}
-          onClick={() => cmd().toggleStrike().run()}
-        >
-          S
-        </Button>
-        <Button
-          size="xs"
-          color={editor.isActive("bulletList") ? "editorActive" : "editor"}
-          onClick={() => cmd().toggleBulletList().run()}
-        >
-          • •
-        </Button>
-        <Button
-          size="xs"
-          color={editor.isActive("orderedList") ? "editorActive" : "editor"}
-          onClick={() => cmd().toggleOrderedList().run()}
-        >
-          1.
-        </Button>
-        <Button
-          size="xs"
-          color={editor.isActive("blockquote") ? "dark" : "light"}
-          onClick={() => cmd().toggleBlockquote().run()}
-        >
-          &ldquo;
-        </Button>
-        <Button
-          size="xs"
-          color="editor"
-          onClick={() => {
-            const url = prompt("Link URL");
-            if (url) cmd().setLink({ href: url }).run();
+    <div className="simple-editor-wrapper">
+      <EditorContext.Provider value={{ editor }}>
+        <Toolbar
+          ref={toolbarRef}
+          className="tiptap-toolbar"
+          style={{
+            ...(isMobile
+              ? {
+                  bottom: `calc(100% - ${height - rect.y}px)`,
+                }
+              : {}),
           }}
         >
-          Link
-        </Button>
-        <Button
-          size="xs"
-          color="failure"
-          onClick={() => cmd().unsetLink().run()}
+          {mobileView === "main" ? (
+            <MainToolbarContent
+              onHighlighterClick={() => setMobileView("highlighter")}
+              onLinkClick={() => setMobileView("link")}
+              isMobile={isMobile}
+            />
+          ) : (
+            <MobileToolbarContent
+              type={mobileView === "highlighter" ? "highlighter" : "link"}
+              onBack={() => setMobileView("main")}
+            />
+          )}
+        </Toolbar>
+        <div
+          ref={focusRef}
+          tabIndex={0}
+          className="simple-editor-content focus:outline-none"
         >
-          Unlink
-        </Button>
-        <Button
-          size="xs"
-          color={editor.isActive("blockquote") ? "dark" : "light"}
-          onClick={() => cmd().toggleCodeBlock().run()}
-        >
-          {"</>"}
-        </Button>
-        <Button size="xs" color="editor" onClick={() => cmd().undo().run()}>
-          Undo
-        </Button>
-        <Button size="xs" color="editor" onClick={() => cmd().redo().run()}>
-          Redo
-        </Button>
-      </div>
-      <div className="rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 p-3">
-        <EditorContent editor={editor} />
-      </div>
+          <EditorContent
+            editor={editor}
+            role="presentation"
+            className="simple-editor-content"
+          />
+        </div>
+      </EditorContext.Provider>
     </div>
   );
 };

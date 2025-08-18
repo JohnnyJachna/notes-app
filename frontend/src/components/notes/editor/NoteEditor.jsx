@@ -1,12 +1,10 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useAtomValue, useSetAtom } from "jotai/react";
 import { updateNoteAtom } from "../NotesAtoms";
 import NoteHeaderEditor from "./NoteHeaderEditor";
 import NoteContentEditor from "./NoteContentEditor";
 import NoteTagsEditor from "./NoteTagsEditor";
 import NoteSourcesEditor from "./NoteSourcesEditor";
-import TTEditor from "./TTEditor";
-import TextEditor from "./TextEditor";
 
 import {
   Button,
@@ -24,6 +22,8 @@ const NoteEditor = ({ noteAtom, open, handleCloseEditor }) => {
   const [content, setContent] = useState(note.content);
   const [noteTags, setNoteTags] = useState(note.tags);
   const [noteSources, setNoteSources] = useState(note.sources);
+
+  const editorFocusRef = useRef(null);
 
   const handleCancel = () => {
     setHeader(note.header);
@@ -57,9 +57,12 @@ const NoteEditor = ({ noteAtom, open, handleCloseEditor }) => {
         <NoteHeaderEditor header={header} setHeader={setHeader} />
       </ModalHeader>
       <ModalBody className="flex flex-col ">
-        {/* <NoteContentEditor content={content} setContent={setContent} /> */}
-        <TTEditor content={content} setContent={setContent} />
-        {/* <TextEditor/> */}
+        <NoteContentEditor
+          content={content}
+          setContent={setContent}
+          focusRef={editorFocusRef}
+          autoFocus={true}
+        />
         <NoteTagsEditor tags={noteTags} setTags={setNoteTags} />
         <NoteSourcesEditor sources={noteSources} setSources={setNoteSources} />
         <Button onClick={handleSave} color="green">
