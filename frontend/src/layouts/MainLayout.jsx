@@ -1,15 +1,32 @@
 import { Outlet } from "react-router";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import { Button, createTheme, ThemeProvider } from "flowbite-react";
+
+const theme = createTheme({
+  button: {
+    color: {
+      editor:
+        "bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700",
+      editorActive:
+        "bg-indigo-600 dark:bg-indigo-500 text-white border border-indigo-600 dark:border-indigo-500",
+    },
+    size: {
+      xs: "px-2 py-1 text-xs",
+    },
+  },
+});
 
 const MainLayout = () => {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
-      <Header />
-      <main>
-        <Outlet />
-      </main>
-      <Footer />
+      <ThemeProvider theme={theme}>
+        <Header />
+        <main>
+          <Outlet />
+        </main>
+        <Footer />
+      </ThemeProvider>
     </div>
   );
 };

@@ -5,7 +5,8 @@ import NoteHeaderEditor from "./NoteHeaderEditor";
 import NoteContentEditor from "./NoteContentEditor";
 import NoteTagsEditor from "./NoteTagsEditor";
 import NoteSourcesEditor from "./NoteSourcesEditor";
-import { SimpleEditor } from '@/components/tiptap-templates/simple/simple-editor'
+import TTEditor from "./TTEditor";
+import TextEditor from "./TextEditor";
 
 import {
   Button,
@@ -49,16 +50,16 @@ const NoteEditor = ({ noteAtom, open, handleCloseEditor }) => {
       dismissible
       show={open}
       onClose={handleCancel}
-      size="lg"
+      size="7xl"
       className="text-gray-100"
     >
       <ModalHeader>
         <NoteHeaderEditor header={header} setHeader={setHeader} />
       </ModalHeader>
       <ModalBody className="flex flex-col ">
-        <NoteContentEditor content={content} setContent={setContent} />
-        
-        {/* <SimpleEditor /> */}
+        {/* <NoteContentEditor content={content} setContent={setContent} /> */}
+        <TTEditor content={content} setContent={setContent} />
+        {/* <TextEditor/> */}
         <NoteTagsEditor tags={noteTags} setTags={setNoteTags} />
         <NoteSourcesEditor sources={noteSources} setSources={setNoteSources} />
         <Button onClick={handleSave} color="green">

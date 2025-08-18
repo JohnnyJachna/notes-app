@@ -5,6 +5,7 @@
 @source "../node_modules/flowbite";
 @import './styles/_variables.scss';
 @import './styles/_keyframe-animations.scss';
+@import "prosemirror-view/style/prosemirror.css";
 
 @theme {
   --color-primary-50: #eff6ff;

@@ -8,5 +8,6 @@ module.exports = {
     "node_modules/flowbite/**/*.js",
   ],
   theme: { extend: {} },
-  plugins: [require("flowbite/plugin")],
+  plugins: [require("flowbite/plugin"), require('@tailwindcss/typography')],
+  
 };
