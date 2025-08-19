@@ -1,3 +1,4 @@
+import { noteSizeAtom } from "../NotesAtoms";
 import { useAtomValue } from "jotai/react";
 
 import NoteTagsPreview from "./NoteTagsPreview";
@@ -5,8 +6,16 @@ import NoteSourcesPreview from "./NoteSourcesPreview";
 
 import { HR } from "flowbite-react";
 
+const sizes = {
+  small: "max-h-24", // ~224px
+  medium: "max-h-32", // ~320px
+  large: "max-h-48", // custom
+  full: "max-h-none", // no limit
+};
+
 const NotePreview = ({ noteAtom }) => {
   const note = useAtomValue(noteAtom);
+  const noteSize = useAtomValue(noteSizeAtom);
 
   return (
     <div className="flex flex-col h-full">
@@ -16,14 +25,13 @@ const NotePreview = ({ noteAtom }) => {
           <HR className="!m-1" />
         </>
       ) : (
-        <p className="font-semibold truncate">&nbsp;</p>
+        <p className="font-semibold truncate">Note Header</p>
       )}
-      <div className="relative max-h-32 overflow-auto text-sm leading-snug">
+      <div className={`${sizes[noteSize]} overflow-auto text-sm leading-snug`}>
         <div
           className="prose prose-sm dark:prose-invert max-w-none"
           dangerouslySetInnerHTML={{ __html: note.content }}
         />
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-6 bg-gradient-to-t from-white dark:from-gray-800 to-transparent" />
       </div>
       <HR className="!m-1" />
       <div className="flex flex-col gap-2 flex-1 overflow-hidden">

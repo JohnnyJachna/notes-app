@@ -4,6 +4,7 @@ import { makeRequest } from "../../utils/api";
 
 export const notesAtom = atom([]);
 export const splitNotesAtom = splitAtom(notesAtom);
+export const noteSizeAtom = atom("medium");
 
 export const fetchNotesAtom = atom(null, async (get, set, setID) => {
   // console.log("fetch notes");

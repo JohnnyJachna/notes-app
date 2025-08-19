@@ -12,10 +12,12 @@ import {
   sourcesAvailableAtom,
   refinedNotesAtom,
 } from "./NotesListAtoms";
+
 import NotesSortControls from "./NotesSortControls";
 import NotesSortDropdown from "./NotesSortDropdown";
 import NotesListItems from "./NotesListItems";
 import NotesListFilterControls from "./NotesListFilterControls";
+import NoteSizeDropdown from "./NoteSizeDropdown";
 
 const NotesList = () => {
   const refinedNotes = useAtomValue(refinedNotesAtom);
@@ -52,6 +54,7 @@ const NotesList = () => {
               handleFilterToggle={() => setIsFiltered((prev) => !prev)}
             />
           )}
+          <NoteSizeDropdown />
         </div>
       )}
       <NotesListItems />

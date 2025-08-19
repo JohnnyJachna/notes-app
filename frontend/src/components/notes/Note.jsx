@@ -7,7 +7,7 @@ import NoteEditor from "./editor/NoteEditor";
 import ButtonEdit from "../buttons/ButtonEdit";
 import ButtonDelete from "../buttons/ButtonDelete";
 
-import { Button, Card } from "flowbite-react";
+import { Card } from "flowbite-react";
 
 const Note = (props) => {
   const note = useAtomValue(props.noteAtom);
@@ -26,9 +26,7 @@ const Note = (props) => {
   return (
     <>
       <Card
-        className="relative cursor-pointer group
-                   [&>div]:p-2 [&>div]:sm:p-3
-                   max-h-[340px] overflow-hidden" // LIMIT CARD HEIGHT
+        className="relative cursor-pointer group [&>div]:p-2 [&>div]:sm:p-3 overflow-auto "
         onClick={() => setShowEditor(true)}
       >
         <div
