@@ -4,6 +4,8 @@ import { useAtomValue, useSetAtom } from "jotai/react";
 
 import NotePreview from "./preview/NotePreview";
 import NoteEditor from "./editor/NoteEditor";
+import ButtonEdit from "../buttons/ButtonEdit";
+import ButtonDelete from "../buttons/ButtonDelete";
 
 import { Button, Card } from "flowbite-react";
 
@@ -23,12 +25,21 @@ const Note = (props) => {
 
   return (
     <>
-      <Card>
-        <NotePreview noteAtom={props.noteAtom} />
-        <Button onClick={() => setShowEditor(true)}>edit</Button>
-        <Button color="red" onClick={handleDeleteNote}>
-          delete
-        </Button>
+      <Card
+        className="relative cursor-pointer h-full group [&>div]:p-2 [&>div]:sm:p-3"
+        onClick={() => setShowEditor(true)}
+      >
+        <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+          <div
+            onClick={(e) => e.stopPropagation()}
+            onKeyDown={(e) => e.stopPropagation()}
+          >
+            <ButtonDelete onClick={() => handleDeleteNote()}></ButtonDelete>
+          </div>
+        </div>
+        <div className="flex flex-col h-full">
+          <NotePreview noteAtom={props.noteAtom} />
+        </div>
       </Card>
       <NoteEditor
         noteAtom={props.noteAtom}
