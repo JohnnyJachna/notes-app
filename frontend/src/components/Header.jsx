@@ -1,32 +1,42 @@
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
 import {
   Navbar,
   NavbarBrand,
   NavbarLink,
+  NavbarCollapse,
+  NavbarToggle,
   DarkThemeToggle,
 } from "flowbite-react";
 
 const Header = () => {
+  const location = useLocation();
+
   return (
     <Navbar fluid rounded>
       <NavbarBrand as={Link} to="/">
         <span>Notes App</span>
       </NavbarBrand>
-      <Link to="/">
-        <NavbarLink active={location.pathname === "/"} as="div">
+      <NavbarToggle />
+      <NavbarCollapse>
+        <NavbarLink as={Link} to="/" active={location.pathname === "/"}>
           Home
         </NavbarLink>
-      </Link>
-      <Link to="/sets">
-        <NavbarLink active={location.pathname === "/sets"} as="div">
+        <NavbarLink
+          as={Link}
+          to="/sets"
+          active={location.pathname.startsWith("/sets")}
+        >
           Sets
         </NavbarLink>
-      </Link>
-      <Link to="/about">
-        <NavbarLink active={location.pathname === "/about"} as="div">
+        <NavbarLink
+          as={Link}
+          to="/about"
+          active={location.pathname === "/about"}
+        >
           About
         </NavbarLink>
-      </Link>
+      </NavbarCollapse>
+
       <DarkThemeToggle />
     </Navbar>
   );
