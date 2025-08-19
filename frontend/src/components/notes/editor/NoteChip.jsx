@@ -1,17 +1,17 @@
-const NoteTag = ({ tag, handleRemoveTag }) => {
-  const removeTag = () => {
-    handleRemoveTag(tag.id);
+const NoteChip = ({ item, handleRemove }) => {
+  const removeItem = () => {
+    handleRemove(item.id);
   };
   return (
     <div
       id="chip"
-      className="relative rounded-md flex bg-slate-800 py-0.5 pl-2.5 pr-8 border border-transparent text-sm text-white transition-all shadow-sm"
+      className="mt-2 mb-2 relative rounded-md flex bg-slate-800 py-0.5 pl-2.5 pr-8 border border-transparent text-sm text-white transition-all shadow-sm"
     >
-      {tag.name}
+      {item.name}
       <button
         className="flex items-center justify-center transition-all p-1 rounded-md text-white hover:bg-white/10 active:bg-white/10 absolute top-0.5 right-0.5"
         type="button"
-        onClick={removeTag}
+        onClick={removeItem}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -26,4 +26,4 @@ const NoteTag = ({ tag, handleRemoveTag }) => {
   );
 };
 
-export default NoteTag;
+export default NoteChip;

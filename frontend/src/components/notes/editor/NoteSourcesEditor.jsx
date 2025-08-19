@@ -2,6 +2,8 @@ import { useState, useEffect, useMemo } from "react";
 import { sourcesAtom } from "../../sources/SourcesAtoms";
 import { useAtomValue } from "jotai/react";
 
+import NoteChip from "./NoteChip";
+
 import { Badge, Button, Dropdown, DropdownItem } from "flowbite-react";
 
 const NoteSourcesEditor = ({ sources, setSources }) => {
@@ -10,12 +12,12 @@ const NoteSourcesEditor = ({ sources, setSources }) => {
   const addableSources = useMemo(
     () =>
       allSources.filter(
-        (src) => !sources.some((noteSrc) => noteSrc.id === src.id),
+        (src) => !sources.some((noteSrc) => noteSrc.id === src.id)
       ),
-    [allSources, sources],
+    [allSources, sources]
   );
   const [sourceSelection, setSourceSelection] = useState(
-    addableSources.length > 0 ? addableSources[0].id : "",
+    addableSources.length > 0 ? addableSources[0].id : ""
   );
   useEffect(() => {
     if (addableSources.length > 0) setSourceSelection(addableSources[0]);
@@ -24,7 +26,7 @@ const NoteSourcesEditor = ({ sources, setSources }) => {
 
   const handleAddSource = () => {
     const srcToAdd = allSources.find(
-      (src) => src.id === Number(sourceSelection.id),
+      (src) => src.id === Number(sourceSelection.id)
     );
     if (srcToAdd) setSources([...sources, srcToAdd]);
   };
@@ -33,39 +35,30 @@ const NoteSourcesEditor = ({ sources, setSources }) => {
   };
 
   return (
-    <div>
+    <div className="flex flex-row flex-wrap gap-2">
       <h4>Sources</h4>
-      <ul className="flex flex-row flex-wrap gap-2">
+      <Button onClick={handleAddSource} size="xs">
+        +
+      </Button>
+      <Dropdown label={sourceSelection.name}>
+        {addableSources.map((source) => (
+          <DropdownItem
+            key={source.id}
+            onClick={() => setSourceSelection(source)}
+          >
+            {source.name}
+          </DropdownItem>
+        ))}
+      </Dropdown>
+      <ul className="flex flex-row">
         {sources.map((source) => (
-          <>
-            <Badge key={source.id + source.name} size="sm" color="yellow">
-              {source.name}
-            </Badge>
-            <Button
-              onClick={() => handleRemoveSource(source.id)}
-              size="xs"
-              color="alternative"
-            >
-              x
-            </Button>
-          </>
+          <NoteChip
+            key={source.id + source.name}
+            item={source}
+            handleRemove={handleRemoveSource}
+          />
         ))}
       </ul>
-      {addableSources.length > 0 && (
-        <div className="flex flex-row flex-wrap gap-2">
-          <Button onClick={handleAddSource}>Add Source</Button>
-          <Dropdown label={sourceSelection.name}>
-            {addableSources.map((source) => (
-              <DropdownItem
-                key={source.id}
-                onClick={() => setSourceSelection(source)}
-              >
-                {source.name}
-              </DropdownItem>
-            ))}
-          </Dropdown>
-        </div>
-      )}
     </div>
   );
 };

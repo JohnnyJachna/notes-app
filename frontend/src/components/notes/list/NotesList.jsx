@@ -41,7 +41,7 @@ const NotesList = () => {
   return (
     <>
       {refinedNotes.length > 0 && (
-        <div className="flex flex-row flex-wrap gap-1">
+        <div className="mt-4 mb-4 flex flex-row flex-wrap gap-1">
           <NotesSortControls
             onSortToggle={() => setIsSorted((prev) => !prev)}
             onOrderToggle={() => setAscending((prev) => !prev)}

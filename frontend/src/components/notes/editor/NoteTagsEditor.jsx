@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { tagsAtom } from "../../tags/TagsAtoms";
 import { useAtomValue } from "jotai/react";
-import NoteTag from "./NoteTag";
+import NoteChip from "./NoteChip";
 
 import {
   Badge,
@@ -37,31 +37,27 @@ const NoteTagsEditor = ({ tags, setTags }) => {
   };
 
   return (
-    <div>
+    <div className="mt-2 mb-2 flex flex-row flex-wrap gap-2">
       <h4>Tags</h4>
-      <ul className="flex flex-row flex-wrap gap-2">
+      <Button onClick={handleAddTag} size="xs">
+        +
+      </Button>
+      <Dropdown label={tagSelection.name}>
+        {addableTags.map((tag) => (
+          <DropdownItem key={tag.id} onClick={() => setTagSelection(tag)}>
+            {tag.name}
+          </DropdownItem>
+        ))}
+      </Dropdown>
+      <ul className="flex flex-row">
         {tags.map((tag) => (
-          <>
-            <NoteTag
-              key={tag.id + tag.name}
-              tag={tag}
-              handleRemoveTag={handleRemoveTag}
-            />
-          </>
+          <NoteChip
+            key={tag.id + tag.name}
+            item={tag}
+            handleRemove={handleRemoveTag}
+          />
         ))}
       </ul>
-      {addableTags.length > 0 && (
-        <div className="flex flex-row flex-wrap gap-2">
-          <Button onClick={handleAddTag}>Add Tag</Button>
-          <Dropdown label={tagSelection.name}>
-            {addableTags.map((tag) => (
-              <DropdownItem key={tag.id} onClick={() => setTagSelection(tag)}>
-                {tag.name}
-              </DropdownItem>
-            ))}
-          </Dropdown>
-        </div>
-      )}
     </div>
   );
 };
