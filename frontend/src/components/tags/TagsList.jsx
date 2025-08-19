@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { tagsAtom, splitTagsAtom } from "./TagsAtoms";
+
 import { useAtomValue } from "jotai/react";
+import { tagsAtom, splitTagsAtom } from "./TagsAtoms";
 
 import Tag from "./Tag";
 

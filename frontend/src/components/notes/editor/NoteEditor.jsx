@@ -32,7 +32,6 @@ const NoteEditor = ({ noteAtom, open, handleCloseEditor }) => {
     setNoteTags(note.tags);
     setNoteSources(note.sources);
     setColor(note.color);
-    console.log("cancel");
     handleCloseEditor();
   };
 

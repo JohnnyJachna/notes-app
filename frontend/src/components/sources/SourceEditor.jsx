@@ -2,10 +2,16 @@ import { useState } from "react";
 import { useAtomValue, useSetAtom } from "jotai/react";
 import { updateSourceAtom } from "./SourcesAtoms";
 
-import Button from "../Button";
-import styles from "../css-modules/NoteEditor.module.css";
+import {
+  Button,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
+  TextInput,
+} from "flowbite-react";
 
-const SourceEditor = ({ sourceAtom, handleCloseEditor }) => {
+const SourceEditor = ({ sourceAtom, open, handleCloseEditor }) => {
   const source = useAtomValue(sourceAtom);
   const updateSource = useSetAtom(updateSourceAtom);
 
@@ -50,60 +56,108 @@ const SourceEditor = ({ sourceAtom, handleCloseEditor }) => {
   };
 
   return (
-    <div className={styles.editor}>
-      <div>
-        <textarea
-          id="Name"
-          placeholder="Name..."
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        ></textarea>
-        <textarea
-          id="Title"
-          placeholder="Title..."
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        ></textarea>
-        <textarea
-          id="Author"
-          placeholder="Author..."
-          value={authors}
-          onChange={(e) => setAuthors(e.target.value)}
-        ></textarea>
-        <textarea
-          id="Publisher"
-          placeholder="Publisher..."
-          value={publishers}
-          onChange={(e) => setPublishers(e.target.value)}
-        ></textarea>
-        <textarea
-          id="Pages"
-          placeholder="Pages..."
-          value={pages}
-          onChange={(e) => setPages(e.target.value)}
-        ></textarea>
-        <textarea
-          id="Publish Date"
-          placeholder="Publish Date..."
-          value={publishDate}
-          onChange={(e) => setPublishDate(e.target.value)}
-        ></textarea>
-        <textarea
-          id="Update Date"
-          placeholder="Update Date..."
-          value={updateDate}
-          onChange={(e) => setUpdateDate(e.target.value)}
-        ></textarea>
-        <textarea
-          id="Access Date"
-          placeholder="Access Date..."
-          value={accessDate}
-          onChange={(e) => setAccessDate(e.target.value)}
-        ></textarea>
-      </div>
-      <Button type="button" name="Save" onClick={handleSave} />
-      <Button type="button" name="Cancel" onClick={handleCancel} />
-    </div>
+    <Modal
+      dismissible
+      show={open}
+      onClose={handleCancel}
+      size="lg"
+      className="text-gray-100"
+    >
+      <ModalHeader>Edit Source</ModalHeader>
+      <ModalBody className="flex flex-col gap-2">
+        <div className="flex items-center gap-2">
+          <h4 className="w-32 text-sm font-medium">Name:</h4>
+          <TextInput
+            id="Name"
+            placeholder="Enter Name..."
+            className="flex-1"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+        </div>
+        <div className="flex items-center gap-2">
+          <h4 className="w-32 text-sm font-medium">Title:</h4>
+          <TextInput
+            id="Title"
+            placeholder="Enter Title..."
+            className="flex-1"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
+        </div>
+
+        <div className="flex items-center gap-2">
+          <h4 className="w-32 text-sm font-medium">Author(s):</h4>
+          <TextInput
+            id="Author"
+            placeholder="Enter Author(s)..."
+            className="flex-1"
+            value={authors}
+            onChange={(e) => setAuthors(e.target.value)}
+          />
+        </div>
+
+        <div className="flex items-center gap-2">
+          <h4 className="w-32 text-sm font-medium">Publisher(s):</h4>
+          <TextInput
+            id="Publisher"
+            placeholder="Enter Publisher(s)..."
+            className="flex-1"
+            value={publishers}
+            onChange={(e) => setPublishers(e.target.value)}
+          />
+        </div>
+
+        <div className="flex items-center gap-2">
+          <h4 className="w-32 text-sm font-medium">Page(s):</h4>
+          <TextInput
+            id="Pages"
+            placeholder="Enter Page(s)..."
+            className="flex-1"
+            value={pages}
+            onChange={(e) => setPages(e.target.value)}
+          />
+        </div>
+
+        <div className="flex items-center gap-2">
+          <h4 className="w-32 text-sm font-medium">Date Published:</h4>
+          <TextInput
+            id="PublishDate"
+            placeholder="Date Published"
+            className="flex-1"
+            value={publishDate}
+            onChange={(e) => setPublishDate(e.target.value)}
+          />
+        </div>
+
+        <div className="flex items-center gap-2">
+          <h4 className="w-32 text-sm font-medium">Date Updated:</h4>
+          <TextInput
+            id="UpdateDate"
+            placeholder="Date Updated"
+            className="flex-1"
+            value={updateDate}
+            onChange={(e) => setUpdateDate(e.target.value)}
+          />
+        </div>
+
+        <div className="flex items-center gap-2">
+          <h4 className="w-32 text-sm font-medium">Date Accessed:</h4>
+          <TextInput
+            id="AccessDate"
+            placeholder="Date Accessed"
+            className="flex-1"
+            value={accessDate}
+            onChange={(e) => setAccessDate(e.target.value)}
+          />
+        </div>
+      </ModalBody>
+      <ModalFooter className="justify-center">
+        <Button onClick={handleSave} color="green">
+          Save
+        </Button>
+      </ModalFooter>
+    </Modal>
   );
 };
 

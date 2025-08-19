@@ -3,10 +3,9 @@ import React, { useState } from "react";
 import { deleteSourceAtom } from "./SourcesAtoms";
 import { useAtomValue, useSetAtom } from "jotai/react";
 
-import Button from "../Button";
-import styles from "../css-modules/Source.module.css";
-import { createPortal } from "react-dom";
 import SourceEditor from "./SourceEditor";
+
+import { Button } from "flowbite-react";
 
 const Source = (props) => {
   const source = useAtomValue(props.sourceAtom);
@@ -23,21 +22,22 @@ const Source = (props) => {
   };
 
   return (
-    <div className={styles.source}>
-      {showEditor &&
-        createPortal(
-          <SourceEditor
-            sourceAtom={props.sourceAtom}
-            handleCloseEditor={handleCloseEditor}
-          />,
-          document.body
-        )}
-      <>
+    <>
+      <div className="flex flex-row gap-1">
         <p>{source.name}</p>
-        <Button type="button" name="edit" onClick={() => setShowEditor(true)} />
-        <Button type="button" name="delete" onClick={handleDeleteNote} />
-      </>
-    </div>
+        <Button onClick={() => setShowEditor(true)} size="xs">
+          ...
+        </Button>
+        <Button onClick={handleDeleteNote} size="xs" color="red">
+          x
+        </Button>
+      </div>
+      <SourceEditor
+        sourceAtom={props.sourceAtom}
+        open={showEditor}
+        handleCloseEditor={handleCloseEditor}
+      />
+    </>
   );
 };
 

@@ -1,8 +1,11 @@
 import React, { useState } from "react";
-import Source from "./Source";
-import { sourcesAtom, splitSourcesAtom } from "./SourcesAtoms";
+
 import { useAtomValue } from "jotai/react";
-import Button from "../Button";
+import { sourcesAtom, splitSourcesAtom } from "./SourcesAtoms";
+
+import Source from "./Source";
+
+import { Button, ButtonGroup } from "flowbite-react";
 
 const SourcesList = () => {
   const sourcesList = useAtomValue(sourcesAtom);
@@ -33,27 +36,27 @@ const SourcesList = () => {
   };
 
   return (
-    <>
-      <h4>Sources List</h4>
+    <div className="flex flex-col gap-2">
       {sourcesList.length > 0 && (
-        <div>
+        <ButtonGroup className="mt-2">
+          <Button onClick={handleSortToggle} size="xs" color="alternative">
+            {isSorted ? "Unsort" : "Sort"}
+          </Button>
           <Button
-            type="button"
-            name={isSorted ? "Unsort" : "Sort"}
-            onClick={handleSortToggle}
-          />
-          <Button
-            type="button"
-            name={ascending ? "Asc" : "Desc"}
             onClick={handleOrderToggle}
             disabled={!isSorted}
-          />
-        </div>
+            size="xs"
+            color="alternative"
+          >
+            {ascending ? "Asc" : "Desc"}
+          </Button>
+        </ButtonGroup>
       )}
+
       {sortedSourceAtoms.map((sourceAtom, idx) => (
         <Source key={sortedSources[idx].id} sourceAtom={sourceAtom} />
       ))}
-    </>
+    </div>
   );
 };
 
