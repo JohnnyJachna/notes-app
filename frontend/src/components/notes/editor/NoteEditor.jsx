@@ -22,6 +22,7 @@ const NoteEditor = ({ noteAtom, open, handleCloseEditor }) => {
   const [content, setContent] = useState(note.content);
   const [noteTags, setNoteTags] = useState(note.tags);
   const [noteSources, setNoteSources] = useState(note.sources);
+  const [color, setColor] = useState(note.color);
 
   const editorFocusRef = useRef(null);
 
@@ -30,6 +31,7 @@ const NoteEditor = ({ noteAtom, open, handleCloseEditor }) => {
     setContent(note.content);
     setNoteTags(note.tags);
     setNoteSources(note.sources);
+    setColor(note.color);
     console.log("cancel");
     handleCloseEditor();
   };
@@ -41,6 +43,7 @@ const NoteEditor = ({ noteAtom, open, handleCloseEditor }) => {
       content,
       noteTags,
       noteSources,
+      color,
     });
     handleCloseEditor();
   };

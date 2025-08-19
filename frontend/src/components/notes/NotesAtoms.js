@@ -36,6 +36,7 @@ export const addNoteAtom = atom(null, async (get, set, setID) => {
         create_date: date,
         update_date: date,
         set_id: setID,
+        color: "grey",
       }),
     });
     set(notesAtom, (prevNote) => [...prevNote, addedNote]);
@@ -46,7 +47,8 @@ export const addNoteAtom = atom(null, async (get, set, setID) => {
 
 export const updateNoteAtom = atom(
   null,
-  async (get, set, { note, header, content, noteTags, noteSources }) => {
+  async (get, set, { note, header, content, noteTags, noteSources, color }) => {
+    console.log(JSON.stringify(noteTags));
     const updatedNote = {
       id: note.id,
       header,
@@ -54,14 +56,17 @@ export const updateNoteAtom = atom(
       create_date: note.create_date,
       update_date: new Date().toLocaleString(),
       set_id: note.set_id,
+      color,
       tags: noteTags.map((tag) => ({
         id: tag.id,
         name: tag.name,
+        color: tag.color,
         set_id: tag.set_id,
       })),
       sources: noteSources.map((src) => ({
         id: src.id,
         name: src.name,
+        color: src.color,
         title: src.title ?? null,
         authors: src.authors ?? null,
         publishers: src.publishers ?? null,

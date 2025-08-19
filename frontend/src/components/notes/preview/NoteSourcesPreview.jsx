@@ -8,7 +8,7 @@ const NoteSourcesPreview = ({ sources }) => {
         <ul className="flex flex-wrap gap-1.5">
           {sources.map((source) => {
             return (
-              <Badge key={source.id}>
+              <Badge key={source.id} color={source.color}>
                 <p>{source.name}</p>
               </Badge>
             );

@@ -125,6 +125,7 @@ async def add_note(set_id: int, payload: Note,session: Session = Depends(get_ses
     create_date=payload.create_date,
     update_date=payload.update_date,
     set_id=payload.set_id,
+    color=payload.color
   )
   
   session.add(new_note)
@@ -139,6 +140,7 @@ async def update_note_data(set_id: int, payload: NoteRead, session: Session = De
     note.header = payload.header
     note.content = payload.content
     note.update_date = payload.update_date
+    note.color = payload.color
 
     # https://docs.sqlalchemy.org/en/20/core/operators.html#in-comparisons
     # Create a new list of tag ids from the payload, then select all Tags with that id
@@ -188,6 +190,7 @@ def get_single_tag(set_id: int, tag_id: int, response: Response, session: Sessio
 async def add_tag(set_id: int, payload: Tag, session: Session = Depends(get_session)):
   new_tag = Tag(
     name = payload.name,
+    color = payload.color,
     set_id = payload.set_id
   )
   
@@ -241,6 +244,7 @@ def get_single_source(set_id: int, source_id: int, response: Response, session: 
 async def add_source(set_id: int, session: Session = Depends(get_session)):
   new_source = Source(
     name = "New Source",
+    color= "yellow",
     set_id = set_id,
     title = "",
     authors = "",

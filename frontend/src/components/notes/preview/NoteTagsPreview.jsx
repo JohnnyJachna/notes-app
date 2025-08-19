@@ -8,7 +8,7 @@ const NoteTagsPreview = ({ tags }) => {
         <ul className="flex flex-wrap gap-1.5">
           {tags.map((tag) => {
             return (
-              <Badge key={tag.id}>
+              <Badge key={tag.id} color={tag.color}>
                 <p>{tag.name}</p>
               </Badge>
             );

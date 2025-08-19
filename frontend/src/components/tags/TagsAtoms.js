@@ -30,6 +30,7 @@ export const addTagAtom = atom(null, async (get, set, setID) => {
       method: "POST",
       body: JSON.stringify({
         name: "New Tag",
+        color: "yellow",
         set_id: setID,
       }),
     });
@@ -41,12 +42,13 @@ export const addTagAtom = atom(null, async (get, set, setID) => {
 
 export const updateTagAtom = atom(
   null,
-  async (get, set, { setID, tagID, name }) => {
+  async (get, set, { setID, tagID, name, color }) => {
     // console.log("update tag");
 
     const updatedTag = {
       id: tagID,
       name: name,
+      color: color,
       set_id: setID,
     };
     try {

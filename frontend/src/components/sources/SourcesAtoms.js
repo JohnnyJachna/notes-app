@@ -44,6 +44,7 @@ export const updateSourceAtom = atom(
     {
       originalSource,
       name,
+      color,
       title,
       authors,
       publishers,
@@ -58,6 +59,7 @@ export const updateSourceAtom = atom(
     const body = {
       id: originalSource.id,
       name: name,
+      color: color,
       title: title,
       authors: authors,
       publishers: publishers,

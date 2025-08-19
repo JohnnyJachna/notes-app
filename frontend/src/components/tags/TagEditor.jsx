@@ -12,7 +12,12 @@ const TagEditor = ({ tagAtom, handleCloseEditor }) => {
 
   const handleClick = async () => {
     if (name !== tag.name) {
-      await updateTag({ setID: tag.set_id, tagID: tag.id, name: name });
+      await updateTag({
+        setID: tag.set_id,
+        tagID: tag.id,
+        name: name,
+        color: tag.color,
+      });
     }
     handleCloseEditor();
   };
