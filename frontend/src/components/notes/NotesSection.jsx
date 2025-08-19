@@ -5,6 +5,8 @@ import { addNoteAtom, fetchNotesAtom } from "./NotesAtoms";
 import { useSetAtom } from "jotai/react";
 
 import NotesList from "./list/NotesList";
+import TagSourceEditor from "./TagSourceEditor";
+
 import { Button } from "flowbite-react";
 
 const NotesSection = () => {
@@ -22,10 +24,13 @@ const NotesSection = () => {
   };
 
   return (
-    <div className="m-3 p-5 border-1 border-solid border-b-gray-400 rounded-lg">
-      <Button color="green" onClick={handleAddNote} className="mb-2">
-        Add Note
-      </Button>
+    <div className="m-3 p-5">
+      <div className="flex flex-row gap-3">
+        <TagSourceEditor />
+        <Button color="green" onClick={handleAddNote} className="mb-2">
+          Add Note
+        </Button>
+      </div>
       <NotesList />
     </div>
   );
