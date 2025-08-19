@@ -23,10 +23,10 @@ const NotesSection = () => {
 
   return (
     <div className="m-3 p-5 border-1 border-solid border-b-gray-400 rounded-lg">
-      <NotesList />
-      <Button color="green" onClick={handleAddNote}>
+      <Button color="green" onClick={handleAddNote} className="mb-2">
         Add Note
       </Button>
+      <NotesList />
     </div>
   );
 };

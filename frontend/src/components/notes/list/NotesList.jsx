@@ -16,7 +16,6 @@ import NotesSortControls from "./NotesSortControls";
 import NotesSortDropdown from "./NotesSortDropdown";
 import NotesListItems from "./NotesListItems";
 import NotesListFilterControls from "./NotesListFilterControls";
-import styles from "../../css-modules/NoteList.module.css";
 
 const NotesList = () => {
   const refinedNotes = useAtomValue(refinedNotesAtom);
@@ -41,7 +40,6 @@ const NotesList = () => {
 
   return (
     <>
-      <h4>Notes List</h4>
       {refinedNotes.length > 0 && (
         <div className="flex flex-row flex-wrap gap-1">
           <NotesSortControls
