@@ -13,7 +13,7 @@ const NoteTagsPreview = ({ tags }) => {
                 color={tag.color}
                 className="whitespace-nowrap"
               >
-                <p>{tag.name}</p>
+                <p className="truncate max-w-20">{tag.name}</p>
               </Badge>
             );
           })}

@@ -13,7 +13,7 @@ const NoteSourcesPreview = ({ sources }) => {
                 color={source.color}
                 className="whitespace-nowrap"
               >
-                <p>{source.name}</p>
+                <p className="truncate max-w-20">{source.name}</p>
               </Badge>
             );
           })}

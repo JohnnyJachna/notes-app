@@ -5,7 +5,6 @@ import { addSourceAtom, fetchSourcesAtom } from "./SourcesAtoms";
 import { useSetAtom } from "jotai/react";
 
 import SourcesList from "./SourcesList";
-import { Button } from "flowbite-react";
 
 const SourcesSection = () => {
   const { setID } = useParams();
@@ -23,12 +22,7 @@ const SourcesSection = () => {
 
   return (
     <>
-      <div className="flex flex-row gap-2 items-center">
-        <Button onClick={handleAddSource} size="xs" color="green">
-          Add Source
-        </Button>
-      </div>
-      <SourcesList />
+      <SourcesList handleAddSource={handleAddSource} />
     </>
   );
 };

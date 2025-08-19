@@ -7,7 +7,7 @@ const NoteTag = ({ tag, handleRemove }) => {
       id="chip"
       className="mt-2 mb-2 relative rounded-md flex bg-slate-800 py-0.5 pl-2.5 pr-8 border border-transparent text-sm text-white transition-all shadow-sm"
     >
-      {tag.name}
+      <p className="truncate max-w-20">{tag.name}</p>
       <button
         className="flex items-center justify-center transition-all p-1 rounded-md text-white hover:bg-white/10 active:bg-white/10 absolute top-0.5 right-0.5"
         type="button"

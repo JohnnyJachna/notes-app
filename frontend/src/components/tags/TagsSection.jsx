@@ -23,12 +23,7 @@ const TagsSection = () => {
 
   return (
     <>
-      <div className="flex flex-row gap-2 items-center">
-        <Button onClick={handleAddTag} size="xs" color="green">
-          Add Tag
-        </Button>
-      </div>
-      <TagsList />
+      <TagsList handleAddTag={handleAddTag} />
     </>
   );
 };

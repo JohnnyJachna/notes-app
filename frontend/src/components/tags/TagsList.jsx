@@ -7,7 +7,7 @@ import Tag from "./Tag";
 
 import { Button, ButtonGroup } from "flowbite-react";
 
-const TagsList = () => {
+const TagsList = ({ handleAddTag }) => {
   const tagsList = useAtomValue(tagsAtom);
   const tagAtoms = useAtomValue(splitTagsAtom);
   const [isSorted, setIsSorted] = useState(false);
@@ -46,27 +46,35 @@ const TagsList = () => {
   };
 
   return (
-    <div className="flex flex-col gap-2">
-      {tagsList.length > 0 && (
-        <ButtonGroup className="mt-2">
-          <Button onClick={handleSortToggle} size="xs" color="alternative">
-            {isSorted ? "Unsort" : "Sort"}
-          </Button>
-          <Button
-            onClick={handleOrderToggle}
-            disabled={!isSorted}
-            size="xs"
-            color="alternative"
-          >
-            {ascending ? "Asc" : "Desc"}
-          </Button>
-        </ButtonGroup>
-      )}
-
+    <>
+      <div className="flex items-baseline justify-between mb-3">
+        <Button onClick={handleAddTag} size="xs" color="green">
+          Add Tag
+        </Button>
+        {tagsList.length > 0 && (
+          <ButtonGroup className="mt-2">
+            <Button onClick={handleSortToggle} size="xs" color="alternative">
+              {isSorted ? "Unsort" : "Sort"}
+            </Button>
+            <Button
+              onClick={handleOrderToggle}
+              disabled={!isSorted}
+              size="xs"
+              color="alternative"
+            >
+              {ascending ? "Asc" : "Desc"}
+            </Button>
+          </ButtonGroup>
+        )}
+      </div>
       {sortedTagAtoms.map((tagAtom, idx) => (
-        <Tag key={sortedTags[idx].id} tagAtom={tagAtom} />
+        <Tag
+          key={sortedTags[idx].id}
+          tagAtom={tagAtom}
+          className="flex flex-col gap-2"
+        />
       ))}
-    </div>
+    </>
   );
 };
 
