@@ -1,16 +1,18 @@
 import React, { useState } from "react";
-import { Link } from "react-router";
-import { deleteSetAtom } from "./SetsAtoms";
+import { useNavigate } from "react-router";
+
 import { useAtom, useSetAtom } from "jotai/react";
+import { deleteSetAtom } from "./SetsAtoms";
 
 import SetEditor from "./SetEditor";
-import { Button, ButtonGroup } from "flowbite-react";
+import { Card, Button } from "flowbite-react";
 
-const Set = (props) => {
-  const [set, setSet] = useAtom(props.setAtom);
+const Set = ({ setAtom }) => {
+  const [set, setSet] = useAtom(setAtom);
   const deleteSet = useSetAtom(deleteSetAtom);
 
   const [showEditor, setShowEditor] = useState(false);
+  const navigate = useNavigate();
 
   const handleCloseEditor = () => {
     setShowEditor(false);
@@ -20,26 +22,48 @@ const Set = (props) => {
     await deleteSet(set.id);
   };
 
+  const goToDetails = () => navigate(`/sets/${set.id}`);
+
   return (
     <>
       {showEditor ? (
         <SetEditor
-          setAtom={props.setAtom}
+          setAtom={setAtom}
           setSet={setSet}
           handleCloseEditor={handleCloseEditor}
         />
       ) : (
-        <div>
-          <Link className="mx-1 px-4" to={`/sets/${set.id}`}>
-            {set.name}
-          </Link>
-          <ButtonGroup>
-            <Button onClick={() => setShowEditor(true)}>Edit</Button>
-            <Button color="red" onClick={handleDeleteSet}>
-              Delete
-            </Button>
-          </ButtonGroup>
-        </div>
+        <Card
+          className="m-3 cursor-pointer"
+          onClick={goToDetails}
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              goToDetails();
+            }
+          }}
+        >
+          <div className="flex items-start justify-between gap-4">
+            <div className="flex-1">
+              <h5 className="font-semibold group-hover:underline">
+                {set.name}
+              </h5>
+            </div>
+            <div
+              className="flex gap-2 shrink-0"
+              onClick={(e) => e.stopPropagation()}
+              onKeyDown={(e) => e.stopPropagation()}
+            >
+              <Button size="xs" onClick={() => setShowEditor(true)}>
+                Edit
+              </Button>
+              <Button size="xs" color="red" onClick={handleDeleteSet}>
+                Delete
+              </Button>
+            </div>
+          </div>
+        </Card>
       )}
     </>
   );

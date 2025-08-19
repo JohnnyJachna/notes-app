@@ -5,6 +5,7 @@ import { addSetAtom, fetchSetsAtom } from "./SetsAtoms";
 import { useSetAtom } from "jotai/react";
 
 import SetsList from "./SetsList";
+import SetAdd from "./SetAdd";
 import { Button } from "flowbite-react";
 
 const SetsSection = () => {
@@ -22,11 +23,11 @@ const SetsSection = () => {
   };
 
   return (
-    <div>
-      <SetsList />
-      <Button color="green" onClick={handleAddSet}>
-        Add Set
-      </Button>
+    <div className=" m-3 w-full max-w-sm">
+      <div>
+        <SetsList className="flex flex-wrap" />
+      </div>
+      <SetAdd handleAddSet={handleAddSet} />
     </div>
   );
 };
