@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { tagsAtom } from "../../tags/TagsAtoms";
 import { useAtomValue } from "jotai/react";
-import NoteChip from "./NoteChip";
+import NoteTag from "./NoteTag";
 
 import {
   Badge,
@@ -49,11 +49,11 @@ const NoteTagsEditor = ({ tags, setTags }) => {
           </DropdownItem>
         ))}
       </Dropdown>
-      <ul className="flex flex-row">
+      <ul className="flex flex-row gap-1">
         {tags.map((tag) => (
-          <NoteChip
+          <NoteTag
             key={tag.id + tag.name}
-            item={tag}
+            tag={tag}
             handleRemove={handleRemoveTag}
           />
         ))}

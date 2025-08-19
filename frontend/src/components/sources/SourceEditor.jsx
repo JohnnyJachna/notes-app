@@ -10,6 +10,7 @@ const SourceEditor = ({ sourceAtom, handleCloseEditor }) => {
   const updateSource = useSetAtom(updateSourceAtom);
 
   const [name, setName] = useState(source.name);
+  const [color, setColor] = useState(source.color);
   const [title, setTitle] = useState(source.title);
   const [authors, setAuthors] = useState(source.authors);
   const [publishers, setPublishers] = useState(source.publishers);
@@ -20,6 +21,7 @@ const SourceEditor = ({ sourceAtom, handleCloseEditor }) => {
 
   const handleCancel = () => {
     setName(source.name);
+    setColor(source.color);
     setTitle(source.title);
     setAuthors(source.authors);
     setPublishers(source.publishers);
@@ -35,6 +37,7 @@ const SourceEditor = ({ sourceAtom, handleCloseEditor }) => {
     await updateSource({
       originalSource,
       name,
+      color,
       title,
       authors,
       publishers,

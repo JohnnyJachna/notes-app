@@ -2,9 +2,9 @@ import { useState, useEffect, useMemo } from "react";
 import { sourcesAtom } from "../../sources/SourcesAtoms";
 import { useAtomValue } from "jotai/react";
 
-import NoteChip from "./NoteChip";
+import NoteSource from "./NoteSource";
 
-import { Badge, Button, Dropdown, DropdownItem } from "flowbite-react";
+import { Badge, Button, Dropdown, DropdownItem, Popover } from "flowbite-react";
 
 const NoteSourcesEditor = ({ sources, setSources }) => {
   const allSources = useAtomValue(sourcesAtom);
@@ -52,9 +52,9 @@ const NoteSourcesEditor = ({ sources, setSources }) => {
       </Dropdown>
       <ul className="flex flex-row">
         {sources.map((source) => (
-          <NoteChip
+          <NoteSource
             key={source.id + source.name}
-            item={source}
+            source={source}
             handleRemove={handleRemoveSource}
           />
         ))}
