@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useAtomValue, useSetAtom } from "jotai/react";
 import { updateTagAtom } from "./TagsAtoms";
 
-import Button from "../Button";
+import { Button, TextInput } from "flowbite-react";
 
 const TagEditor = ({ tagAtom, handleCloseEditor }) => {
   const tag = useAtomValue(tagAtom);
@@ -23,15 +23,17 @@ const TagEditor = ({ tagAtom, handleCloseEditor }) => {
   };
 
   return (
-    <>
-      <textarea
-        id="Name"
+    <div className="flex flex-row gap-1 items-center">
+      <TextInput
+        id="TagNameEditor"
         placeholder="Name..."
         value={name}
         onChange={(e) => setName(e.target.value)}
-      ></textarea>
-      <Button type="button" name="Done" onClick={handleClick} />
-    </>
+      ></TextInput>
+      <Button onClick={handleClick} size="sm">
+        Done
+      </Button>
+    </div>
   );
 };
 

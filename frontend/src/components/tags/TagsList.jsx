@@ -1,8 +1,10 @@
 import React, { useState } from "react";
-import Tag from "./Tag";
 import { tagsAtom, splitTagsAtom } from "./TagsAtoms";
 import { useAtomValue } from "jotai/react";
-import Button from "../Button";
+
+import Tag from "./Tag";
+
+import { Button, ButtonGroup } from "flowbite-react";
 
 const TagsList = () => {
   const tagsList = useAtomValue(tagsAtom);
@@ -43,28 +45,27 @@ const TagsList = () => {
   };
 
   return (
-    <>
-      <h4>Tags List</h4>
+    <div className="flex flex-col gap-2">
       {tagsList.length > 0 && (
-        <div>
+        <ButtonGroup className="mt-2">
+          <Button onClick={handleSortToggle} size="xs" color="alternative">
+            {isSorted ? "Unsort" : "Sort"}
+          </Button>
           <Button
-            type="button"
-            name={isSorted ? "Unsort" : "Sort"}
-            onClick={handleSortToggle}
-          />
-          <Button
-            type="button"
-            name={ascending ? "Asc" : "Desc"}
             onClick={handleOrderToggle}
             disabled={!isSorted}
-          />
-        </div>
+            size="xs"
+            color="alternative"
+          >
+            {ascending ? "Asc" : "Desc"}
+          </Button>
+        </ButtonGroup>
       )}
 
       {sortedTagAtoms.map((tagAtom, idx) => (
         <Tag key={sortedTags[idx].id} tagAtom={tagAtom} />
       ))}
-    </>
+    </div>
   );
 };
 

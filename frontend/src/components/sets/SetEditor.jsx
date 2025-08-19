@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useAtomValue, useSetAtom } from "jotai/react";
 import { updateSetAtom } from "./SetsAtoms";
-import Button from "../Button";
+import { Button, TextInput } from "flowbite-react";
 
 const SetEditor = ({ setAtom, handleCloseEditor }) => {
   const set = useAtomValue(setAtom);
@@ -21,15 +21,17 @@ const SetEditor = ({ setAtom, handleCloseEditor }) => {
   };
 
   return (
-    <>
-      <textarea
-        id="Name"
-        placeholder="Name..."
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-      ></textarea>
-      <Button type="button" name="Done" onClick={handleClick} />
-    </>
+    <div className="reset-styles">
+      <div className="flex flex-row gap-1">
+        <TextInput
+          id="SetNameEditor"
+          placeholder="Name..."
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        ></TextInput>
+        <Button onClick={handleClick}>Done</Button>
+      </div>
+    </div>
   );
 };
 
