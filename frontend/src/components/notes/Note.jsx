@@ -26,16 +26,16 @@ const Note = (props) => {
   return (
     <>
       <Card
-        className="relative cursor-pointer h-full group [&>div]:p-2 [&>div]:sm:p-3"
+        className="relative cursor-pointer group
+                   [&>div]:p-2 [&>div]:sm:p-3
+                   max-h-[340px] overflow-hidden" // LIMIT CARD HEIGHT
         onClick={() => setShowEditor(true)}
       >
-        <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-          <div
-            onClick={(e) => e.stopPropagation()}
-            onKeyDown={(e) => e.stopPropagation()}
-          >
-            <ButtonDelete onClick={() => handleDeleteNote()}></ButtonDelete>
-          </div>
+        <div
+          className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <ButtonDelete onClick={handleDeleteNote} />
         </div>
         <div className="flex flex-col h-full">
           <NotePreview noteAtom={props.noteAtom} />

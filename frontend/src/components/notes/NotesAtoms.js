@@ -48,7 +48,6 @@ export const addNoteAtom = atom(null, async (get, set, setID) => {
 export const updateNoteAtom = atom(
   null,
   async (get, set, { note, header, content, noteTags, noteSources, color }) => {
-    console.log(JSON.stringify(noteTags));
     const updatedNote = {
       id: note.id,
       header,

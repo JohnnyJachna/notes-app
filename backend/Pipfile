@@ -10,6 +10,7 @@ sqlmodel = "*"
 python-dotenv = "*"
 psycopg2 = "*"
 alembic = "*"
+nh3 = "*"
 
 [dev-packages]
 

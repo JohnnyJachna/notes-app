@@ -5,6 +5,7 @@ from fastapi import FastAPI, Response, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from sqlmodel import Session, select
 from db import get_session
+from sanitizer import sanitize_html
 
 from models.set import Set
 from models.note import Note, Source, Tag, NoteRead, TagRead, SourceRead
@@ -138,10 +139,10 @@ async def update_note_data(set_id: int, payload: NoteRead, session: Session = De
     note = session.get(Note, payload.id)
 
     note.header = payload.header
-    note.content = payload.content
+    note.content = sanitize_html(payload.content)
     note.update_date = payload.update_date
     note.color = payload.color
-
+    
     # https://docs.sqlalchemy.org/en/20/core/operators.html#in-comparisons
     # Create a new list of tag ids from the payload, then select all Tags with that id
     
