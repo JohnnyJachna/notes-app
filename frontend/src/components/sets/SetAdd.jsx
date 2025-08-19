@@ -6,7 +6,7 @@ const SetAdd = ({ handleAddSet }) => {
   };
   return (
     <div>
-      <Card className="m-3 cursor-pointer items-center">
+      <Card className="cursor-pointer items-center h-full">
         <Button
           onClick={addSet}
           color="green"

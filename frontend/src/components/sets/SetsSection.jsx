@@ -1,10 +1,10 @@
 import { useEffect } from "react";
 import { useParams } from "react-router";
 
-import { addSetAtom, fetchSetsAtom } from "./SetsAtoms";
-import { useSetAtom } from "jotai/react";
+import { addSetAtom, fetchSetsAtom, splitSetsAtom } from "./SetsAtoms";
+import { useAtom, useSetAtom } from "jotai/react";
 
-import SetsList from "./SetsList";
+import Set from "./Set";
 import SetAdd from "./SetAdd";
 import { Button } from "flowbite-react";
 
@@ -13,6 +13,7 @@ const SetsSection = () => {
 
   const addSet = useSetAtom(addSetAtom);
   const fetchSets = useSetAtom(fetchSetsAtom);
+  const [setsList] = useAtom(splitSetsAtom);
 
   useEffect(() => {
     fetchSets(setID);
@@ -23,10 +24,10 @@ const SetsSection = () => {
   };
 
   return (
-    <div className=" m-3 w-full max-w-sm">
-      <div>
-        <SetsList className="flex flex-wrap" />
-      </div>
+    <div className="m-3 grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5">
+      {setsList.map((setAtom) => (
+        <Set setAtom={setAtom} key={setAtom.toString()} />
+      ))}
       <SetAdd handleAddSet={handleAddSet} />
     </div>
   );

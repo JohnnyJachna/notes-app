@@ -1,6 +1,6 @@
 import { Outlet } from "react-router";
 import Header from "../components/Header";
-import Footer from "../components/Footer";
+import AppFooter from "../components/AppFooter";
 import { Button, createTheme, ThemeProvider } from "flowbite-react";
 
 const theme = createTheme({
@@ -19,13 +19,13 @@ const theme = createTheme({
 
 const MainLayout = () => {
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+    <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
       <ThemeProvider theme={theme}>
         <Header />
-        <main>
+        <main className="flex-1">
           <Outlet />
         </main>
-        <Footer />
+        <AppFooter />
       </ThemeProvider>
     </div>
   );

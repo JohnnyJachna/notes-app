@@ -34,7 +34,7 @@ const Set = ({ setAtom }) => {
         />
       ) : (
         <Card
-          className="m-3 cursor-pointer"
+          className="cursor-pointer h-full"
           onClick={goToDetails}
           tabIndex={0}
           onKeyDown={(e) => {
