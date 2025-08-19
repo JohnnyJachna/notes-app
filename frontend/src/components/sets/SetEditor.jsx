@@ -21,16 +21,17 @@ const SetEditor = ({ setAtom, handleCloseEditor }) => {
   };
 
   return (
-    <div className="reset-styles">
-      <div className="flex flex-row gap-1">
-        <TextInput
-          id="SetNameEditor"
-          placeholder="Name..."
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        ></TextInput>
-        <Button onClick={handleClick}>Done</Button>
-      </div>
+    <div className="flex items-center gap-2 w-full">
+      <TextInput
+        id="SetNameEditor"
+        placeholder="Name..."
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        className="flex-1"
+      ></TextInput>
+      <Button onClick={handleClick} size="sm">
+        Done
+      </Button>
     </div>
   );
 };

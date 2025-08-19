@@ -5,7 +5,10 @@ import { useAtom, useSetAtom } from "jotai/react";
 import { deleteSetAtom } from "./SetsAtoms";
 
 import SetEditor from "./SetEditor";
-import { Card, Button } from "flowbite-react";
+
+import { Card } from "flowbite-react";
+import ButtonEdit from "../buttons/ButtonEdit";
+import ButtonDelete from "../buttons/ButtonDelete";
 
 const Set = ({ setAtom }) => {
   const [set, setSet] = useAtom(setAtom);
@@ -25,47 +28,44 @@ const Set = ({ setAtom }) => {
   const goToDetails = () => navigate(`/sets/${set.id}`);
 
   return (
-    <>
-      {showEditor ? (
-        <SetEditor
-          setAtom={setAtom}
-          setSet={setSet}
-          handleCloseEditor={handleCloseEditor}
-        />
-      ) : (
-        <Card
-          className="cursor-pointer h-full"
-          onClick={goToDetails}
-          tabIndex={0}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" || e.key === " ") {
-              e.preventDefault();
-              goToDetails();
-            }
-          }}
-        >
-          <div className="flex items-start justify-between gap-4">
-            <div className="flex-1">
-              <h5 className="font-semibold group-hover:underline">
-                {set.name}
-              </h5>
+    <Card
+      className="relative cursor-pointer h-full group"
+      onClick={goToDetails}
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          goToDetails();
+        }
+      }}
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        onKeyDown={(e) => e.stopPropagation()}
+        className="flex items-center gap-2 h-10"
+      >
+        {showEditor ? (
+          <SetEditor
+            setAtom={setAtom}
+            setSet={setSet}
+            handleCloseEditor={handleCloseEditor}
+          />
+        ) : (
+          <>
+            <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+              <ButtonEdit onClick={() => setShowEditor(true)} />
+              <ButtonDelete onClick={handleDeleteSet} />
             </div>
-            <div
-              className="flex gap-2 shrink-0"
-              onClick={(e) => e.stopPropagation()}
-              onKeyDown={(e) => e.stopPropagation()}
+            <h5
+              className="font-semibold truncate pr-16 relative h10 flex items-center"
+              title={set.name}
             >
-              <Button size="xs" onClick={() => setShowEditor(true)}>
-                Edit
-              </Button>
-              <Button size="xs" color="red" onClick={handleDeleteSet}>
-                Delete
-              </Button>
-            </div>
-          </div>
-        </Card>
-      )}
-    </>
+              {set.name}
+            </h5>
+          </>
+        )}
+      </div>
+    </Card>
   );
 };
 
