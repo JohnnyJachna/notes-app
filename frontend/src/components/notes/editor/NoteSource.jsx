@@ -1,9 +1,16 @@
+import { validHex } from "@uiw/react-color";
+import { getContrastingColor } from "@uiw/react-color";
+
 import { Button, Popover } from "flowbite-react";
 
 const NoteSource = ({ source, handleRemove }) => {
+  const bgColor = validHex(source.color) ? source.color : "#F8E61B";
+  const txtColor = getContrastingColor(bgColor);
+
   const removeItem = () => {
     handleRemove(source.id);
   };
+
   return (
     <>
       <Popover
@@ -15,10 +22,11 @@ const NoteSource = ({ source, handleRemove }) => {
                 id="default-popover"
                 className="font-semibold text-gray-900 dark:text-white"
               >
-                {source.title}
+                {source.name}
               </h3>
             </div>
             <div className="px-3 py-2">
+              {source.title && <p>Title: {source.title}</p>}
               {source.authors && <p>Author(s): {source.authors}</p>}
               {source.publishers && <p>Publisher(s): {source.publishers}</p>}
               {source.pages && <p>Page(s): {source.pages}</p>}
@@ -32,14 +40,15 @@ const NoteSource = ({ source, handleRemove }) => {
         }
       >
         <div
-          id="chip"
-          className="mt-2 mb-2 relative rounded-md flex bg-slate-800 py-0.5 pl-2.5 pr-8 border border-transparent text-sm text-white transition-all shadow-sm"
+          className="mt-2 mb-2 relative rounded-md flex py-0.5 pl-2.5 pr-8 border border-transparent text-sm transition-all shadow-sm"
+          style={{ backgroundColor: bgColor, color: txtColor }}
         >
           <p className="truncate max-w-20">{source.name}</p>
           <button
-            className="flex items-center justify-center transition-all p-1 rounded-md text-white hover:bg-white/10 active:bg-white/10 absolute top-0.5 right-0.5"
             type="button"
             onClick={removeItem}
+            className="flex items-center justify-center transition-all p-1 rounded-md absolute top-0.5 right-0.5 hover:bg-white/10 active:bg-white/20"
+            style={{ color: txtColor }}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

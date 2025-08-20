@@ -1,17 +1,24 @@
+import { validHex } from "@uiw/react-color";
+import { getContrastingColor } from "@uiw/react-color";
+
 const NoteTag = ({ tag, handleRemove }) => {
+  const bgColor = validHex(tag.color) ? tag.color : "#F8E61B";
+  const txtColor = getContrastingColor(bgColor);
   const removeItem = () => {
     handleRemove(tag.id);
   };
+
   return (
     <div
-      id="chip"
-      className="mt-2 mb-2 relative rounded-md flex bg-slate-800 py-0.5 pl-2.5 pr-8 border border-transparent text-sm text-white transition-all shadow-sm"
+      className="mt-2 mb-2 relative rounded-md flex py-0.5 pl-2.5 pr-8 border border-transparent text-sm transition-all shadow-sm"
+      style={{ backgroundColor: bgColor, color: txtColor }}
     >
       <p className="truncate max-w-20">{tag.name}</p>
       <button
-        className="flex items-center justify-center transition-all p-1 rounded-md text-white hover:bg-white/10 active:bg-white/10 absolute top-0.5 right-0.5"
         type="button"
         onClick={removeItem}
+        className="flex items-center justify-center transition-all p-1 rounded-md absolute top-0.5 right-0.5 hover:bg-white/10 active:bg-white/20"
+        style={{ color: txtColor }}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
