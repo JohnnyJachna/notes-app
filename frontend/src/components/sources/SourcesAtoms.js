@@ -28,7 +28,11 @@ export const addSourceAtom = atom(null, async (get, set, setID) => {
   try {
     const addedSource = await makeRequest(`sets/${setID}/sources/add`, {
       method: "POST",
-      body: JSON.stringify({ name: "New Source", set_id: setID }),
+      body: JSON.stringify({
+        name: "New Source",
+        color: "F8E61B",
+        set_id: setID,
+      }),
     });
     set(sourcesAtom, (prevSource) => [...prevSource, addedSource]);
   } catch (error) {

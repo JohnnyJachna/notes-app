@@ -245,7 +245,7 @@ def get_single_source(set_id: int, source_id: int, response: Response, session: 
 async def add_source(set_id: int, session: Session = Depends(get_session)):
   new_source = Source(
     name = "New Source",
-    color= "yellow",
+    color= "#F8E61B",
     set_id = set_id,
     title = "",
     authors = "",

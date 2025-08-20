@@ -30,7 +30,7 @@ export const addTagAtom = atom(null, async (get, set, setID) => {
       method: "POST",
       body: JSON.stringify({
         name: "New Tag",
-        color: "yellow",
+        color: "#F8E61B",
         set_id: setID,
       }),
     });

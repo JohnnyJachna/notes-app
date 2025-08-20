@@ -37,7 +37,7 @@ export const addNoteAtom = atom(null, async (get, set, setID) => {
         create_date: date,
         update_date: date,
         set_id: setID,
-        color: "grey",
+        color: "#374151",
       }),
     });
     set(notesAtom, (prevNote) => [...prevNote, addedNote]);
