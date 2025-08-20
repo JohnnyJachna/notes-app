@@ -1,10 +1,14 @@
 import { useState, useRef } from "react";
+
 import { useAtomValue, useSetAtom } from "jotai/react";
 import { updateNoteAtom } from "../NotesAtoms";
+
 import NoteHeaderEditor from "./NoteHeaderEditor";
 import NoteContentEditor from "./NoteContentEditor";
 import NoteTagsEditor from "./NoteTagsEditor";
 import NoteSourcesEditor from "./NoteSourcesEditor";
+import NoteColorEditor from "./NoteColorEditor";
+import ButtonColorToggle from "@/components/buttons/ButtonColorToggle";
 
 import {
   Button,
@@ -24,8 +28,13 @@ const NoteEditor = ({ noteAtom, open, handleCloseEditor }) => {
   const [noteTags, setNoteTags] = useState(note.tags);
   const [noteSources, setNoteSources] = useState(note.sources);
   const [color, setColor] = useState(note.color);
+  const [colorEditorOpen, setColorEditorOpen] = useState(false);
 
   const editorFocusRef = useRef(null);
+
+  const handleCloseColorEditor = () => {
+    setColorEditorOpen(false);
+  };
 
   const handleCancel = () => {
     setHeader(note.header);
@@ -47,39 +56,53 @@ const NoteEditor = ({ noteAtom, open, handleCloseEditor }) => {
     });
     handleCloseEditor();
   };
-
+  console.log("Color: " + color);
   return (
-    <Modal
-      dismissible
-      show={open}
-      onClose={handleCancel}
-      size="7xl"
-      className="text-gray-100"
-    >
-      <ModalHeader>
-        <NoteHeaderEditor header={header} setHeader={setHeader} />
-      </ModalHeader>
-      <ModalBody className="flex flex-col gap-2 !p-3">
-        <NoteContentEditor
-          content={content}
-          setContent={setContent}
-          focusRef={editorFocusRef}
-          autoFocus={true}
-        />
-        <NoteTagsEditor tags={noteTags} setTags={setNoteTags} />
-        <HR className="!m-1 !bg-gray-400" />
-        <NoteSourcesEditor sources={noteSources} setSources={setNoteSources} />
-        <Button onClick={handleSave} color="green">
-          Save
-        </Button>
-      </ModalBody>
-      <ModalFooter className="flex justify-center ">
-        <div className="text-sm text-gray-400 flex justify-center gap-2 flex-wrap">
-          <p>Last Edit : {note.update_date}</p>
-          <p>Created on : {note.create_date}</p>
-        </div>
-      </ModalFooter>
-    </Modal>
+    <>
+      <Modal
+        dismissible
+        show={open}
+        onClose={handleCancel}
+        size="7xl"
+        className="text-gray-100"
+      >
+        <ModalHeader className="flex justify-between">
+          <div className="flex">
+            <NoteHeaderEditor header={header} setHeader={setHeader} />
+            <ButtonColorToggle onClick={setColorEditorOpen} />
+          </div>
+        </ModalHeader>
+        <ModalBody className="flex flex-col gap-2 !p-3">
+          <NoteContentEditor
+            content={content}
+            setContent={setContent}
+            focusRef={editorFocusRef}
+            autoFocus={true}
+          />
+          <NoteTagsEditor tags={noteTags} setTags={setNoteTags} />
+          <HR className="!m-1 !bg-gray-400" />
+          <NoteSourcesEditor
+            sources={noteSources}
+            setSources={setNoteSources}
+          />
+          <Button onClick={handleSave} color="green">
+            Save
+          </Button>
+        </ModalBody>
+        <ModalFooter className="flex justify-center ">
+          <div className="text-sm text-gray-400 flex justify-center gap-2 flex-wrap">
+            <p>Last Edit : {note.update_date}</p>
+            <p>Created on : {note.create_date}</p>
+          </div>
+        </ModalFooter>
+      </Modal>
+      <NoteColorEditor
+        color={color}
+        setColor={setColor}
+        open={colorEditorOpen}
+        handleCloseColorEditor={handleCloseColorEditor}
+      />
+    </>
   );
 };
 

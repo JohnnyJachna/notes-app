@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+
 import { deleteNoteAtom } from "./NotesAtoms";
 import { useAtomValue, useSetAtom } from "jotai/react";
 
@@ -7,11 +8,16 @@ import NoteEditor from "./editor/NoteEditor";
 import ButtonEdit from "../buttons/ButtonEdit";
 import ButtonDelete from "../buttons/ButtonDelete";
 
+import { validHex } from "@uiw/react-color";
+import { getContrastingColor } from "@uiw/react-color";
+
 import { Card } from "flowbite-react";
 
 const Note = (props) => {
   const note = useAtomValue(props.noteAtom);
   const deleteNote = useSetAtom(deleteNoteAtom);
+  const bgColor = validHex(note.color) ? note.color : "#374151";
+  const txtColor = getContrastingColor(bgColor);
 
   const [showEditor, setShowEditor] = useState(false);
 
@@ -28,6 +34,7 @@ const Note = (props) => {
       <Card
         className="relative cursor-pointer group [&>div]:p-2 [&>div]:sm:p-3 overflow-auto "
         onClick={() => setShowEditor(true)}
+        style={{ backgroundColor: bgColor, color: txtColor }}
       >
         <div
           className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity"
