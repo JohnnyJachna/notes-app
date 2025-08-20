@@ -35,11 +35,16 @@ const NoteTagsEditor = ({ tags, setTags }) => {
 
   return (
     <div className="mt-2 mb-2 flex flex-row flex-wrap items-center">
-      <h4 className="font-semibold text-lg">Tags</h4>
+      <h4 className="font-semibold text-lg mr-2">Tags:</h4>
       {addableTags?.length > 0 && (
         <>
           <ButtonAdd onClick={handleAddTag} />
-          <Dropdown label={tagSelection.name} size="sm" className="mr-2.5">
+          <Dropdown
+            label={tagSelection.name}
+            size="sm"
+            className="mr-2.5"
+            style={{ height: 28 }}
+          >
             {addableTags.map((tag) => (
               <DropdownItem key={tag.id} onClick={() => setTagSelection(tag)}>
                 {tag.name}

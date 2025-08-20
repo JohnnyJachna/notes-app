@@ -34,7 +34,7 @@ const NotePreview = ({ noteAtom }) => {
         />
       </div>
       <HR className="!m-1" />
-      <div className="flex flex-col gap-2 flex-1 overflow-hidden">
+      <div className="flex flex-col gap-2 flex-1 overflow-hidden mt-1">
         <NoteTagsPreview tags={note.tags} />
         <NoteSourcesPreview sources={note.sources} />
       </div>

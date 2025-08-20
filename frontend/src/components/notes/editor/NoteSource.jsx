@@ -40,14 +40,14 @@ const NoteSource = ({ source, handleRemove }) => {
         }
       >
         <div
-          className="mt-2 mb-2 relative rounded-md flex py-0.5 pl-2.5 pr-8 border border-transparent text-sm transition-all shadow-sm"
+          className="inline-flex items-center gap-2 rounded-md h-7 px-2 pr-1 border border-transparent text-sm shadow-sm"
           style={{ backgroundColor: bgColor, color: txtColor }}
         >
-          <p className="truncate max-w-20">{source.name}</p>
+          <p className="truncate max-w-24 leading-normal">{source.name}</p>
           <button
             type="button"
             onClick={removeItem}
-            className="flex items-center justify-center transition-all p-1 rounded-md absolute top-0.5 right-0.5 hover:bg-white/10 active:bg-white/20"
+            className="flex items-center justify-center rounded hover:bg-white/10 active:bg-white/20 w-5 h-5 cursor-pointer"
             style={{ color: txtColor }}
           >
             <svg

@@ -37,11 +37,16 @@ const NoteSourcesEditor = ({ sources, setSources }) => {
 
   return (
     <div className="mt-2 mb-2 flex flex-row flex-wrap items-center">
-      <h4 className="font-semibold text-lg">Sources</h4>
+      <h4 className="font-semibold text-lg mr-2">Sources:</h4>
       {addableSources?.length > 0 && (
         <>
           <ButtonAdd onClick={handleAddSource} />
-          <Dropdown label={sourceSelection.name} size="sm" className="mr-2.5">
+          <Dropdown
+            label={sourceSelection.name}
+            size="sm"
+            className="mr-2.5"
+            style={{ height: 28 }}
+          >
             {addableSources.map((source) => (
               <DropdownItem
                 key={source.id}
