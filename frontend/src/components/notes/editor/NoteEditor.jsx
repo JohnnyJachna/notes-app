@@ -66,8 +66,8 @@ const NoteEditor = ({ noteAtom, open, handleCloseEditor }) => {
         size="7xl"
         className="text-gray-100"
       >
-        <ModalHeader className="flex justify-between">
-          <div className="flex">
+        <ModalHeader>
+          <div className="flex items-center gap-2">
             <NoteHeaderEditor header={header} setHeader={setHeader} />
             <ButtonColorToggle onClick={setColorEditorOpen} />
           </div>
