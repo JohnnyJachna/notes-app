@@ -3,10 +3,15 @@ import { IoMdAddCircleOutline } from "react-icons/io";
 
 const ButtonAdd = ({ onClick }) => {
   return (
-    <Button onClick={onClick} size="xs" color="clear" className="focus:ring-0">
+    <Button
+      onClick={onClick}
+      size="xs"
+      color="clear"
+      className="focus:ring-0 cursor-pointer"
+    >
       <IoMdAddCircleOutline
         size="20"
-        className="text-gray-200 transition-colors hover:text-blue-500"
+        className="text-gray-300 transition-colors hover:text-white"
       />
     </Button>
   );
