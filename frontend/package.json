@@ -27,6 +27,8 @@
     "@tiptap/pm": "^3.2.0",
     "@tiptap/react": "^3.2.0",
     "@tiptap/starter-kit": "^3.2.0",
+    "@uiw/react-color": "^2.8.0",
+    "@uiw/react-color-sketch": "^2.8.0",
     "flowbite": "^3.1.2",
     "flowbite-react": "^0.12.7",
     "jotai": "^2.13.1",

@@ -3,8 +3,8 @@
 @source "../.flowbite-react/class-list.json";
 @plugin "flowbite/plugin";
 @source "../node_modules/flowbite";
-@import './styles/_variables.scss';
-@import './styles/_keyframe-animations.scss';
+@import "./styles/_variables.scss";
+@import "./styles/_keyframe-animations.scss";
 @import "prosemirror-view/style/prosemirror.css";
 
 @theme {
@@ -30,4 +30,15 @@
   --font-mono:
     "ui-monospace", "SFMono-Regular", "Menlo", "Monaco", "Consolas",
     "Liberation Mono", "Courier New", "monospace";
+}
+
+@layer components {
+  .w-color-sketch {
+    --sketch-background: #323232 !important;
+  }
+  .w-color-editable-input {
+    --editable-input-label-color: #757575 !important;
+    --editable-input-box-shadow: #616161 0px 0px 0px 1px inset !important;
+    --editable-input-color: #bbb !important;
+  }
 }

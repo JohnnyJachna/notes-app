@@ -50,7 +50,7 @@ const NoteSourcesEditor = ({ sources, setSources }) => {
           </DropdownItem>
         ))}
       </Dropdown>
-      <ul className="flex flex-row">
+      <ul className="flex flex-row gap-1">
         {sources.map((source) => (
           <NoteSource
             key={source.id + source.name}

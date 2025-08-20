@@ -1,4 +1,6 @@
 import { Badge } from "flowbite-react";
+import { validHex } from "@uiw/react-color";
+import { getContrastingColor } from "@uiw/react-color";
 
 const NoteSourcesPreview = ({ sources }) => {
   return (
@@ -7,11 +9,12 @@ const NoteSourcesPreview = ({ sources }) => {
       {sources && sources.length > 0 ? (
         <ul className="flex flex-wrap gap-1">
           {sources.map((source) => {
+            const bgColor = validHex(source.color) ? source.color : "#F8E61B";
+            const txtColor = getContrastingColor(bgColor);
             return (
               <Badge
                 key={source.id}
-                color={source.color}
-                className="whitespace-nowrap"
+                style={{ backgroundColor: bgColor, color: txtColor }}
               >
                 <p className="truncate max-w-20">{source.name}</p>
               </Badge>

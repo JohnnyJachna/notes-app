@@ -67,7 +67,7 @@ export const updateTagAtom = atom(
             return {
               ...note,
               tags: note.tags.map((tag) =>
-                tag.id === tagID ? { ...tag, name: name } : tag
+                tag.id === tagID ? { ...tag, name: name, color: color } : tag
               ),
             };
           }
