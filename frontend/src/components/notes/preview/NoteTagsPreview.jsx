@@ -14,6 +14,7 @@ const NoteTagsPreview = ({ tags }) => {
             return (
               <Badge
                 key={tag.id}
+                className={`border rounded-md border-[${txtColor}]`}
                 style={{ backgroundColor: bgColor, color: txtColor }}
               >
                 <p className="truncate max-w-20">{tag.name}</p>

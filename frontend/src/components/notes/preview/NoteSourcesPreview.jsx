@@ -14,6 +14,7 @@ const NoteSourcesPreview = ({ sources }) => {
             return (
               <Badge
                 key={source.id}
+                className={`border rounded-md border-[${txtColor}]`}
                 style={{ backgroundColor: bgColor, color: txtColor }}
               >
                 <p className="truncate max-w-20">{source.name}</p>

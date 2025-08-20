@@ -56,7 +56,7 @@ const NoteEditor = ({ noteAtom, open, handleCloseEditor }) => {
     });
     handleCloseEditor();
   };
-  console.log("Color: " + color);
+
   return (
     <>
       <Modal
