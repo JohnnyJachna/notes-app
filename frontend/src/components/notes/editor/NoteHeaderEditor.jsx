@@ -2,8 +2,8 @@ import { Label, TextInput } from "flowbite-react";
 
 const NoteHeaderEditor = ({ header, setHeader }) => {
   return (
-    <div>
-      <Label htmlFor="note-header" className="mb-2 block">
+    <div className="flex gap-2 items-baseline">
+      <Label htmlFor="note-header" className="block !text-base">
         Header
       </Label>
       <TextInput

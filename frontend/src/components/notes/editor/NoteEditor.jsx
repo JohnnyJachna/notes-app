@@ -8,6 +8,7 @@ import NoteSourcesEditor from "./NoteSourcesEditor";
 
 import {
   Button,
+  HR,
   Modal,
   ModalBody,
   ModalFooter,
@@ -58,7 +59,7 @@ const NoteEditor = ({ noteAtom, open, handleCloseEditor }) => {
       <ModalHeader>
         <NoteHeaderEditor header={header} setHeader={setHeader} />
       </ModalHeader>
-      <ModalBody className="flex flex-col ">
+      <ModalBody className="flex flex-col gap-2 !p-3">
         <NoteContentEditor
           content={content}
           setContent={setContent}
@@ -66,14 +67,17 @@ const NoteEditor = ({ noteAtom, open, handleCloseEditor }) => {
           autoFocus={true}
         />
         <NoteTagsEditor tags={noteTags} setTags={setNoteTags} />
+        <HR className="!m-1 !bg-gray-400" />
         <NoteSourcesEditor sources={noteSources} setSources={setNoteSources} />
         <Button onClick={handleSave} color="green">
           Save
         </Button>
       </ModalBody>
-      <ModalFooter>
-        <p>Last Edit : {note.update_date}</p>
-        <p>Created on : {note.create_date}</p>
+      <ModalFooter className="flex justify-center ">
+        <div className="text-sm text-gray-400 flex justify-center gap-2 flex-wrap">
+          <p>Last Edit : {note.update_date}</p>
+          <p>Created on : {note.create_date}</p>
+        </div>
       </ModalFooter>
     </Modal>
   );

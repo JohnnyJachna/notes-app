@@ -1,16 +1,12 @@
 import { useState, useEffect, useMemo } from "react";
+
 import { tagsAtom } from "../../tags/TagsAtoms";
 import { useAtomValue } from "jotai/react";
-import NoteTag from "./NoteTag";
 
-import {
-  Badge,
-  Button,
-  Dropdown,
-  DropdownItem,
-  Toast,
-  ToastToggle,
-} from "flowbite-react";
+import NoteTag from "./NoteTag";
+import ButtonAdd from "@/components/buttons/ButtonAdd";
+
+import { Dropdown, DropdownItem } from "flowbite-react";
 
 const NoteTagsEditor = ({ tags, setTags }) => {
   const allTags = useAtomValue(tagsAtom);
@@ -23,6 +19,7 @@ const NoteTagsEditor = ({ tags, setTags }) => {
   const [tagSelection, setTagSelection] = useState(
     addableTags.length > 0 ? addableTags[0].id : ""
   );
+
   useEffect(() => {
     if (addableTags.length > 0) setTagSelection(addableTags[0]);
     else setTagSelection("");
@@ -37,19 +34,21 @@ const NoteTagsEditor = ({ tags, setTags }) => {
   };
 
   return (
-    <div className="mt-2 mb-2 flex flex-row flex-wrap gap-2">
-      <h4>Tags</h4>
-      <Button onClick={handleAddTag} size="xs">
-        +
-      </Button>
-      <Dropdown label={tagSelection.name}>
-        {addableTags.map((tag) => (
-          <DropdownItem key={tag.id} onClick={() => setTagSelection(tag)}>
-            {tag.name}
-          </DropdownItem>
-        ))}
-      </Dropdown>
-      <ul className="flex flex-row gap-1">
+    <div className="mt-2 mb-2 flex flex-row flex-wrap items-center">
+      <h4 className="font-semibold text-lg">Tags</h4>
+      {addableTags?.length > 0 && (
+        <>
+          <ButtonAdd onClick={handleAddTag} />
+          <Dropdown label={tagSelection.name} size="sm" className="mr-2.5">
+            {addableTags.map((tag) => (
+              <DropdownItem key={tag.id} onClick={() => setTagSelection(tag)}>
+                {tag.name}
+              </DropdownItem>
+            ))}
+          </Dropdown>
+        </>
+      )}
+      <ul className="flex gap-1 flex-wrap">
         {tags.map((tag) => (
           <NoteTag
             key={tag.id + tag.name}

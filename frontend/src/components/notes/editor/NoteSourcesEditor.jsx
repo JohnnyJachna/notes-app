@@ -3,8 +3,9 @@ import { sourcesAtom } from "../../sources/SourcesAtoms";
 import { useAtomValue } from "jotai/react";
 
 import NoteSource from "./NoteSource";
+import ButtonAdd from "@/components/buttons/ButtonAdd";
 
-import { Badge, Button, Dropdown, DropdownItem, Popover } from "flowbite-react";
+import { Dropdown, DropdownItem, Popover } from "flowbite-react";
 
 const NoteSourcesEditor = ({ sources, setSources }) => {
   const allSources = useAtomValue(sourcesAtom);
@@ -35,22 +36,24 @@ const NoteSourcesEditor = ({ sources, setSources }) => {
   };
 
   return (
-    <div className="flex flex-row flex-wrap gap-2">
-      <h4>Sources</h4>
-      <Button onClick={handleAddSource} size="xs">
-        +
-      </Button>
-      <Dropdown label={sourceSelection.name}>
-        {addableSources.map((source) => (
-          <DropdownItem
-            key={source.id}
-            onClick={() => setSourceSelection(source)}
-          >
-            {source.name}
-          </DropdownItem>
-        ))}
-      </Dropdown>
-      <ul className="flex flex-row gap-1">
+    <div className="mt-2 mb-2 flex flex-row flex-wrap items-center">
+      <h4 className="font-semibold text-lg">Sources</h4>
+      {addableSources?.length > 0 && (
+        <>
+          <ButtonAdd onClick={handleAddSource} />
+          <Dropdown label={sourceSelection.name} size="sm" className="mr-2.5">
+            {addableSources.map((source) => (
+              <DropdownItem
+                key={source.id}
+                onClick={() => setSourceSelection(source)}
+              >
+                {source.name}
+              </DropdownItem>
+            ))}
+          </Dropdown>
+        </>
+      )}
+      <ul className="flex gap-1 flex-wrap">
         {sources.map((source) => (
           <NoteSource
             key={source.id + source.name}

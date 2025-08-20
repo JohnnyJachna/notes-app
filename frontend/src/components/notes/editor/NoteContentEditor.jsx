@@ -236,7 +236,7 @@ const NoteContentEditor = ({
     return <div className="text-sm text-gray-500">Loading editor…</div>;
 
   return (
-    <div className="simple-editor-wrapper">
+    <div className="simple-editor-wrapper rounded-xl border border-gray-300 dark:border-gray-600 overflow-hidden bg-white dark:bg-gray-800">
       <EditorContext.Provider value={{ editor }}>
         <Toolbar
           ref={toolbarRef}
