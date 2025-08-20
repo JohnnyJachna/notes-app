@@ -8,9 +8,8 @@ export const sortTypesAtom = atom([
   "Edited",
   "Created",
 ]);
-export const sortTypeAtom = atom("Header");
-export const isSortedAtom = atom(false);
-export const ascendingAtom = atom(true);
+export const sortTypeAtom = atom("Created");
+export const ascendingAtom = atom(false);
 
 export const filterTypeAtom = atom("Tag");
 export const isFilteredAtom = atom(false);
@@ -63,11 +62,9 @@ export const filteredNotesAtom = atom((get) => {
 // Sorting
 export const sortedNotesAtom = atom((get) => {
   const notesList = get(notesAtom);
-  const isSorted = get(isSortedAtom);
   const ascending = get(ascendingAtom);
   const sortType = get(sortTypeAtom);
 
-  if (!isSorted) return notesList;
   const sortedArray = [...notesList];
   switch (sortType) {
     case "Header":
@@ -123,14 +120,10 @@ export const sortedNotesAtom = atom((get) => {
 
 // Combine sorting and filtering
 export const refinedNotesAtom = atom((get) => {
-  const notesList = get(notesAtom);
-  const isSorted = get(isSortedAtom);
   const isFiltered = get(isFilteredAtom);
   const sortedNotes = get(sortedNotesAtom);
   const filteredNotes = get(filteredNotesAtom);
 
-  if (!isSorted && !isFiltered) return notesList;
-  if (!isSorted) return filteredNotes;
   if (!isFiltered) return sortedNotes;
   return sortedNotes.filter((sNote) =>
     filteredNotes.some((fNote) => fNote.id === sNote.id)

@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { useAtomValue, useSetAtom, useAtom } from "jotai/react";
 import {
-  isSortedAtom,
   ascendingAtom,
   isFilteredAtom,
   tagSelectionAtom,
@@ -19,10 +18,11 @@ import NotesListItems from "./NotesListItems";
 import NotesListFilterControls from "./NotesListFilterControls";
 import NoteSizeDropdown from "./NoteSizeDropdown";
 
+import { HR } from "flowbite-react";
+
 const NotesList = () => {
   const refinedNotes = useAtomValue(refinedNotesAtom);
 
-  const setIsSorted = useSetAtom(isSortedAtom);
   const setIsFiltered = useSetAtom(isFilteredAtom);
   const setAscending = useSetAtom(ascendingAtom);
 
@@ -43,20 +43,22 @@ const NotesList = () => {
   return (
     <>
       {refinedNotes.length > 0 && (
-        <div className="mt-4 mb-4 flex flex-row flex-wrap gap-1">
-          <NotesSortControls
-            onSortToggle={() => setIsSorted((prev) => !prev)}
-            onOrderToggle={() => setAscending((prev) => !prev)}
-          />
-          <NotesSortDropdown />
+        <div className="mt-4 mb-4 flex flex-wrap gap-5 items-center-safe">
+          <NoteSizeDropdown />
+          <div className="flex gap-1">
+            <NotesSortDropdown />
+            <NotesSortControls
+              onOrderToggle={() => setAscending((prev) => !prev)}
+            />
+          </div>
           {(tagsAvailable || sourcesAvailable) && (
             <NotesListFilterControls
               handleFilterToggle={() => setIsFiltered((prev) => !prev)}
             />
           )}
-          <NoteSizeDropdown />
         </div>
       )}
+      <HR />
       <NotesListItems />
     </>
   );

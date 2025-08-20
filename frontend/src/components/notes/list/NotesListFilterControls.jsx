@@ -35,12 +35,23 @@ const NotesListFilterControls = ({ handleFilterToggle }) => {
     }
   }, [tagsNames, tagsAvailable, sourcesNames, sourcesAvailable]);
 
+  const trunc = (text) => (
+    <span className="truncate" title={text}>
+      {text}
+    </span>
+  );
+
   return (
-    <>
-      <Button color="alternative" onClick={handleFilterToggle}>
+    <div className="flex gap-1 flex-wrap">
+      {/* Filter Toggle */}
+
+      <Button color="alternative" onClick={handleFilterToggle} className="w-21">
         {isFiltered ? "Unfilter" : "Filter"}
       </Button>
-      <Dropdown label={filterType} color="alternative">
+
+      {/* Filter Type */}
+
+      <Dropdown label={filterType} color="alternative" className="w-30">
         {tagsAvailable && (
           <DropdownItem key="Tag" onClick={() => setFilterType("Tag")}>
             Tag
@@ -52,28 +63,51 @@ const NotesListFilterControls = ({ handleFilterToggle }) => {
           </DropdownItem>
         )}
       </Dropdown>
+
+      {/* Filter Selection */}
+
       {filterType === "Tag" && (
-        <Dropdown label={tagSelection} color="alternative">
+        <Dropdown
+          label={trunc(tagSelection)}
+          color="alternative"
+          className="w-30"
+        >
           {tagsNames.map((tag, index) => (
-            <DropdownItem key={index} onClick={() => setTagSelection(tag)}>
-              {tag}
+            <DropdownItem
+              key={index}
+              onClick={() => setTagSelection(tag)}
+              className="!p-0"
+            >
+              <span className="block px-3 py-2 truncate max-w-full" title={tag}>
+                {tag}
+              </span>
             </DropdownItem>
           ))}
         </Dropdown>
       )}
       {filterType === "Source" && (
-        <Dropdown label={sourceSelection} color="alternative">
+        <Dropdown
+          label={trunc(sourceSelection)}
+          color="alternative"
+          className="w-30"
+        >
           {sourcesNames.map((source, index) => (
             <DropdownItem
               key={index}
               onClick={() => setSourceSelection(source)}
+              className="!p-0"
             >
-              {source}
+              <span
+                className="block px-3 py-2 truncate max-w-full"
+                title={source}
+              >
+                {source}
+              </span>
             </DropdownItem>
           ))}
         </Dropdown>
       )}
-    </>
+    </div>
   );
 };
 
