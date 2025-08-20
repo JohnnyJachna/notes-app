@@ -105,8 +105,8 @@ export const sortedNotesAtom = atom((get) => {
       break;
     case "Created":
       sortedArray.sort((a, b) => {
-        const createA = new Date(a.update_date);
-        const createB = new Date(b.update_date);
+        const createA = new Date(a.create_date);
+        const createB = new Date(b.create_date);
         if (createA < createB) return ascending ? -1 : 1;
         if (createA > createB) return ascending ? 1 : -1;
         return 0;
