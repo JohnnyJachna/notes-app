@@ -1,5 +1,7 @@
 import { noteSizeAtom } from "../NotesAtoms";
 import { useAtomValue } from "jotai/react";
+import { validHex } from "@uiw/react-color";
+import { getContrastingColor } from "@uiw/react-color";
 
 import NoteTagsPreview from "./NoteTagsPreview";
 import NoteSourcesPreview from "./NoteSourcesPreview";
@@ -16,13 +18,15 @@ const sizes = {
 const NotePreview = ({ noteAtom }) => {
   const note = useAtomValue(noteAtom);
   const noteSize = useAtomValue(noteSizeAtom);
+  const bgColor = validHex(note.color) ? note.color : "#FFFFFF";
+  const hrColor = getContrastingColor(bgColor);
 
   return (
     <div className="flex flex-col h-full">
       {note.header ? (
         <>
           <p className="font-semibold truncate">{note.header}</p>
-          <HR className="!m-1" />
+          <HR className={`!m-1 !bg-[${hrColor}]`} />
         </>
       ) : (
         <p className="font-semibold truncate">Note Header</p>
@@ -33,13 +37,13 @@ const NotePreview = ({ noteAtom }) => {
           dangerouslySetInnerHTML={{ __html: note.content }}
         />
       </div>
-      <HR className="!m-1" />
+      <HR className={`!m-1 !bg-[${hrColor}]`} />
       <div className="flex flex-col gap-2 flex-1 overflow-hidden mt-1">
         <NoteTagsPreview tags={note.tags} />
         <NoteSourcesPreview sources={note.sources} />
       </div>
 
-      <HR className="!m-1" />
+      <HR className={`!m-1 !bg-[${hrColor}]`} />
       <p className="mt-1 text-[10px] text-gray-500 dark:text-gray-400">
         Last Edit: {note.update_date}
       </p>
