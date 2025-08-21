@@ -189,7 +189,6 @@ const Kanban = () => {
 
   return (
     <div className="mx-auto w-full">
-      <h2 className="mb-4 text-xl font-bold dark:text-white">Kanban Board</h2>
       <DndContext
         sensors={sensors}
         collisionDetection={closestCorners}

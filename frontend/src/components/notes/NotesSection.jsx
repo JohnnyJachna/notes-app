@@ -4,7 +4,7 @@ import { useParams, useNavigate } from "react-router";
 import {
   addNoteAtom,
   fetchNotesAtom,
-  noteLoadingAtom,
+  notesLoadingAtom,
   notesLoadedAtom,
 } from "./NotesAtoms";
 import { useAtomValue, useSetAtom } from "jotai/react";
@@ -20,7 +20,7 @@ const NotesSection = () => {
 
   const addNote = useSetAtom(addNoteAtom);
   const fetchNotes = useSetAtom(fetchNotesAtom);
-  const isLoading = useAtomValue(noteLoadingAtom);
+  const isLoading = useAtomValue(notesLoadingAtom);
   const notesLoaded = useAtomValue(notesLoadedAtom);
 
   useEffect(() => {
