@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useParams } from "react-router";
+import { useParams, useNavigate } from "react-router";
 
 import {
   addNoteAtom,
@@ -16,12 +16,12 @@ import { Button, Spinner } from "flowbite-react";
 
 const NotesSection = () => {
   const { setID } = useParams();
+  const navigate = useNavigate();
 
   const addNote = useSetAtom(addNoteAtom);
   const fetchNotes = useSetAtom(fetchNotesAtom);
   const isLoading = useAtomValue(noteLoadingAtom);
   const notesLoaded = useAtomValue(notesLoadedAtom);
-  console.log("isLoading :", isLoading);
 
   useEffect(() => {
     if (notesLoaded) return;
@@ -32,6 +32,10 @@ const NotesSection = () => {
     await addNote(setID);
   };
 
+  const navToDnd = () => {
+    navigate(`/sets/${setID}/dnd`);
+  };
+
   return (
     <>
       {isLoading ? (
@@ -40,11 +44,14 @@ const NotesSection = () => {
         </div>
       ) : (
         <div className="m-3 p-5">
-          <div className="flex flex-row gap-3">
-            <TagSourceEditor />
-            <Button color="green" onClick={handleAddNote} className="mb-2">
-              Add Note
-            </Button>
+          <div className="flex justify-between">
+            <div className="flex gap-3">
+              <TagSourceEditor />
+              <Button color="green" onClick={handleAddNote} className="mb-2">
+                Add Note
+              </Button>
+            </div>
+            <Button onClick={navToDnd}>Editor</Button>
           </div>
           <NotesList />
         </div>

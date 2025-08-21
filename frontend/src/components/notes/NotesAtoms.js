@@ -9,7 +9,7 @@ export const noteLoadingAtom = atom(false);
 export const notesLoadedAtom = atom(false);
 
 export const fetchNotesAtom = atom(null, async (get, set, setID) => {
-  console.log("fetch notes");
+  // console.log("fetch notes");
 
   set(noteLoadingAtom, true);
   set(notesLoadedAtom, false);
