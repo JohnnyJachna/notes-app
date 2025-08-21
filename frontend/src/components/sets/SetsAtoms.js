@@ -2,15 +2,29 @@ import { atom } from "jotai/vanilla";
 import { splitAtom } from "jotai/utils";
 import { makeRequest } from "../../utils/api";
 
+const sortSets = (setsList) => {
+  const sortedArray = [...setsList];
+
+  sortedArray.sort((a, b) => {
+    const updateA = new Date(a.update_date);
+    const updateB = new Date(b.update_date);
+    if (updateA < updateB) return 1;
+    if (updateA > updateB) return -1;
+    return 0;
+  });
+  return sortedArray;
+};
+
 export const setsAtom = atom([]);
 export const splitSetsAtom = splitAtom(setsAtom);
 
 export const fetchSetsAtom = atom(null, async (get, set) => {
-  console.log("fetch sets");
+  // console.log("fetch sets");
 
   try {
     const response = await makeRequest(`sets`);
-    set(setsAtom, response);
+    const sortedResponse = sortSets(response);
+    set(setsAtom, sortedResponse);
   } catch (error) {
     console.log(error);
     set(setsAtom, []);
@@ -29,7 +43,7 @@ export const addSetAtom = atom(null, async (get, set) => {
         update_date: date,
       }),
     });
-    set(setsAtom, (prev) => [...prev, addedSet]);
+    set(setsAtom, (prev) => sortSets([...prev, addedSet]));
   } catch (error) {
     console.log(error);
   }
@@ -49,8 +63,13 @@ export const updateSetAtom = atom(null, async (get, set, updatedSet) => {
       method: "PATCH",
       body: JSON.stringify(body),
     });
+    const updatedWithDate = { ...updatedSet, update_date: date };
     set(setsAtom, (prev) =>
-      prev.map((set) => (set.id === updatedSet.id ? updatedSet : set))
+      sortSets(
+        prev.map((set) =>
+          set.id === updatedWithDate.id ? updatedWithDate : set
+        )
+      )
     );
   } catch (error) {
     console.log(error);
