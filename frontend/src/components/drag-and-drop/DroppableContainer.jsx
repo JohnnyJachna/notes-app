@@ -4,22 +4,31 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 
-import SortableItem from "./SortableItem";
+import { useSetAtom } from "jotai";
+import { deleteContainerAtom } from "./DndAtoms";
 
-const DroppableContainer = ({ id, name, notes }) => {
-  console.log("id :", id);
-  console.log("notes :", notes);
-  console.log("name :", name);
+import SortableItem from "./SortableItem";
+import ButtonDelete from "../buttons/ButtonDelete";
+
+const DroppableContainer = ({ id, setID, name, notes }) => {
   const { setNodeRef } = useDroppable({ id });
+  const deleteContainer = useSetAtom(deleteContainerAtom);
+
+  const handleContainerDelete = async () => {
+    await deleteContainer({ setID: setID, containerID: id });
+  };
 
   return (
     <div
       ref={setNodeRef}
       className="flex h-full min-h-40 flex-col rounded-md border border-gray-200 bg-gray-50 p-3 dark:border-gray-700 dark:bg-gray-800/50"
     >
-      <h3 className="mb-2 font-medium text-gray-700 dark:text-gray-200">
-        {name}
-      </h3>
+      <div className="flex items-center justify-between">
+        <h3 className="mb-2 font-medium text-gray-700 dark:text-gray-200">
+          {name}
+        </h3>
+        <ButtonDelete onClick={handleContainerDelete} />
+      </div>
       <div className="flex-1">
         <SortableContext
           items={notes.map((note) => note.id)}

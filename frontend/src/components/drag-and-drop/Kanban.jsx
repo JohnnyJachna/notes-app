@@ -207,6 +207,7 @@ const Kanban = () => {
             <DroppableContainer
               key={container.id}
               id={container.id}
+              setID={container.set_id}
               name={container.name}
               notes={container.notes}
             />
