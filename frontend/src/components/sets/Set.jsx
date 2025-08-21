@@ -25,46 +25,52 @@ const Set = ({ setAtom }) => {
     await deleteSet(set.id);
   };
 
-  const goToDetails = () => navigate(`/sets/${set.id}`);
+  const navToSet = () => {
+    if (!showEditor) navigate(`/sets/${set.id}`);
+  };
 
   return (
     <Card
-      className="relative cursor-pointer h-full group"
-      onClick={goToDetails}
+      className="relative cursor-pointer group select-none"
+      onClick={navToSet}
       tabIndex={0}
       onKeyDown={(e) => {
-        if (e.key === "Enter" || e.key === " ") {
+        if ((e.key === "Enter" || e.key === " ") && !showEditor) {
           e.preventDefault();
-          goToDetails();
+          navToSet();
         }
       }}
     >
-      <div
-        onClick={(e) => e.stopPropagation()}
-        onKeyDown={(e) => e.stopPropagation()}
-        className="flex items-center gap-2 h-10"
-      >
-        {showEditor ? (
+      {!showEditor && (
+        <div
+          className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity"
+          onClick={(e) => e.stopPropagation()}
+          onKeyDown={(e) => e.stopPropagation()}
+        >
+          <ButtonEdit onClick={() => setShowEditor(true)} />
+          <ButtonDelete onClick={handleDeleteSet} />
+        </div>
+      )}
+
+      {showEditor ? (
+        <div
+          className="flex items-center h-10"
+          onClick={(e) => e.stopPropagation()}
+          onKeyDown={(e) => e.stopPropagation()}
+        >
           <SetEditor
             setAtom={setAtom}
             setSet={setSet}
             handleCloseEditor={handleCloseEditor}
           />
-        ) : (
-          <>
-            <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-              <ButtonEdit onClick={() => setShowEditor(true)} />
-              <ButtonDelete onClick={handleDeleteSet} />
-            </div>
-            <h5
-              className="font-semibold truncate pr-16 relative h10 flex items-center"
-              title={set.name}
-            >
-              {set.name}
-            </h5>
-          </>
-        )}
-      </div>
+        </div>
+      ) : (
+        <div className="flex items-center h-10">
+          <h5 className="font-semibold truncate pr-16 w-full" title={set.name}>
+            {set.name}
+          </h5>
+        </div>
+      )}
     </Card>
   );
 };
