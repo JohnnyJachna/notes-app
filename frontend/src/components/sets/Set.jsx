@@ -3,6 +3,7 @@ import { useNavigate } from "react-router";
 
 import { useAtom, useSetAtom } from "jotai/react";
 import { updateSetAtom, deleteSetAtom } from "./SetsAtoms";
+import { fetchNotesAtom } from "../notes/NotesAtoms";
 
 import SetEditor from "./SetEditor";
 
@@ -14,6 +15,7 @@ const Set = ({ setAtom }) => {
   const [set, setSet] = useAtom(setAtom);
   const updateSet = useSetAtom(updateSetAtom);
   const deleteSet = useSetAtom(deleteSetAtom);
+  const fetchNotes = useSetAtom(fetchNotesAtom);
 
   const [showEditor, setShowEditor] = useState(false);
   const [opening, setOpening] = useState(false);
@@ -30,8 +32,9 @@ const Set = ({ setAtom }) => {
   const navToSet = async () => {
     if (!showEditor) {
       setOpening(true);
-      await updateSet(set);
+      await fetchNotes(set.id);
       navigate(`/sets/${set.id}`);
+      await updateSet(set);
     }
   };
 
@@ -47,7 +50,6 @@ const Set = ({ setAtom }) => {
         }
       }}
     >
-      {" "}
       {!opening ? (
         <>
           {!showEditor && (
