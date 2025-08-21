@@ -8,8 +8,7 @@ from db import get_session
 from sanitizer import sanitize_html
 
 from models.set import Set
-from models.note import Note, Source, Tag, NoteRead, TagRead, SourceRead
-from models.links import LinkTagNote, LinkSourceNote
+from models.note import Note, NoteRead, Source, SourceRead, Tag, TagRead, Container, ContainerRead
 
 def get_datetime():
   current_datetime = datetime.datetime.now()
@@ -136,28 +135,28 @@ async def add_note(set_id: int, payload: Note,session: Session = Depends(get_ses
 
 @app.patch("/sets/{set_id}/notes", response_model=NoteRead)
 async def update_note_data(set_id: int, payload: NoteRead, session: Session = Depends(get_session)):
-    note = session.get(Note, payload.id)
+  note = session.get(Note, payload.id)
 
-    note.header = payload.header
-    note.content = sanitize_html(payload.content)
-    note.update_date = payload.update_date
-    note.color = payload.color
-    
-    # https://docs.sqlalchemy.org/en/20/core/operators.html#in-comparisons
-    # Create a new list of tag ids from the payload, then select all Tags with that id
-    
-    if payload.tags is not None:
-        tags = session.exec(select(Tag).where(Tag.id.in_([t.id for t in payload.tags]))).all()
-        note.tags = tags
-        
-    if payload.sources is not None:
-        sources = session.exec(select(Source).where(Source.id.in_([s.id for s in payload.sources]))).all()
-        note.sources = sources
+  note.header = payload.header
+  note.content = sanitize_html(payload.content)
+  note.update_date = payload.update_date
+  note.color = payload.color
+  
+  # https://docs.sqlalchemy.org/en/20/core/operators.html#in-comparisons
+  # Create a new list of tag ids from the payload, then select all Tags with that id
+  
+  if payload.tags is not None:
+      tags = session.exec(select(Tag).where(Tag.id.in_([t.id for t in payload.tags]))).all()
+      note.tags = tags
+      
+  if payload.sources is not None:
+      sources = session.exec(select(Source).where(Source.id.in_([s.id for s in payload.sources]))).all()
+      note.sources = sources
 
-    session.add(note)
-    session.commit()
-    session.refresh(note)
-    return note
+  session.add(note)
+  session.commit()
+  session.refresh(note)
+  return note
 
 @app.delete("/sets/{set_id}/notes/{note_id}")
 def delete_note(set_id: int, note_id: int, response: Response, session: Session = Depends(get_session)):
@@ -284,6 +283,54 @@ def delete_source(set_id: int, source_id: int, response: Response, session: Sess
   session.delete(source)
   session.commit()
   return {"message" : f"Source with id: {source_id} deleted"}
+
+# ----- CONTAINER ROUTES ------
+
+@app.get("/sets/{set_id}/containers", response_model=list[ContainerRead])
+async def get_containers(set_id: int, session: Session = Depends(get_session)):
+  statement = select(Container).where(Container.set_id == set_id)
+  result = session.exec(statement).all()
+  return result
+
+@app.post("/sets/{set_id}/containers/add", response_model=Container)
+async def add_container(set_id: int, payload: Container, session: Session = Depends(get_session)):
+  new_container = Container(
+    name = payload.name,
+    color = payload.color,
+    set_id = payload.set_id
+  )
+  
+  session.add(new_container)
+  session.commit()
+  session.refresh(new_container)
+  return new_container
+
+@app.patch("/sets/{set_id}/containers", response_model=ContainerRead)
+async def update_container_data(set_id: int, payload: ContainerRead, session: Session = Depends(get_session)):
+  container = session.get(Container, payload.id)
+
+  container.name = payload.name
+  container.color = payload.color
+  
+  if payload.notes is not None:
+      notes = session.exec(select(Note).where(Note.id.in_([n.id for n in payload.notes]))).all()
+      container.notes = notes
+
+  session.add(container)
+  session.commit()
+  session.refresh(container)
+  return container
+
+@app.delete("/sets/{set_id}/containers/{container_id}")
+def delete_container(set_id: int, container_id: int, response: Response, session: Session = Depends(get_session)):
+  container = session.get(Container, container_id)
+  if container is None:
+    response.status_code = 404
+    return "Tag not found"
+  
+  session.delete(container)
+  session.commit()
+  return {"message" : f"Container with id: {container_id} deleted"}
 
 # ----- NOTES TAGS ROUTES -----
 

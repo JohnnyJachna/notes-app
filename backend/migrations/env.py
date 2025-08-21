@@ -10,8 +10,8 @@ from sqlmodel import SQLModel
 from config import DATABASE_URL
 
 from models.set import Set
-from models.note import Note, Tag, Source
-from models.links import LinkTagNote, LinkSourceNote
+from models.note import Note, Tag, Source, Container
+from models.links import LinkTagNote, LinkSourceNote, LinkContainerNote
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
