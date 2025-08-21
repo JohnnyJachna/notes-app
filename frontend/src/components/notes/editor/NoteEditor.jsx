@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 
 import { useAtomValue, useSetAtom } from "jotai/react";
 import { updateNoteAtom } from "../NotesAtoms";
@@ -32,16 +32,24 @@ const NoteEditor = ({ noteAtom, open, handleCloseEditor }) => {
 
   const editorFocusRef = useRef(null);
 
-  const handleCloseColorEditor = () => {
-    setColorEditorOpen(false);
-  };
-
-  const handleCancel = () => {
+  const refreshNoteState = () => {
     setHeader(note.header);
     setContent(note.content);
     setNoteTags(note.tags);
     setNoteSources(note.sources);
     setColor(note.color);
+  };
+
+  useEffect(() => {
+    refreshNoteState();
+  }, [note]);
+
+  const handleCloseColorEditor = () => {
+    setColorEditorOpen(false);
+  };
+
+  const handleCancel = () => {
+    refreshNoteState();
     handleCloseEditor();
   };
 

@@ -9,10 +9,10 @@ import NoteSourcesPreview from "./NoteSourcesPreview";
 import { HR } from "flowbite-react";
 
 const sizes = {
-  small: "max-h-24", // ~224px
-  medium: "max-h-32", // ~320px
-  large: "max-h-48", // custom
-  full: "max-h-none", // no limit
+  small: "max-h-24",
+  medium: "max-h-32",
+  large: "max-h-48",
+  full: "max-h-none",
 };
 
 const NotePreview = ({ noteAtom }) => {
@@ -26,7 +26,7 @@ const NotePreview = ({ noteAtom }) => {
       {note.header ? (
         <>
           <p className="font-semibold truncate">{note.header}</p>
-          <HR className={`!m-1 !bg-[${hrColor}]`} />
+          <HR className="m-1" style={{ background: hrColor }} />
         </>
       ) : (
         <p className="font-semibold truncate">Note Header</p>
@@ -37,13 +37,13 @@ const NotePreview = ({ noteAtom }) => {
           dangerouslySetInnerHTML={{ __html: note.content }}
         />
       </div>
-      <HR className={`!m-1 !bg-[${hrColor}]`} />
-      <div className="flex flex-col gap-2 flex-1 overflow-hidden mt-1">
+      <HR className="m-1" style={{ background: hrColor }} />
+      <div className="flex flex-col gap-2 flex-1 overflow-auto justify-end mt-1">
         <NoteTagsPreview tags={note.tags} />
         <NoteSourcesPreview sources={note.sources} />
       </div>
 
-      <HR className={`!m-1 !bg-[${hrColor}]`} />
+      <HR className="m-1" style={{ background: hrColor }} />
       <p className="mt-1 text-[10px] text-gray-500 dark:text-gray-400">
         Last Edit: {note.update_date}
       </p>
