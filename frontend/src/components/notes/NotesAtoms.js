@@ -5,18 +5,21 @@ import { makeRequest } from "../../utils/api";
 export const notesAtom = atom([]);
 export const splitNotesAtom = splitAtom(notesAtom);
 export const noteSizeAtom = atom("medium");
+export const noteLoadingAtom = atom(false);
+export const notesLoadedAtom = atom(false);
 
 export const fetchNotesAtom = atom(null, async (get, set, setID) => {
-  // console.log("fetch notes");
+  console.log("fetch notes");
 
-  if (!setID) {
-    set(notesAtom, []);
-    return;
-  }
+  set(noteLoadingAtom, true);
+  set(notesLoadedAtom, false);
+  set(notesAtom, []);
 
   try {
     const response = await makeRequest(`sets/${setID}/notes`);
     set(notesAtom, response);
+    set(noteLoadingAtom, false);
+    set(notesLoadedAtom, true);
   } catch (error) {
     console.log(error);
     set(notesAtom, []);
