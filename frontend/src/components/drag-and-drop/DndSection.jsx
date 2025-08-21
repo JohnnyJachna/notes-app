@@ -37,7 +37,7 @@ const DndSection = () => {
     navigate(`/sets/${setID}`);
   };
 
-  console.log("Containers: " + JSON.stringify(containers));
+  // console.log("Containers: " + JSON.stringify(containers));
 
   return (
     <>

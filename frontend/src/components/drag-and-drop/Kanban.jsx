@@ -10,33 +10,38 @@ import {
 } from "@dnd-kit/core";
 import { arrayMove, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 
+import { useAtom } from "jotai";
+import { containersAtom } from "./DndAtoms";
+
 import DroppableContainer from "./DroppableContainer";
 import ItemOverlay from "./ItemOverlay";
 
 const Kanban = () => {
-  const [containers, setContainers] = useState([
-    {
-      id: "container-1",
-      title: "Container 1",
-      items: [
-        { id: "card-1", content: "Card 1" },
-        { id: "card-2", content: "Card 2" },
-        { id: "card-3", content: "Card 3" },
-      ],
-    },
-    {
-      id: "container-2",
-      title: "Container 2",
-      items: [{ id: "card-4", content: "Card 4" }],
-    },
-    {
-      id: "container-3",
-      title: "Container 3",
-      items: [{ id: "card-5", content: "Card 5" }],
-    },
-  ]);
+  // const [containers, setContainers] = useState([
+  //   {
+  //     id: "container-1",
+  //     title: "Container 1",
+  //     notes: [
+  //       { id: "card-1", content: "Card 1" },
+  //       { id: "card-2", content: "Card 2" },
+  //       { id: "card-3", content: "Card 3" },
+  //     ],
+  //   },
+  //   {
+  //     id: "container-2",
+  //     title: "Container 2",
+  //     notes: [{ id: "card-4", content: "Card 4" }],
+  //   },
+  //   {
+  //     id: "container-3",
+  //     title: "Container 3",
+  //     notes: [{ id: "card-5", content: "Card 5" }],
+  //   },
+  // ]);
 
-  // State to track which item is being dragged
+  const [containers, setContainers] = useAtom(containersAtom);
+
+  // State to track which note is being dragged
   const [activeID, setActiveID] = useState(null);
 
   // Configure sensors for different input methods
@@ -52,13 +57,13 @@ const Kanban = () => {
     })
   );
 
-  // Find which container an item belongs to
-  const findContainerID = (itemID) => {
-    if (containers.some((container) => container.id === itemID)) {
-      return itemID;
+  // Find which container a note belongs to
+  const findContainerID = (noteID) => {
+    if (containers.some((container) => container.id === noteID)) {
+      return noteID;
     }
     const found = containers.find((container) =>
-      container.items.some((item) => item.id === itemID)
+      container.notes.some((note) => note.id === noteID)
     );
     return found ? found.id : null;
   };
@@ -90,8 +95,8 @@ const Kanban = () => {
       const activeContainer = prev.find((c) => c.id === activeContainerID);
       if (!activeContainer) return prev;
 
-      const activeItem = activeContainer.items.find(
-        (item) => item.id === activeID
+      const activeItem = activeContainer.notes.find(
+        (note) => note.id === activeID
       );
       if (!activeItem) return prev;
 
@@ -99,7 +104,7 @@ const Kanban = () => {
         if (container.id === activeContainerID) {
           return {
             ...container,
-            items: container.items.filter((item) => item.id !== activeID),
+            notes: container.notes.filter((note) => note.id !== activeID),
           };
         }
 
@@ -107,20 +112,20 @@ const Kanban = () => {
           if (overID === overContainerID) {
             return {
               ...container,
-              items: [...container.items, activeItem],
+              notes: [...container.notes, activeItem],
             };
           }
-          const overItemIndex = container.items.findIndex(
-            (item) => item.id === overID
+          const overItemIndex = container.notes.findIndex(
+            (note) => note.id === overID
           );
 
           if (overItemIndex !== -1) {
             return {
               ...container,
-              items: [
-                ...container.items.slice(0, overItemIndex + 1),
+              notes: [
+                ...container.notes.slice(0, overItemIndex + 1),
                 activeItem,
-                ...container.items.slice(overItemIndex + 1),
+                ...container.notes.slice(overItemIndex + 1),
               ],
             };
           }
@@ -156,20 +161,20 @@ const Kanban = () => {
       }
 
       const container = containers[containerIndex];
-      const activeIndex = container.items.findIndex(
-        (item) => item.id === active.id
+      const activeIndex = container.notes.findIndex(
+        (note) => note.id === active.id
       );
-      const overIndex = container.items.findIndex(
-        (item) => item.id === over.id
+      const overIndex = container.notes.findIndex(
+        (note) => note.id === over.id
       );
 
       if (activeIndex !== -1 && overIndex !== -1) {
-        const newItems = arrayMove(container.items, activeIndex, overIndex);
+        const newItems = arrayMove(container.notes, activeIndex, overIndex);
 
         setContainers((containers) => {
           return containers.map((c, i) => {
             if (i === containerIndex) {
-              return { ...c, items: newItems };
+              return { ...c, notes: newItems };
             }
             return c;
           });
@@ -181,8 +186,8 @@ const Kanban = () => {
 
   const getActiveItem = () => {
     for (const container of containers) {
-      const item = container.items.find((item) => item.id === activeID);
-      if (item) return item;
+      const note = container.notes.find((note) => note.id === activeID);
+      if (note) return note;
     }
     return null;
   };
@@ -202,8 +207,8 @@ const Kanban = () => {
             <DroppableContainer
               key={container.id}
               id={container.id}
-              title={container.title}
-              items={container.items}
+              name={container.name}
+              notes={container.notes}
             />
           ))}
         </div>

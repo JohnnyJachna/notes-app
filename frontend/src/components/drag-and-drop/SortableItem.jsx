@@ -1,7 +1,7 @@
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 
-const SortableItem = ({ id, content }) => {
+const SortableItem = ({ id, header }) => {
   const {
     attributes,
     listeners,
@@ -27,7 +27,7 @@ const SortableItem = ({ id, content }) => {
     >
       <div className="flex items-center gap-3">
         <span className="text-gray-500 dark:text-gray-400">⋮</span>
-        <span className="dark:text-gray-200">{content}</span>
+        <span className="dark:text-gray-200">{header}</span>
       </div>
     </li>
   );

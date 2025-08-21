@@ -6,7 +6,10 @@ import {
 
 import SortableItem from "./SortableItem";
 
-const DroppableContainer = ({ id, title, items }) => {
+const DroppableContainer = ({ id, name, notes }) => {
+  console.log("id :", id);
+  console.log("notes :", notes);
+  console.log("name :", name);
   const { setNodeRef } = useDroppable({ id });
 
   return (
@@ -15,20 +18,20 @@ const DroppableContainer = ({ id, title, items }) => {
       className="flex h-full min-h-40 flex-col rounded-md border border-gray-200 bg-gray-50 p-3 dark:border-gray-700 dark:bg-gray-800/50"
     >
       <h3 className="mb-2 font-medium text-gray-700 dark:text-gray-200">
-        {title}
+        {name}
       </h3>
       <div className="flex-1">
         <SortableContext
-          items={items.map((item) => item.id)}
+          items={notes.map((note) => note.id)}
           strategy={verticalListSortingStrategy}
         >
           <ul className="flex flex-col gap-2">
-            {items.map((item) => (
-              <SortableItem key={item.id} id={item.id} content={item.content} />
+            {notes.map((note) => (
+              <SortableItem key={note.id} id={note.id} header={note.header} />
             ))}
           </ul>
         </SortableContext>
-        {items.length === 0 && (
+        {notes.length === 0 && (
           <div className="flex h-20 items-center justify-center rounded-md border border-dashed border-gray-300 bg-gray-50 dark:border-gray-600 dark:bg-gray-800/30">
             <p className="text-sm text-gray-500 dark:text-gray-400">
               Drop items here

@@ -292,7 +292,7 @@ async def get_containers(set_id: int, session: Session = Depends(get_session)):
   result = session.exec(statement).all()
   return result
 
-@app.post("/sets/{set_id}/containers/add", response_model=Container)
+@app.post("/sets/{set_id}/containers/add", response_model=ContainerRead)
 async def add_container(set_id: int, payload: Container, session: Session = Depends(get_session)):
   new_container = Container(
     name = payload.name,
