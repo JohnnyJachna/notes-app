@@ -32,7 +32,7 @@ const Note = (props) => {
   return (
     <>
       <Card
-        className="relative cursor-pointer group [&>div]:p-2 [&>div]:sm:p-3 overflow-auto "
+        className="relative cursor-pointer group [&>div]:p-2 [&>div]:sm:p-3 overflow-aut shadow-md shadow-black"
         onClick={() => setShowEditor(true)}
         style={{ backgroundColor: bgColor, color: txtColor }}
       >

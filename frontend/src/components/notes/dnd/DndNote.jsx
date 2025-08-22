@@ -37,7 +37,7 @@ const DndNote = ({ note }) => {
       className="touch-none"
     >
       <Card
-        className="relative h-full cursor-grab active:cursor-grabbing group [&>div]:p-2 [&>div]:sm:p-3 overflow-auto"
+        className="relative h-full cursor-grab active:cursor-grabbing group [&>div]:p-2 [&>div]:sm:p-3 overflow-auto shadow-xl shadow-black"
         style={{ backgroundColor: bgColor, color: txtColor }}
       >
         <div className="flex flex-col h-full">

@@ -19,6 +19,7 @@ import {
   arrayMove,
   rectSortingStrategy,
 } from "@dnd-kit/sortable";
+import { restrictToWindowEdges } from "@dnd-kit/modifiers";
 
 import DndNote from "./DndNote";
 
@@ -65,21 +66,24 @@ const DndNotesList = () => {
           Save
         </Button>
       </div>
-      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 auto-rows-fr">
-        <DndContext
-          sensors={sensors}
-          collisionDetection={closestCenter}
-          onDragEnd={handleDragEnd}
-        >
-          <SortableContext
-            items={items.map((note) => note.id)}
-            strategy={rectSortingStrategy}
+      <div className="p-6 border-2 border-gray-500 border-dashed">
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 auto-rows-fr">
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragEnd={handleDragEnd}
+            modifiers={[restrictToWindowEdges]}
           >
-            {items.map((note) => (
-              <DndNote key={note.id} note={note} />
-            ))}
-          </SortableContext>
-        </DndContext>
+            <SortableContext
+              items={items.map((note) => note.id)}
+              strategy={rectSortingStrategy}
+            >
+              {items.map((note) => (
+                <DndNote key={note.id} note={note} />
+              ))}
+            </SortableContext>
+          </DndContext>
+        </div>
       </div>
     </>
   );
