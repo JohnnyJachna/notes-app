@@ -29,7 +29,7 @@ const Source = (props) => {
       <div className="flex flex-row gap-1 justify-between group">
         <h5
           ittle={source.name}
-          className="font-semibold truncate pr-16 relative h10 flex items-center"
+          className="truncate pr-16 relative h10 flex items-center"
         >
           {source.name}
         </h5>
