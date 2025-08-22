@@ -43,7 +43,7 @@ const Note = (props) => {
           <ButtonDelete onClick={handleDeleteNote} />
         </div>
         <div className="flex flex-col h-full">
-          <NotePreview noteAtom={props.noteAtom} />
+          <NotePreview note={note} />
         </div>
       </Card>
       <NoteEditor

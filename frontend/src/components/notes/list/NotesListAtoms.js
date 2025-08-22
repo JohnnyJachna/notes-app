@@ -7,6 +7,7 @@ export const sortTypesAtom = atom([
   "Sources",
   "Edited",
   "Created",
+  "Custom",
 ]);
 export const sortTypeAtom = atom("Created");
 export const ascendingAtom = atom(false);
@@ -111,6 +112,8 @@ export const sortedNotesAtom = atom((get) => {
         if (createA > createB) return ascending ? 1 : -1;
         return 0;
       });
+      break;
+    case "Custom":
       break;
     default:
       return notesList;

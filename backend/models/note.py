@@ -13,6 +13,7 @@ class Note(Base, table=True):
   set_id: int | None = Field(default=None, foreign_key="set.id", ondelete="CASCADE")
   tags: List["Tag"] = Relationship(back_populates="notes", sa_relationship_kwargs={"lazy": "selectin"}, link_model=LinkTagNote)
   sources: List["Source"] = Relationship(back_populates="notes", sa_relationship_kwargs={"lazy": "selectin"}, link_model=LinkSourceNote)
+  position: int | None = Field(default=None, index=True)
   color: str
 
 class Tag(Base, table=True):
@@ -67,5 +68,9 @@ class NoteRead(SQLModel):
     set_id: int
     tags: List[TagRead] | None= []
     sources: List[SourceRead] | None = []
+    position: int | None
     color: str
     
+class NotePositionUpdate(SQLModel):
+    id: int
+    position: int | None = Field(default=None)

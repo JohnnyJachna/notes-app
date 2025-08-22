@@ -1,5 +1,6 @@
 import uvicorn
 import datetime
+from typing import List
 
 from fastapi import FastAPI, Response, Depends
 from fastapi.middleware.cors import CORSMiddleware
@@ -8,8 +9,7 @@ from db import get_session
 from sanitizer import sanitize_html
 
 from models.set import Set
-from models.note import Note, Source, Tag, NoteRead, TagRead, SourceRead
-from models.links import LinkTagNote, LinkSourceNote
+from models.note import Note, Source, Tag, NoteRead, TagRead, SourceRead, NotePositionUpdate
 
 def get_datetime():
   current_datetime = datetime.datetime.now()
@@ -158,6 +158,18 @@ async def update_note_data(set_id: int, payload: NoteRead, session: Session = De
     session.commit()
     session.refresh(note)
     return note
+
+@app.patch("/notes/positions")
+async def update_notes_positions(payload: List[NotePositionUpdate], session: Session = Depends(get_session)):
+    for item in payload:
+        note = session.get(Note, item.id)
+        if note:
+            note.position = item.position
+
+    session.add_all([session.get(Note, item.id) for item in payload])
+    session.commit()
+    
+    return {"message": "Note positions updated successfully."}
 
 @app.delete("/sets/{set_id}/notes/{note_id}")
 def delete_note(set_id: int, note_id: int, response: Response, session: Session = Depends(get_session)):

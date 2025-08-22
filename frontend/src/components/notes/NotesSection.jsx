@@ -7,12 +7,14 @@ import {
   noteLoadingAtom,
   notesLoadedAtom,
 } from "./NotesAtoms";
-import { useAtomValue, useSetAtom } from "jotai/react";
+import { isDndActiveAtom } from "./dnd/DndAtoms";
+import { useAtomValue, useSetAtom, useAtom } from "jotai/react";
 
 import NotesListControls from "./list/NotesListControls";
 import NotesList from "./list/NotesList";
 import TagSourceEditor from "./TagSourceEditor";
 import NoteSizeDropdown from "./list/NoteSizeDropdown";
+import DndNotesList from "./dnd/DndNoteList";
 
 import { Button, HR, Spinner } from "flowbite-react";
 
@@ -23,6 +25,7 @@ const NotesSection = () => {
   const fetchNotes = useSetAtom(fetchNotesAtom);
   const isLoading = useAtomValue(noteLoadingAtom);
   const notesLoaded = useAtomValue(notesLoadedAtom);
+  const [isDndActive, setIsDndActive] = useAtom(isDndActiveAtom);
 
   useEffect(() => {
     if (notesLoaded) return;
@@ -31,6 +34,10 @@ const NotesSection = () => {
 
   const handleAddNote = async () => {
     await addNote(setID);
+  };
+
+  const handleDndToggle = () => {
+    setIsDndActive((prev) => !prev);
   };
 
   return (
@@ -42,17 +49,20 @@ const NotesSection = () => {
       ) : (
         <div className="m-3 p-5 xl:max-w-8/12 mx-auto">
           <div className="flex gap-3 justify-between flex-wrap">
-            <div className="flex gap-3">
-              <Button color="green" onClick={handleAddNote} className="mb-2">
+            <div className="flex gap-3 mb-2">
+              <Button color="green" onClick={handleAddNote}>
                 Add Note
               </Button>
               <TagSourceEditor />
               <NoteSizeDropdown />
+              <Button onClick={handleDndToggle} className="w-32">
+                {isDndActive ? <span>Cancel</span> : <span>Custom Sort</span>}
+              </Button>
             </div>
             <NotesListControls />
           </div>
           <HR className="!m-6" />
-          <NotesList />
+          {isDndActive ? <DndNotesList /> : <NotesList />}
         </div>
       )}
     </>

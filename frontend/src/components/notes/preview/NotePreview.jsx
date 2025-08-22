@@ -15,8 +15,7 @@ const sizes = {
   full: "max-h-none",
 };
 
-const NotePreview = ({ noteAtom }) => {
-  const note = useAtomValue(noteAtom);
+const NotePreview = ({ note }) => {
   const noteSize = useAtomValue(noteSizeAtom);
   const bgColor = validHex(note.color) ? note.color : "#FFFFFF";
   const hrColor = getContrastingColor(bgColor);

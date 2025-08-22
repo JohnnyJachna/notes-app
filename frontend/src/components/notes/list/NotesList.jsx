@@ -5,7 +5,7 @@ import Note from "../Note";
 const NotesList = () => {
   const noteAtoms = useAtomValue(refinedNotesSplitAtom);
   return (
-    <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5">
+    <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 auto-rows-fr">
       {noteAtoms.map((noteAtom) => (
         <Note key={noteAtom.toString()} noteAtom={noteAtom} />
       ))}
