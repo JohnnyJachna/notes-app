@@ -1,5 +1,6 @@
 import { atom } from "jotai";
 import { notesAtom, splitNotesAtom } from "../NotesAtoms";
+import { sortedDndNotesAtom } from "../dnd/DndAtoms";
 
 export const sortTypesAtom = atom([
   "Header",
@@ -66,7 +67,7 @@ export const sortedNotesAtom = atom((get) => {
   const ascending = get(ascendingAtom);
   const sortType = get(sortTypeAtom);
 
-  const sortedArray = [...notesList];
+  let sortedArray = [...notesList];
   switch (sortType) {
     case "Header":
       sortedArray.sort((a, b) => {
@@ -114,6 +115,10 @@ export const sortedNotesAtom = atom((get) => {
       });
       break;
     case "Custom":
+      {
+        const sortedDndNotes = get(sortedDndNotesAtom);
+        sortedArray = sortedDndNotes;
+      }
       break;
     default:
       return notesList;
