@@ -41,6 +41,7 @@ export const addNoteAtom = atom(null, async (get, set, setID) => {
         update_date: date,
         set_id: setID,
         color: "#374151",
+        position: null,
       }),
     });
     set(notesAtom, (prevNote) => [...prevNote, addedNote]);
@@ -60,6 +61,7 @@ export const updateNoteAtom = atom(
       update_date: new Date().toLocaleString(),
       set_id: note.set_id,
       color,
+      position: note.position,
       tags: noteTags.map((tag) => ({
         id: tag.id,
         name: tag.name,

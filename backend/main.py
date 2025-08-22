@@ -126,7 +126,8 @@ async def add_note(set_id: int, payload: Note,session: Session = Depends(get_ses
     create_date=payload.create_date,
     update_date=payload.update_date,
     set_id=payload.set_id,
-    color=payload.color
+    color=payload.color,
+    position=payload.position,
   )
   
   session.add(new_note)
