@@ -40,7 +40,7 @@ const NotesSection = () => {
           <Spinner size="xl" />
         </div>
       ) : (
-        <div className="m-3 p-5 max-w-8/12 mx-auto">
+        <div className="m-3 p-5 xl:max-w-8/12 mx-auto">
           <div className="flex gap-3 justify-between flex-wrap">
             <div className="flex gap-3">
               <Button color="green" onClick={handleAddNote} className="mb-2">

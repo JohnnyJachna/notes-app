@@ -24,7 +24,7 @@ const SetsSection = () => {
   };
 
   return (
-    <div className="max-w-8/12 mx-auto">
+    <div className="xl:max-w-8/12 mx-auto">
       <div className="m-3 grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5">
         {setsList.map((setAtom) => (
           <Set setAtom={setAtom} key={setAtom.toString()} />
