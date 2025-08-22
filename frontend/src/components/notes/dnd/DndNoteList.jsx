@@ -5,6 +5,7 @@ import {
   isDndActiveAtom,
   sortedDndNotesAtom,
   saveDndNotesPositionsAtom,
+  dndNoteLoadingAtom,
 } from "./DndAtoms";
 
 import {
@@ -23,7 +24,7 @@ import { restrictToWindowEdges } from "@dnd-kit/modifiers";
 
 import DndNote from "./DndNote";
 
-import { Button } from "flowbite-react";
+import { Button, Spinner } from "flowbite-react";
 import { sortTypeAtom } from "../list/NotesListAtoms";
 
 const DndNotesList = () => {
@@ -31,6 +32,7 @@ const DndNotesList = () => {
   const setIsDndActive = useSetAtom(isDndActiveAtom);
   const setSortType = useSetAtom(sortTypeAtom);
   const setSaveDndNotesPositions = useSetAtom(saveDndNotesPositionsAtom);
+  const dndNoteLoading = useAtomValue(dndNoteLoadingAtom);
 
   const [items, setItems] = useState([]);
 
@@ -61,30 +63,38 @@ const DndNotesList = () => {
 
   return (
     <>
-      <div className="flex justify-center items-center mb-5">
-        <Button color="green" onClick={handleSave}>
-          Save
-        </Button>
-      </div>
-      <div className="p-6 border-2 border-gray-500 border-dashed">
-        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 auto-rows-fr">
-          <DndContext
-            sensors={sensors}
-            collisionDetection={closestCenter}
-            onDragEnd={handleDragEnd}
-            modifiers={[restrictToWindowEdges]}
-          >
-            <SortableContext
-              items={items.map((note) => note.id)}
-              strategy={rectSortingStrategy}
-            >
-              {items.map((note) => (
-                <DndNote key={note.id} note={note} />
-              ))}
-            </SortableContext>
-          </DndContext>
+      {dndNoteLoading ? (
+        <div className="h-screen flex justify-center items-center">
+          <Spinner size="xl" />
         </div>
-      </div>
+      ) : (
+        <>
+          <div className="flex justify-center items-center mb-5">
+            <Button color="green" onClick={handleSave}>
+              Save
+            </Button>
+          </div>
+          <div className="p-6 border-2 border-gray-500 border-dashed">
+            <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 auto-rows-fr">
+              <DndContext
+                sensors={sensors}
+                collisionDetection={closestCenter}
+                onDragEnd={handleDragEnd}
+                modifiers={[restrictToWindowEdges]}
+              >
+                <SortableContext
+                  items={items.map((note) => note.id)}
+                  strategy={rectSortingStrategy}
+                >
+                  {items.map((note) => (
+                    <DndNote key={note.id} note={note} />
+                  ))}
+                </SortableContext>
+              </DndContext>
+            </div>
+          </div>
+        </>
+      )}
     </>
   );
 };

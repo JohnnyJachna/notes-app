@@ -2,6 +2,7 @@ import { atom } from "jotai";
 import { notesAtom } from "../NotesAtoms";
 
 export const isDndActiveAtom = atom(false);
+export const dndNoteLoadingAtom = atom(false);
 
 export const sortedDndNotesAtom = atom((get) => {
   const notes = get(notesAtom);
@@ -28,6 +29,8 @@ export const saveDndNotesPositionsAtom = atom(
       position: index,
     }));
 
+    set(dndNoteLoadingAtom, true);
+
     try {
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/notes/positions`,
@@ -43,7 +46,7 @@ export const saveDndNotesPositionsAtom = atom(
         throw new Error("Failed to save note positions");
       }
       set(notesAtom, updatedNotes);
-
+      set(dndNoteLoadingAtom, false);
       console.log("Note positions saved successfully!");
     } catch (error) {
       console.error("Error saving note positions:", error);
