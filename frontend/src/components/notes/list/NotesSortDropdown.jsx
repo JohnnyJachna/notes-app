@@ -8,9 +8,13 @@ const NotesSortDropdown = () => {
   const [sortType, setSortType] = useAtom(sortTypeAtom);
 
   return (
-    <Dropdown label={sortType} color="alternative" className="w-30">
+    <Dropdown label="Sort" color="alternative">
       {sortTypes.map((str) => (
-        <DropdownItem key={str} onClick={() => setSortType(str)}>
+        <DropdownItem
+          key={str}
+          onClick={() => setSortType(str)}
+          className={sortType === str ? "bg-blue-100 dark:bg-blue-700" : ""}
+        >
           {str}
         </DropdownItem>
       ))}

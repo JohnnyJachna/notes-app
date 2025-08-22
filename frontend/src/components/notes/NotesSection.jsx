@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useParams, useNavigate } from "react-router";
+import { useParams } from "react-router";
 
 import {
   addNoteAtom,
@@ -9,14 +9,15 @@ import {
 } from "./NotesAtoms";
 import { useAtomValue, useSetAtom } from "jotai/react";
 
+import NotesListControls from "./list/NotesListControls";
 import NotesList from "./list/NotesList";
 import TagSourceEditor from "./TagSourceEditor";
+import NoteSizeDropdown from "./list/NoteSizeDropdown";
 
-import { Button, Spinner } from "flowbite-react";
+import { Button, HR, Spinner } from "flowbite-react";
 
 const NotesSection = () => {
   const { setID } = useParams();
-  const navigate = useNavigate();
 
   const addNote = useSetAtom(addNoteAtom);
   const fetchNotes = useSetAtom(fetchNotesAtom);
@@ -32,10 +33,6 @@ const NotesSection = () => {
     await addNote(setID);
   };
 
-  const navToDnd = () => {
-    navigate(`/sets/${setID}/dnd`);
-  };
-
   return (
     <>
       {isLoading ? (
@@ -43,16 +40,18 @@ const NotesSection = () => {
           <Spinner size="xl" />
         </div>
       ) : (
-        <div className="m-3 p-5">
-          <div className="flex justify-between">
+        <div className="m-3 p-5 max-w-8/12 mx-auto">
+          <div className="flex gap-3 justify-between flex-wrap">
             <div className="flex gap-3">
-              <TagSourceEditor />
               <Button color="green" onClick={handleAddNote} className="mb-2">
                 Add Note
               </Button>
+              <TagSourceEditor />
+              <NoteSizeDropdown />
             </div>
-            <Button onClick={navToDnd}>Editor</Button>
+            <NotesListControls />
           </div>
+          <HR className="!m-6" />
           <NotesList />
         </div>
       )}

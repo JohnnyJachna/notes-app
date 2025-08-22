@@ -20,7 +20,9 @@ const TagSourceEditor = () => {
   const handleDrawerClose = () => setIsOpen(false);
   return (
     <>
-      <Button onClick={() => setIsOpen(true)}>Tags & Sources</Button>
+      <Button onClick={() => setIsOpen(true)} color="alternative">
+        Tags & Sources
+      </Button>
       <Drawer open={isOpen} onClose={handleDrawerClose}>
         <DrawerHeader title="Tag and Source Editor" />
         <DrawerItems>

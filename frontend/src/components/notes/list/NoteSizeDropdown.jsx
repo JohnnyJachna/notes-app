@@ -7,7 +7,7 @@ const NoteSizeDropdown = () => {
   const [noteSize, setNoteSize] = useAtom(noteSizeAtom);
 
   return (
-    <Dropdown label="Note Size" style={{ height: 40 }}>
+    <Dropdown label="Note Size" color="alternative" style={{ height: 40 }}>
       <DropdownItem
         value={"small"}
         onClick={() => setNoteSize("small")}
