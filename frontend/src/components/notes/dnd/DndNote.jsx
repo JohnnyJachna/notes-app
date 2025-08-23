@@ -1,11 +1,14 @@
 import { validHex } from "@uiw/react-color";
 import { getContrastingColor } from "@uiw/react-color";
 import { useSortable } from "@dnd-kit/sortable";
+
 import { CSS } from "@dnd-kit/utilities";
+
 import NotePreview from "../preview/NotePreview";
-import { Card, HR } from "flowbite-react";
 import NoteTagsPreview from "../preview/NoteTagsPreview";
 import NoteSourcesPreview from "../preview/NoteSourcesPreview";
+
+import { Card, HR } from "flowbite-react";
 
 const DndNote = ({ note }) => {
   const bgColor = validHex(note.color) ? note.color : "#374151";
