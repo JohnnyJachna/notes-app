@@ -2,6 +2,9 @@ import { useAtomValue } from "jotai";
 import { ascendingAtom } from "./NotesListAtoms";
 
 import { Button, ButtonGroup } from "flowbite-react";
+import { FaSortAmountDown } from "react-icons/fa";
+import { FaSortAmountUp } from "react-icons/fa";
+import { FaSortAmountUpAlt } from "react-icons/fa";
 
 const NotesSortControls = (props) => {
   const ascending = useAtomValue(ascendingAtom);
@@ -11,9 +14,10 @@ const NotesSortControls = (props) => {
       <Button
         onClick={props.onOrderToggle}
         color="alternative"
-        className="w-15"
+        className="w-23"
       >
-        {ascending ? "Asc" : "Desc"}
+        <span className="mr-1.5">Sort</span>
+        {ascending ? <FaSortAmountUpAlt /> : <FaSortAmountDown />}
       </Button>
     </div>
   );

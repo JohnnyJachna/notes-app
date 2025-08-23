@@ -36,10 +36,10 @@ const NotesListControls = () => {
   return (
     <div className="flex flex-wrap gap-3">
       <div className="flex gap-1">
-        <NotesSortDropdown />
         <NotesSortControls
           onOrderToggle={() => setAscending((prev) => !prev)}
         />
+        <NotesSortDropdown />
       </div>
       {(tagsAvailable || sourcesAvailable) && (
         <NotesListFilterControls

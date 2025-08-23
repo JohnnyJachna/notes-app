@@ -10,7 +10,7 @@ export const sortTypesAtom = atom([
   "Created",
   "Custom",
 ]);
-export const sortTypeAtom = atom("Created");
+export const sortTypeAtom = atom("Edited");
 export const ascendingAtom = atom(false);
 
 export const filterTypeAtom = atom("Tag");

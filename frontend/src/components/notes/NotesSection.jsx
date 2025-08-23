@@ -55,7 +55,11 @@ const NotesSection = () => {
               </Button>
               <TagSourceEditor />
               <NoteSizeDropdown />
-              <Button onClick={handleDndToggle} className="w-32">
+              <Button
+                onClick={handleDndToggle}
+                color="alternative"
+                className="w-32"
+              >
                 {isDndActive ? <span>Cancel</span> : <span>Custom Sort</span>}
               </Button>
             </div>
