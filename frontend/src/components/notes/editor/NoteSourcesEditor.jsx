@@ -6,6 +6,7 @@ import NoteSource from "./NoteSource";
 import ButtonAdd from "@/components/buttons/ButtonAdd";
 
 import { Dropdown, DropdownItem, Popover } from "flowbite-react";
+import { LuNotepadText } from "react-icons/lu";
 
 const NoteSourcesEditor = ({ sources, setSources }) => {
   const allSources = useAtomValue(sourcesAtom);
@@ -37,6 +38,7 @@ const NoteSourcesEditor = ({ sources, setSources }) => {
 
   return (
     <div className="mt-2 mb-2 flex flex-row flex-wrap items-center">
+      <LuNotepadText className="mr-1.5 size-8" />
       <h4 className="font-semibold text-lg mr-2">Sources:</h4>
       {addableSources?.length > 0 && (
         <>

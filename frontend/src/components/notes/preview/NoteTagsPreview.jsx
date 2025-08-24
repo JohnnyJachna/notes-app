@@ -1,11 +1,13 @@
 import { Badge } from "flowbite-react";
+import { IoMdPricetag } from "react-icons/io";
+
 import { validHex } from "@uiw/react-color";
 import { getContrastingColor } from "@uiw/react-color";
 
 const NoteTagsPreview = ({ tags }) => {
   return (
     <div className="flex flex-wrap items-center gap-1 text-xs">
-      <span className="font-medium">Tags:</span>
+      <IoMdPricetag className="size-5" />
       {tags && tags.length > 0 ? (
         <ul className="flex flex-wrap gap-1">
           {tags.map((tag) => {

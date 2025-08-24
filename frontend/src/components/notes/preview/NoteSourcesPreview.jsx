@@ -1,11 +1,13 @@
 import { Badge } from "flowbite-react";
+import { LuNotepadText } from "react-icons/lu";
+
 import { validHex } from "@uiw/react-color";
 import { getContrastingColor } from "@uiw/react-color";
 
 const NoteSourcesPreview = ({ sources }) => {
   return (
     <div className="flex flex-wrap items-center gap-1 text-xs">
-      <span className="font-medium">Sources:</span>
+      <LuNotepadText className="size-5" />
       {sources && sources.length > 0 ? (
         <ul className="flex flex-wrap gap-1">
           {sources.map((source) => {

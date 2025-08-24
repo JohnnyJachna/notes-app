@@ -8,6 +8,7 @@ import ButtonEdit from "../buttons/ButtonEdit";
 import ButtonDelete from "../buttons/ButtonDelete";
 
 import { HR } from "flowbite-react";
+import { LuNotepadText } from "react-icons/lu";
 
 const Source = (props) => {
   const source = useAtomValue(props.sourceAtom);
@@ -26,13 +27,16 @@ const Source = (props) => {
   return (
     <>
       <HR className="!m-0" />
-      <div className="flex flex-row gap-1 justify-between group">
-        <h5
-          ittle={source.name}
-          className="truncate pr-16 relative h10 flex items-center"
-        >
-          {source.name}
-        </h5>
+      <div className="flex flex-row gap-1 justify-between items-center group">
+        <div className="flex items-center">
+          <LuNotepadText className="mr-2" style={{ color: source.color }} />
+          <h5
+            ittle={source.name}
+            className="truncate pr-16 relative h10 flex items-center"
+          >
+            {source.name}
+          </h5>
+        </div>
         <div className="flex opacity-0 group-hover:opacity-100 transition-opacity">
           <ButtonEdit onClick={() => setShowEditor(true)} />
           <ButtonDelete onClick={handleDeleteSource} />

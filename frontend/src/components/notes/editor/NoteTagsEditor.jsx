@@ -7,6 +7,7 @@ import NoteTag from "./NoteTag";
 import ButtonAdd from "@/components/buttons/ButtonAdd";
 
 import { Dropdown, DropdownItem } from "flowbite-react";
+import { IoMdPricetag } from "react-icons/io";
 
 const NoteTagsEditor = ({ tags, setTags }) => {
   const allTags = useAtomValue(tagsAtom);
@@ -35,6 +36,7 @@ const NoteTagsEditor = ({ tags, setTags }) => {
 
   return (
     <div className="mt-2 mb-2 flex flex-row flex-wrap items-center">
+      <IoMdPricetag className="mr-1.5 size-8" />
       <h4 className="font-semibold text-lg mr-2">Tags:</h4>
       {addableTags?.length > 0 && (
         <>
