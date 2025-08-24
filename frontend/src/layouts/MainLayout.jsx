@@ -22,15 +22,6 @@ const theme = createTheme({
 
 const MainLayout = () => {
   return (
-    // <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
-    //   <ThemeProvider theme={theme}>
-    //     <Header />
-    //     <main className="flex-1">
-    //       <Outlet />
-    //     </main>
-    //     <AppFooter />
-    //   </ThemeProvider>
-    // </div>
     <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
       <ThemeProvider theme={theme}>
         <main className="flex-1">

@@ -171,7 +171,7 @@ export function useMark(config) {
     event.preventDefault()
     handleMark()
   }, {
-    enabled: isVisible && canToggle,
+    enabled: false,
     enableOnContentEditable: !isMobile,
     enableOnFormTags: true,
   })
