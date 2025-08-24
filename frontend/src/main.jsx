@@ -1,17 +1,35 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { BrowserRouter } from "react-router";
+import { BrowserRouter, Routes, Route } from "react-router";
 import { Provider } from "jotai/react";
+
+import { ClerkProvider } from "@clerk/clerk-react";
+import { dark } from "@clerk/themes";
 
 import "./index.css";
 import App from "./App.jsx";
+import AuthTokenProvider from "./AuthTokenProvider";
+
+const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
+
+if (!PUBLISHABLE_KEY) {
+  throw new Error("Add your Clerk Publishable Key to the .env file");
+}
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <Provider>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
+      <ClerkProvider
+        publishableKey={PUBLISHABLE_KEY}
+        appearance={{ baseTheme: dark }}
+      >
+        <BrowserRouter>
+          <AuthTokenProvider />
+          <Routes>
+            <Route path="/*" element={<App />} />
+          </Routes>
+        </BrowserRouter>
+      </ClerkProvider>
     </Provider>
   </StrictMode>
 );

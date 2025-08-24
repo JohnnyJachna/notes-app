@@ -1,6 +1,9 @@
-import { Outlet } from "react-router";
+import { Outlet, Link, Navigate } from "react-router";
+import { SignIn, SignedIn, SignedOut, UserButton } from "@clerk/clerk-react";
+
 import Header from "../components/Header";
 import AppFooter from "../components/AppFooter";
+
 import { Button, createTheme, ThemeProvider } from "flowbite-react";
 
 const theme = createTheme({
@@ -19,11 +22,27 @@ const theme = createTheme({
 
 const MainLayout = () => {
   return (
+    // <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+    //   <ThemeProvider theme={theme}>
+    //     <Header />
+    //     <main className="flex-1">
+    //       <Outlet />
+    //     </main>
+    //     <AppFooter />
+    //   </ThemeProvider>
+    // </div>
     <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
       <ThemeProvider theme={theme}>
-        <Header />
         <main className="flex-1">
-          <Outlet />
+          <SignedOut>
+            <div className="flex min-h-[70vh] items-center justify-center p-4">
+              <SignIn fallbackRedirectUrl="/sets" />
+            </div>
+          </SignedOut>
+          <SignedIn>
+            <Header />
+            <Outlet />
+          </SignedIn>
         </main>
         <AppFooter />
       </ThemeProvider>

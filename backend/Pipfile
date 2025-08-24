@@ -11,6 +11,7 @@ python-dotenv = "*"
 psycopg2 = "*"
 alembic = "*"
 nh3 = "*"
+clerk-backend-api = "*"
 
 [dev-packages]
 

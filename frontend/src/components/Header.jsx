@@ -1,5 +1,11 @@
 import { Link, useLocation } from "react-router";
 import {
+  SignedIn,
+  SignInButton,
+  SignedOut,
+  UserButton,
+} from "@clerk/clerk-react";
+import {
   Navbar,
   NavbarBrand,
   NavbarLink,
@@ -7,37 +13,34 @@ import {
   NavbarToggle,
   DarkThemeToggle,
 } from "flowbite-react";
+import { CgNotes } from "react-icons/cg";
 
 const Header = () => {
   const location = useLocation();
 
   return (
     <Navbar fluid rounded>
-      <NavbarBrand as={Link} to="/">
-        <span>Notes App</span>
+      <NavbarBrand>
+        <CgNotes size="20" />
       </NavbarBrand>
       <NavbarToggle />
       <NavbarCollapse>
-        <NavbarLink as={Link} to="/" active={location.pathname === "/"}>
-          Home
-        </NavbarLink>
         <NavbarLink
           as={Link}
           to="/sets"
           active={location.pathname.startsWith("/sets")}
         >
-          Sets
-        </NavbarLink>
-        <NavbarLink
-          as={Link}
-          to="/about"
-          active={location.pathname === "/about"}
-        >
-          About
+          <span className="text-base font-semibold text-gray-200 transition-colors hover:text-gray-50">
+            Sets
+          </span>
         </NavbarLink>
       </NavbarCollapse>
-
-      <DarkThemeToggle />
+      <SignedIn>
+        <UserButton afterSignOutUrl="/" />
+      </SignedIn>
+      <SignedOut>
+        <SignInButton mode="modal" />
+      </SignedOut>
     </Navbar>
   );
 };

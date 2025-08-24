@@ -2,11 +2,12 @@ import uvicorn
 import datetime
 from typing import List
 
-from fastapi import FastAPI, Response, Depends
+from fastapi import FastAPI, Response, Depends, Request
 from fastapi.middleware.cors import CORSMiddleware
 from sqlmodel import Session, select
 from db import get_session
-from sanitizer import sanitize_html
+from utils.sanitizer import sanitize_html
+from utils.auth import authenticate_and_get_user_details
 
 from models.set import Set
 from models.note import Note, Source, Tag, NoteRead, TagRead, SourceRead, NotePositionUpdate
@@ -34,17 +35,24 @@ async def root():
 # ----- SETS ROUTES ------
 
 @app.get("/sets", response_model=list[Set])
-async def get_sets(session: Session = Depends(get_session)):
-  statement = select(Set)
+async def get_sets(request: Request, session: Session = Depends(get_session)):
+  user_details = authenticate_and_get_user_details(request)
+  user_id = user_details.get("user_id")
+
+  statement = select(Set).where(Set.user_id == user_id)
   result = session.exec(statement).all()
   return result
 
 @app.post("/sets/add", response_model=Set)
-async def add_set(payload: Set, session: Session = Depends(get_session)):
+async def add_set(payload: Set, request: Request, session: Session = Depends(get_session)):
+  user_details = authenticate_and_get_user_details(request)
+  user_id = user_details.get("user_id")
+
   new_set = Set(
     name=payload.name,
     create_date=payload.create_date,
-    update_date=payload.update_date
+    update_date=payload.update_date,
+    user_id = user_id,
   )
   
   session.add(new_set)

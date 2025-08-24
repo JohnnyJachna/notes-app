@@ -82,7 +82,6 @@ export const deleteSetAtom = atom(null, async (get, set, setID) => {
   try {
     await makeRequest(`sets/${setID}`, {
       method: "DELETE",
-      body: setID,
     });
     set(setsAtom, (prev) => prev.filter((set) => set.id !== setID));
   } catch (error) {
