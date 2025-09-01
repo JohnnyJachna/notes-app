@@ -99,8 +99,8 @@ const NoteEditor = ({ noteAtom, open, handleCloseEditor }) => {
         </ModalBody>
         <ModalFooter className="flex justify-center ">
           <div className="text-sm text-gray-400 flex justify-center gap-2 flex-wrap">
-            <p>Last Edit : {note.update_date}</p>
-            <p>Created on : {note.create_date}</p>
+            <p>Last Edit: {note.update_date}</p>
+            <p>Created on: {note.create_date}</p>
           </div>
         </ModalFooter>
       </Modal>
