@@ -58,7 +58,7 @@ export const updateSourceAtom = atom(
       accessDate,
     }
   ) => {
-    console.log("update source " + originalSource);
+    // console.log("update source " + originalSource);
 
     const body = {
       id: originalSource.id,
