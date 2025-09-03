@@ -57,8 +57,11 @@ body,
 .simple-editor-wrapper {
   max-width: none;
   min-height: 250px;
-  overflow: auto;
+  height: 600px;
+  overflow: hidden;
   background-color: oklch(42.843% 0.0313 268.393);
+  display: flex;
+  flex-direction: column;
 }
 
 .simple-editor-content {
@@ -69,15 +72,19 @@ body,
   display: flex;
   flex-direction: column;
   flex: 1;
+  overflow: hidden;
 }
 
 .simple-editor-content .tiptap.ProseMirror.simple-editor {
   flex: 1;
-  padding: 1rem 1rem 30vh;
+  padding: 1rem 1rem 1rem;
+  overflow-y: auto;
+  height: 100%;
+  max-height: none;
 }
 
 @media screen and (max-width: 480px) {
   .simple-editor-content .tiptap.ProseMirror.simple-editor {
-    padding: 1rem 1.5rem 30vh;
+    padding: 1rem 1.5rem 1rem;
   }
 }

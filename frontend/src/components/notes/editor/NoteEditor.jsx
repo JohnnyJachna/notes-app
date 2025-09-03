@@ -93,7 +93,7 @@ const NoteEditor = ({ noteAtom, open, handleCloseEditor }) => {
             sources={noteSources}
             setSources={setNoteSources}
           />
-          <Button onClick={handleSave} color="green">
+          <Button onClick={handleSave} color="green" style={{ minHeight: 30 }}>
             Save
           </Button>
         </ModalBody>
