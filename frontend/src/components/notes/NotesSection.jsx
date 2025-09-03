@@ -63,7 +63,7 @@ const NotesSection = () => {
                 {isDndActive ? <span>Cancel</span> : <span>Custom Sort</span>}
               </Button>
             </div>
-            <NotesListControls />
+            {!isDndActive && <NotesListControls />}
           </div>
           <HR className="!m-6" />
           {isDndActive ? <DndNotesList /> : <NotesList />}
