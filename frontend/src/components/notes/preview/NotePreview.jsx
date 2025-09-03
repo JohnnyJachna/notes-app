@@ -22,11 +22,7 @@ const NotePreview = ({ note }) => {
 
   return (
     <div className="flex flex-col h-full">
-      {note.header ? (
-        <p className="font-semibold truncate">{note.header}</p>
-      ) : (
-        <p className="font-semibold truncate">Note Header</p>
-      )}
+      <p className="font-semibold truncate">{note.header}</p>
       {note.content && (
         <>
           <HR className="m-1" style={{ background: hrColor }} />

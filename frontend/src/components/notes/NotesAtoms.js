@@ -34,8 +34,7 @@ export const addNoteAtom = atom(null, async (get, set, setID) => {
     const addedNote = await makeRequest(`sets/${setID}/notes/add`, {
       method: "POST",
       body: JSON.stringify({
-        name: "New Tag",
-        header: "",
+        header: "New Note",
         content: "",
         create_date: date,
         update_date: date,
