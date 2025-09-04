@@ -148,7 +148,7 @@ async def update_note_data(set_id: int, payload: NoteRead, session: Session = De
     session.refresh(note)
     return note
 
-@app.patch("/notes/positions")
+@app.patch("/sets/{set_id}/notes/positions")
 async def update_notes_positions(payload: List[NotePositionUpdate], session: Session = Depends(get_session)):
     for item in payload:
         note = session.get(Note, item.id)

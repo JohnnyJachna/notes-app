@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useParams } from "react-router";
 
 import { useAtomValue, useSetAtom } from "jotai";
 import {
@@ -28,6 +29,8 @@ import { Button, Spinner } from "flowbite-react";
 import { sortTypeAtom } from "../list/NotesListAtoms";
 
 const DndNotesList = () => {
+  const { setID } = useParams();
+
   const sortedNotes = useAtomValue(sortedDndNotesAtom);
   const setIsDndActive = useSetAtom(isDndActiveAtom);
   const setSortType = useSetAtom(sortTypeAtom);
@@ -56,7 +59,7 @@ const DndNotesList = () => {
   };
 
   const handleSave = async () => {
-    await setSaveDndNotesPositions(items);
+    await setSaveDndNotesPositions({ setID: setID, newSortedList: items });
     setIsDndActive(false);
     setSortType("Custom");
   };

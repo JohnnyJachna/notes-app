@@ -1,6 +1,8 @@
 import { atom } from "jotai";
 import { notesAtom } from "../NotesAtoms";
 
+import { makeRequest } from "@/utils/api";
+
 export const isDndActiveAtom = atom(false);
 export const dndNoteLoadingAtom = atom(false);
 
@@ -23,7 +25,7 @@ export const sortedDndNotesAtom = atom((get) => {
 
 export const saveDndNotesPositionsAtom = atom(
   null,
-  async (get, set, newSortedList) => {
+  async (get, set, { setID, newSortedList }) => {
     const updatedNotes = newSortedList.map((note, index) => ({
       ...note,
       position: index,
@@ -32,19 +34,14 @@ export const saveDndNotesPositionsAtom = atom(
     set(dndNoteLoadingAtom, true);
 
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/notes/positions`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(updatedNotes),
-        }
-      );
-      if (!response.ok) {
-        throw new Error("Failed to save note positions");
-      }
+      await makeRequest(`sets/${setID}/notes/positions`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedNotes),
+      });
+
       set(notesAtom, updatedNotes);
       set(dndNoteLoadingAtom, false);
       console.log("Note positions saved successfully!");
